@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="positioner_macro" params="prefix">
+
+    <!-- link list -->
+    <link name="${prefix}rotary_table_base">
+        <visual>
+        <geometry>
+          <mesh filename="package://hydra_description/meshes/rotary_table.dae"/>
+        </geometry>
+        <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://hydra_description/meshes/rotary_table.dae"/>
+        </geometry>
+        <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+      </collision>
+    </link>
+    
+    <link name="${prefix}positioner_link">
+        <visual>
+        <geometry>
+          <mesh filename="package://hydra_description/meshes/hydra_positioner.dae"/>
+        </geometry>
+        <origin rpy="0.0 0.0 0.0" xyz="0 0 0.1778"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://hydra_description/meshes/hydra_positioner.dae"/>
+        </geometry>
+        <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+      </collision>
+    </link>
+
+    <!-- joint list -->
+    <joint name="${prefix}positioner_joint" type="continuous">
+      <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <parent link="${prefix}rotary_table_base"/>
+      <child link="${prefix}positioner_link"/>
+    </joint>
+
+  </xacro:macro>
+</robot>
