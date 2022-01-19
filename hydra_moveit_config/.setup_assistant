@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: hydra_description
+    relative_path: urdf/hydra.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/hydra.srdf
+  CONFIG:
+    author_name: Alex Arbogast
+    author_email: arbogastaw@gmail.com
+    generated_timestamp: 1642480602

@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/ros/noetic/include/**",
+        "/home/alex/Desktop/workspaces/mrmf_ws/src/gcode_ros/gcode_core/include/**",
+        "/home/alex/Desktop/workspaces/mrmf_ws/src/gcode_ros/gcode_rosutils/include/**",
+        "/home/alex/Desktop/workspaces/mrmf_ws/src/gcode_ros/gcode_rviz/include/**",
+        "/home/alex/Desktop/workspaces/mrmf_ws/src/rviz_visual_tools/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

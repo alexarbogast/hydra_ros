@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<robot name="hydra" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="$(find hydra_description)/urdf/za_typhoon_macro.xacro"/>
+    <xacro:include filename="$(find hydra_description)/urdf/positioner_macro.xacro"/>
+    
+    <xacro:macro name="hydra_macro" params="prefix">
+        <xacro:za_typhoon_macro prefix="${prefix}rob1_" tool0_trans="0 0 0" tool0_rot="0 ${pi*1} 0"/>
+        <xacro:za_typhoon_macro prefix="${prefix}rob2_" tool0_trans="0 0 0" tool0_rot="0 ${pi*1} 0"/>
+        <xacro:za_typhoon_macro prefix="${prefix}rob3_" tool0_trans="0 0 0" tool0_rot="0 ${pi*1} 0"/>
+
+        <xacro:positioner_macro prefix="${prefix}"/>
+    </xacro:macro>
+</robot>

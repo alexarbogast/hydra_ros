@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<robot name="hydra" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="prefix" default=""/>
+  <xacro:arg name="fixed_tool" default="True"/>
+  <xacro:arg name="radius" default="0.9"/>
+  <xacro:include filename="$(find hydra_description)/urdf/hydra_macro.xacro"/>
+  <xacro:hydra_macro prefix="$(arg prefix)"/>
+
+  <!-- 'world' frame: default pose reference frame -->
+  <link name="world" />
+  <joint name="world-$(arg prefix)rob1_base_link" type="fixed">
+    <origin xyz="-${$(arg radius)*sin(pi/6)} -${$(arg radius)*cos(pi/6)}  0" rpy="0 0 ${pi/3}"/>
+    <axis xyz="0 0 1"/>
+    <parent link="world"/>
+    <child link="$(arg prefix)rob1_base_link"/>
+  </joint>
+  <joint name="world-$(arg prefix)rob2_base_link" type="fixed">
+    <origin xyz="${$(arg radius)} 0 0" rpy="0 0 ${pi}"/>
+    <axis xyz="0 0 1"/>
+    <parent link="world"/>
+    <child link="$(arg prefix)rob2_base_link"/>
+  </joint>
+  <joint name="world-$(arg prefix)rob3_base_link" type="fixed">
+    <origin xyz="-${$(arg radius)*sin(pi/6)} ${$(arg radius)*cos(pi/6)} 0" rpy="0 0 -${pi/3}"/>
+    <axis xyz="0 0 1"/>
+    <parent link="world"/>
+    <child link="$(arg prefix)rob3_base_link"/>
+  </joint>
+  <joint name="world-$(arg prefix)rotary_table_base" type="fixed">
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="world"/>
+    <child link="$(arg prefix)rotary_table_base"/>
+  </joint>
+</robot>

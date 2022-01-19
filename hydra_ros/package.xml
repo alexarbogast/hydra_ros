@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+	<name>hydra_ros</name>
+	<version>0.1.0</version>
+	<description>Metapackage for hydra_ros</description>
+	<maintainer email="arbogastaw@gmail.com">Alex Arbogast</maintainer>
+	<license>BSD</license>
+
+	<author>Alex Arbogast</author>
+	<buildtool_depend>catkin</buildtool_depend>
+
+	<exec_depend>hydra_description</exec_depend>
+	<exec_depend>hydra_ikfast_plugin</exec_depend>
+	<exec_depend>hydra_moveit_config</exec_depend>
+
+	<export>
+		<metapackage/>
+	</export>
+</package>

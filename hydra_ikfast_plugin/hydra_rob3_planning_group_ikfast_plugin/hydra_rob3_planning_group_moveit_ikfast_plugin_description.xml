@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<library path="lib/libhydra_rob3_planning_group_moveit_ikfast_plugin">
+  <class name="hydra_rob3_planning_group/IKFastKinematicsPlugin" type="hydra_rob3_planning_group::IKFastKinematicsPlugin" base_class_type="kinematics::KinematicsBase">
+    <description>IKFast61 plugin for closed-form kinematics of hydra rob3_planning_group</description>
+  </class>
+</library>
