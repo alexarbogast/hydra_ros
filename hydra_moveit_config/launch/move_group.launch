@@ -21,21 +21,6 @@
 
   <arg name="capabilities" default=""/>
   <arg name="disable_capabilities" default=""/>
-  <!-- load these non-default MoveGroup capabilities (space seperated) -->
-  <!--
-  <arg name="capabilities" value="
-                a_package/AwsomeMotionPlanningCapability
-                another_package/GraspPlanningPipeline
-                " />
-  -->
-
-  <!-- inhibit these default MoveGroup capabilities (space seperated) -->
-  <!--
-  <arg name="disable_capabilities" value="
-                move_group/MoveGroupKinematicsService
-                move_group/ClearOctomapService
-                " />
-  -->
 
   <arg name="load_robot_description" default="true" />
   <!-- load URDF, SRDF and joint_limits configuration -->
@@ -49,16 +34,6 @@
     <!-- OMPL -->
     <include file="$(dirname)/planning_pipeline.launch.xml">
       <arg name="pipeline" value="ompl" />
-    </include>
-
-    <!-- CHOMP -->
-    <include file="$(dirname)/planning_pipeline.launch.xml">
-      <arg name="pipeline" value="chomp" />
-    </include>
-
-    <!-- Pilz Industrial Motion -->
-    <include file="$(dirname)/planning_pipeline.launch.xml">
-      <arg name="pipeline" value="pilz_industrial_motion_planner" />
     </include>
 
     <!-- Support custom planning pipeline -->
