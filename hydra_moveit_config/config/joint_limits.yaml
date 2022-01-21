@@ -68,8 +68,33 @@ joint_limits:
     max_velocity: 6.283185307179586
     has_acceleration_limits: false
     max_acceleration: 0
-  rotary_table_positioner:
-    has_velocity_limits: false
-    max_velocity: 0
+  rob3_joint_1:
+    has_velocity_limits: true
+    max_velocity: 2.6
+    has_acceleration_limits: false
+    max_acceleration: 0
+  rob3_joint_2:
+    has_velocity_limits: true
+    max_velocity: 1.9
+    has_acceleration_limits: false
+    max_acceleration: 0
+  rob3_joint_3:
+    has_velocity_limits: true
+    max_velocity: 2.6
+    has_acceleration_limits: false
+    max_acceleration: 0
+  rob3_joint_4:
+    has_velocity_limits: true
+    max_velocity: 3.5
+    has_acceleration_limits: false
+    max_acceleration: 0
+  rob3_joint_5:
+    has_velocity_limits: true
+    max_velocity: 3.9
+    has_acceleration_limits: false
+    max_acceleration: 0
+  rob3_joint_6:
+    has_velocity_limits: true
+    max_velocity: 6.283185307179586
     has_acceleration_limits: false
     max_acceleration: 0

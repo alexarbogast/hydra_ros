@@ -183,7 +183,7 @@ rob2_planning_group:
     - SPARStwo
   projection_evaluator: joints(rob2_joint_1,rob2_joint_2)
   longest_valid_segment_fraction: 0.005
-positioner_planning_group:
+rob3_planning_group:
   planner_configs:
     - AnytimePathShortening
     - SBL
@@ -209,31 +209,5 @@ positioner_planning_group:
     - LazyPRMstar
     - SPARS
     - SPARStwo
-rob1_positioner_planning_group:
-  planner_configs:
-    - AnytimePathShortening
-    - SBL
-    - EST
-    - LBKPIECE
-    - BKPIECE
-    - KPIECE
-    - RRT
-    - RRTConnect
-    - RRTstar
-    - TRRT
-    - PRM
-    - PRMstar
-    - FMT
-    - BFMT
-    - PDST
-    - STRIDE
-    - BiTRRT
-    - LBTRRT
-    - BiEST
-    - ProjEST
-    - LazyPRM
-    - LazyPRMstar
-    - SPARS
-    - SPARStwo
-  projection_evaluator: joints(rob1_joint_1,rob1_joint_2)
+  projection_evaluator: joints(rob3_joint_1,rob3_joint_2)
   longest_valid_segment_fraction: 0.005
