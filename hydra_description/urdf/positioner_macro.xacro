@@ -34,12 +34,12 @@
       </collision>
     </link>
     <link name="${prefix}positioner"/>
+    <link name="${prefix}positioner_static"/>
 
     <!-- joint list -->
     <joint name="{prefix}rotary_table_top_base" type="fixed">
       <parent link="${prefix}rotary_table_base"/>
       <child link="${prefix}rotary_table_top"/>
-      <axis xyz="0 0 0"/>
       <origin rpy="0.0 0.0 0.0" xyz="0 0 0.1778"/>
     </joint>
     
@@ -55,6 +55,12 @@
       <axis xyz="0 0 1"/>
       <parent link="${prefix}positioner_base"/>
       <child link="${prefix}positioner"/>
+    </joint>
+
+    <joint name="${prefix}positioner_static_joint" type="fixed">
+      <origin rpy="0.0 0.0 0.0" xyz="0 0 0.03175"/>
+      <parent link="${prefix}rotary_table_top"/>
+      <child link="${prefix}positioner_static"/>
     </joint>
 
   </xacro:macro>
