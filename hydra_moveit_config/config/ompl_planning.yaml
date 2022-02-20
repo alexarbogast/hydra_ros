@@ -237,3 +237,31 @@ positioner_planning_group:
     - LazyPRMstar
     - SPARS
     - SPARStwo
+hydra_planning_group:
+  planner_configs:
+    - AnytimePathShortening
+    - SBL
+    - EST
+    - LBKPIECE
+    - BKPIECE
+    - KPIECE
+    - RRT
+    - RRTConnect
+    - RRTstar
+    - TRRT
+    - PRM
+    - PRMstar
+    - FMT
+    - BFMT
+    - PDST
+    - STRIDE
+    - BiTRRT
+    - LBTRRT
+    - BiEST
+    - ProjEST
+    - LazyPRM
+    - LazyPRMstar
+    - SPARS
+    - SPARStwo
+  projection_evaluator: joints(rob1_joint_1,rob1_joint_2)
+  longest_valid_segment_fraction: 0.005

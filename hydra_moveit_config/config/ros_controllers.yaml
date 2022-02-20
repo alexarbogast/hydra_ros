@@ -128,3 +128,121 @@ positioner_controller:
       d: 1
       i: 1
       i_clamp: 1
+hydra_position_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - rob1_joint_1
+    - rob1_joint_2
+    - rob1_joint_3
+    - rob1_joint_4
+    - rob1_joint_5
+    - rob1_joint_6
+    - rob2_joint_1
+    - rob2_joint_2
+    - rob2_joint_3
+    - rob2_joint_4
+    - rob2_joint_5
+    - rob2_joint_6
+    - rob3_joint_1
+    - rob3_joint_2
+    - rob3_joint_3
+    - rob3_joint_4
+    - rob3_joint_5
+    - rob3_joint_6
+    - rotary_table_positioner
+  gains:
+    rob1_joint_1:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob1_joint_2:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob1_joint_3:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob1_joint_4:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob1_joint_5:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob1_joint_6:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob2_joint_1:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob2_joint_2:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob2_joint_3:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob2_joint_4:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob2_joint_5:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob2_joint_6:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob3_joint_1:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob3_joint_2:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob3_joint_3:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob3_joint_4:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob3_joint_5:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rob3_joint_6:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rotary_table_positioner:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1

@@ -6,6 +6,6 @@
 
   <!-- Load the controllers -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" args="rob1_position_controller rob2_position_controller rob3_position_controller positioner_controller "/>
+    output="screen" args="rob1_position_controller rob2_position_controller rob3_position_controller positioner_controller hydra_position_controller "/>
 
 </launch>
