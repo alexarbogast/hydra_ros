@@ -9,13 +9,13 @@
     <link name="${prefix}typhoon_extruder_base">
         <visual>
         <geometry>
-          <mesh filename="package://hydra_description/meshes/typhoon_extruder.dae"/>
+          <mesh filename="package://hydra_description/meshes/visual/typhoon_extruder.dae"/>
         </geometry>
         <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
       </visual>
       <collision>
         <geometry>
-          <mesh filename="package://hydra_description/meshes/typhoon_extruder.dae"/>
+          <mesh filename="package://hydra_description/meshes/visual/typhoon_extruder.dae"/>
         </geometry>
         <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
       </collision>

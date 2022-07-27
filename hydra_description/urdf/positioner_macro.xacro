@@ -6,13 +6,13 @@
     <link name="${prefix}rotary_table_base">
         <visual>
         <geometry>
-          <mesh filename="package://hydra_description/meshes/rotary_table.dae"/>
+          <mesh filename="package://hydra_description/meshes/visual/rotary_table.dae"/>
         </geometry>
         <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
       </visual>
       <collision>
         <geometry>
-          <mesh filename="package://hydra_description/meshes/rotary_table.dae"/>
+          <mesh filename="package://hydra_description/meshes/collision/rotary_table_collision.stl"/>
         </geometry>
         <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
       </collision>
@@ -22,13 +22,13 @@
     <link name="${prefix}positioner_base">
         <visual>
         <geometry>
-          <mesh filename="package://hydra_description/meshes/hydra_positioner.dae"/>
+          <mesh filename="package://hydra_description/meshes/visual/hydra_positioner.dae"/>
         </geometry>
         <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
       </visual>
       <collision>
         <geometry>
-          <mesh filename="package://hydra_description/meshes/hydra_positioner.dae"/>
+          <mesh filename="package://hydra_description/meshes/collision/hydra_positioner_collision.stl"/>
         </geometry>
         <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
       </collision>
@@ -40,7 +40,7 @@
     <joint name="{prefix}rotary_table_top_base" type="fixed">
       <parent link="${prefix}rotary_table_base"/>
       <child link="${prefix}rotary_table_top"/>
-      <origin rpy="0.0 0.0 0.0" xyz="0 0 0.1778"/>
+      <origin rpy="0.0 0.0 0.0" xyz="0 0 0.183984"/>
     </joint>
     
     <joint name="${prefix}rotary_table_positioner" type="continuous">
