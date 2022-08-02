@@ -62,11 +62,19 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        positioner_link:
+        positioner:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        positioner_base:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
+        positioner_static:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         rob1_base:
           Alpha: 1
           Show Axes: false
@@ -115,6 +123,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
         rob1_typhoon_extruder:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob1_typhoon_extruder_base:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -170,6 +182,10 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        rob2_typhoon_extruder_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
           Value: true
         rob3_base:
           Alpha: 1
@@ -222,12 +238,20 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        rob3_typhoon_extruder_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
           Value: true
         rotary_table_base:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
+        rotary_table_top:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         world:
           Alpha: 1
           Show Axes: false
@@ -238,6 +262,157 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        positioner:
+          Value: true
+        positioner_base:
+          Value: true
+        positioner_static:
+          Value: true
+        rob1_base:
+          Value: true
+        rob1_base_link:
+          Value: true
+        rob1_flange:
+          Value: true
+        rob1_link_1:
+          Value: true
+        rob1_link_2:
+          Value: true
+        rob1_link_3:
+          Value: true
+        rob1_link_4:
+          Value: true
+        rob1_link_5:
+          Value: true
+        rob1_link_6:
+          Value: true
+        rob1_tool0:
+          Value: true
+        rob1_typhoon_extruder:
+          Value: true
+        rob1_typhoon_extruder_base:
+          Value: true
+        rob2_base:
+          Value: true
+        rob2_base_link:
+          Value: true
+        rob2_flange:
+          Value: true
+        rob2_link_1:
+          Value: true
+        rob2_link_2:
+          Value: true
+        rob2_link_3:
+          Value: true
+        rob2_link_4:
+          Value: true
+        rob2_link_5:
+          Value: true
+        rob2_link_6:
+          Value: true
+        rob2_tool0:
+          Value: true
+        rob2_typhoon_extruder:
+          Value: true
+        rob2_typhoon_extruder_base:
+          Value: true
+        rob3_base:
+          Value: true
+        rob3_base_link:
+          Value: true
+        rob3_flange:
+          Value: true
+        rob3_link_1:
+          Value: true
+        rob3_link_2:
+          Value: true
+        rob3_link_3:
+          Value: true
+        rob3_link_4:
+          Value: true
+        rob3_link_5:
+          Value: true
+        rob3_link_6:
+          Value: true
+        rob3_tool0:
+          Value: true
+        rob3_typhoon_extruder:
+          Value: true
+        rob3_typhoon_extruder_base:
+          Value: true
+        rotary_table_base:
+          Value: true
+        rotary_table_top:
+          Value: true
+        world:
+          Value: true
+      Marker Alpha: 1
+      Marker Scale: 0.800000011920929
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        world:
+          rob1_base_link:
+            rob1_base:
+              {}
+            rob1_link_1:
+              rob1_link_2:
+                rob1_link_3:
+                  rob1_link_4:
+                    rob1_link_5:
+                      rob1_link_6:
+                        rob1_flange:
+                          rob1_tool0:
+                            {}
+                          rob1_typhoon_extruder_base:
+                            rob1_typhoon_extruder:
+                              {}
+          rob2_base_link:
+            rob2_base:
+              {}
+            rob2_link_1:
+              rob2_link_2:
+                rob2_link_3:
+                  rob2_link_4:
+                    rob2_link_5:
+                      rob2_link_6:
+                        rob2_flange:
+                          rob2_tool0:
+                            {}
+                          rob2_typhoon_extruder_base:
+                            rob2_typhoon_extruder:
+                              {}
+          rob3_base_link:
+            rob3_base:
+              {}
+            rob3_link_1:
+              rob3_link_2:
+                rob3_link_3:
+                  rob3_link_4:
+                    rob3_link_5:
+                      rob3_link_6:
+                        rob3_flange:
+                          rob3_tool0:
+                            {}
+                          rob3_typhoon_extruder_base:
+                            rob3_typhoon_extruder:
+                              {}
+          rotary_table_base:
+            rotary_table_top:
+              positioner_base:
+                positioner:
+                  {}
+              positioner_static:
+                {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -282,9 +457,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.19979725778102875
+      Pitch: 0.3697969913482666
       Target Frame: <Fixed Frame>
-      Yaw: 3.370393991470337
+      Yaw: 3.1353840827941895
     Saved: ~
 Window Geometry:
   Displays:
