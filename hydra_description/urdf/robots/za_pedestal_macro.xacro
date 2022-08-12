@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="ped_height" value="0.585" />
+
+	<xacro:macro name="za_pedestal_macro" params="prefix tool:='tool0'" >
+
+		<xacro:include filename="$(find hydra_description)/urdf/robots/za_tool_macro.xacro" />
+		<xacro:za_tool_macro prefix="${prefix}" tool="${tool}"/>
+
+        <link name="${prefix}pedestal_base">
+            <visual>
+                <geometry>
+                    <mesh filename="package://hydra_description/meshes/visual/za_pedestal.dae"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://hydra_description/meshes/collision/za_pedestal_collision.stl"/>
+                </geometry>
+            </collision>
+        </link>
+		<link name="${prefix}pedestal_top"/>
+
+        <joint name="${prefix}pedestal_base-${prefix}pedestal_top" type="fixed">
+            <origin rpy="0.0 0.0 0.0" xyz="0 0 ${ped_height}"/>
+            <parent link="${prefix}pedestal_base"/>
+            <child  link="${prefix}pedestal_top"/>
+        </joint>
+        <joint name="${prefix}pedestal_top-${prefix}base_link" type="fixed">
+            <parent link="${prefix}pedestal_top"/>
+            <child  link="${prefix}base_link"/>
+        </joint>
+
+	</xacro:macro>
+</robot>

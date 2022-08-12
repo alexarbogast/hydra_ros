@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<robot name="za" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="prefix" default="" />
+  <xacro:arg name="tool" default="typhoon_extruder" />
+
+  <xacro:include filename="$(find hydra_description)/urdf/robots/za_pedestal_macro.xacro" />
+  <xacro:za_pedestal_macro prefix="$(arg prefix)" tool="$(arg tool)"/>
+</robot>

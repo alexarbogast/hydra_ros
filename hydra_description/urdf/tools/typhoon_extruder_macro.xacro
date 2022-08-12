@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="tcp_trans" value="0.08613 0.0 -0.159" />
+    <xacro:property name="tcp_rot"  value="0.0 ${pi} 0.0" />
+
+	<xacro:macro name="typhoon_extruder_macro" params="prefix">
+
+		<!-- link list -->
+		<link name="${prefix}typhoon_extruder_base">
+			<visual>
+				<geometry>
+					<mesh filename="package://hydra_description/meshes/visual/typhoon_extruder.dae"/>
+				</geometry>
+			</visual>
+			<collision>
+				<geometry>
+					<mesh filename="package://hydra_description/meshes/collision/typhoon_extruder_collision.stl"/>
+				</geometry>
+			</collision>
+		</link>
+		<link name="${prefix}typhoon_extruder" />
+
+		<!-- attach extruder to flange -->
+		<joint name="${prefix}extruder_attach_joint" type="fixed">
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<parent link="${prefix}flange"/>
+			<child link="${prefix}typhoon_extruder_base"/>
+		</joint>
+		<joint name="${prefix}extruder_extruder_base" type="fixed">
+			<origin xyz="${tcp_trans}" rpy="${tcp_rot}" />
+			<parent link="${prefix}typhoon_extruder_base"/>
+			<child link="${prefix}typhoon_extruder"/>
+		</joint>
+
+	</xacro:macro>
+</robot>

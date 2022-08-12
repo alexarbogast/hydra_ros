@@ -1,13 +1,36 @@
 <?xml version="1.0" ?>
 <robot name="hydra" xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <xacro:include filename="$(find hydra_description)/urdf/za_typhoon_macro.xacro"/>
-    <xacro:include filename="$(find hydra_description)/urdf/positioner_macro.xacro"/>
+    <xacro:include filename="$(find hydra_description)/urdf/robots/za_pedestal_macro.xacro"/>
+    <xacro:include filename="$(find hydra_description)/urdf/positioner/positioner_macro.xacro"/>
     
-    <xacro:macro name="hydra_macro" params="prefix">
-        <xacro:za_typhoon_macro prefix="${prefix}rob1_" tool0_trans="0 0 0" tool0_rot="0 ${pi*1} 0"/>
-        <xacro:za_typhoon_macro prefix="${prefix}rob2_" tool0_trans="0 0 0" tool0_rot="0 ${pi*1} 0"/>
-        <xacro:za_typhoon_macro prefix="${prefix}rob3_" tool0_trans="0 0 0" tool0_rot="0 ${pi*1} 0"/>
+    <xacro:macro name="hydra_macro" params="prefix radius tool:='tool0'">
+        <xacro:za_pedestal_macro prefix="${prefix}rob1_" tool="${tool}"/>
+        <xacro:za_pedestal_macro prefix="${prefix}rob2_" tool="${tool}"/>
+        <xacro:za_pedestal_macro prefix="${prefix}rob3_" tool="${tool}"/>
 
         <xacro:positioner_macro prefix="${prefix}"/>
+
+        <link name="${prefix}hydra_base"/>
+        <joint name="${prefix}hydra_base-rob1_pedestal_base" type="fixed">
+            <origin xyz="-${radius*sin(pi/6)} -${radius*cos(pi/6)}  0" rpy="0 0 ${pi/3}"/>
+            <parent link="${prefix}hydra_base"/>
+            <child  link="${prefix}rob1_pedestal_base"/>
+        </joint>
+        <joint name="${prefix}hydra_base-rob2_pedestal_base" type="fixed">
+            <origin xyz="${radius} 0 0" rpy="0 0 ${pi}"/>
+            <parent link="${prefix}hydra_base"/>
+            <child  link="${prefix}rob2_pedestal_base"/>
+        </joint>
+        <joint name="${prefix}hydra_base-rob3_pedestal_base" type="fixed">
+            <origin xyz="-${radius*sin(pi/6)} ${radius*cos(pi/6)} 0" rpy="0 0 -${pi/3}"/>
+            <parent link="${prefix}hydra_base"/>
+            <child  link="${prefix}rob3_pedestal_base"/>
+        </joint>
+        <joint name="${prefix}hydra_base-$(arg prefix)rotary_table_base" type="fixed">
+            <origin xyz="0 0 0"/>
+            <parent link="${prefix}hydra_base"/>
+            <child  link="${prefix}positioner_stand_base"/>
+        </joint>
+
     </xacro:macro>
 </robot>

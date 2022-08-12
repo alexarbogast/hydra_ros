@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="pos_stand_height" value="0.32853" />
+
+  <xacro:macro name="positioner_macro" params="prefix">
+
+    <!-- link list -->
+    <link name="${prefix}positioner_stand_base">
+        <visual>
+          <geometry>
+            <mesh filename="package://hydra_description/meshes/visual/positioner_stand.dae"/>
+          </geometry>
+        </visual>
+        <collision>
+          <geometry>
+            <mesh filename="package://hydra_description/meshes/collision/positioner_stand_collision.stl"/>
+          </geometry>
+        </collision>
+    </link>
+    <link name="${prefix}rotary_table_base">
+        <visual>
+        <geometry>
+          <mesh filename="package://hydra_description/meshes/visual/rotary_table.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://hydra_description/meshes/collision/rotary_table_collision.stl"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}rotary_table_top"/>
+    
+    <link name="${prefix}positioner_base">
+        <visual>
+        <geometry>
+          <mesh filename="package://hydra_description/meshes/visual/hydra_positioner.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://hydra_description/meshes/collision/hydra_positioner_collision.stl"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}positioner"/>
+    <link name="${prefix}positioner_static"/>
+
+    <!-- joint list -->
+    <joint name="${prefix}pos_stand_base-rotary_table_base" type="fixed">
+      <origin rpy="0.0 0.0 0.0" xyz="0 0 ${pos_stand_height}"/>
+      <parent link="${prefix}positioner_stand_base"/>
+      <child link="${prefix}rotary_table_base"/>
+    </joint>
+    <joint name="${prefix}rotary_table_top_base" type="fixed">
+      <origin rpy="0.0 0.0 0.0" xyz="0 0 0.183984"/>
+      <parent link="${prefix}rotary_table_base"/>
+      <child link="${prefix}rotary_table_top"/>
+    </joint>
+    <joint name="${prefix}rotary_table_positioner" type="continuous">
+      <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <parent link="${prefix}rotary_table_top"/>
+      <child link="${prefix}positioner_base"/>
+    </joint>
+    <joint name="${prefix}positioner_joint" type="fixed">
+      <origin rpy="0.0 0.0 0.0" xyz="0 0 0.03175"/>
+      <parent link="${prefix}positioner_base"/>
+      <child link="${prefix}positioner"/>
+    </joint>
+    <joint name="${prefix}positioner_static_joint" type="fixed">
+      <origin rpy="0.0 0.0 0.0" xyz="0 0 0.03175"/>
+      <parent link="${prefix}rotary_table_top"/>
+      <child link="${prefix}positioner_static"/>
+    </joint>
+
+  </xacro:macro>
+</robot>
