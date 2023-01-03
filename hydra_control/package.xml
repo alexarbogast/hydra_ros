@@ -9,6 +9,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   
+  <depend>ros_control_boilerplate</depend>
   <depend>controller_interface</depend>
   <depend>controller_manager</depend>
   <depend>roscpp</depend>

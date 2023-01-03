@@ -1,0 +1,77 @@
+robot1_trajectory_controller:
+  type: velocity_controllers/JointTrajectoryController
+  joints:
+    - rob1_joint_1
+    - rob1_joint_2
+    - rob1_joint_3
+    - rob1_joint_4
+    - rob1_joint_5
+    - rob1_joint_6
+
+  gains: # Required because we're controlling a velocity interface
+    rob1_joint_1: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob1_joint_2: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob1_joint_3: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob1_joint_4: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob1_joint_5: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob1_joint_6: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+
+  constraints:
+    goal_time: 1.0 # If the timestamp of the goal trajectory point is t, then following the trajectory succeeds if it reaches the goal within t +/- goal_time, and aborts otherwise.
+    stopped_velocity_tolerance: 0.01 # Velocity to be considered approximately equal to zero
+
+robot2_trajectory_controller:
+  type: velocity_controllers/JointTrajectoryController
+  joints:
+    - rob2_joint_1
+    - rob2_joint_2
+    - rob2_joint_3
+    - rob2_joint_4
+    - rob2_joint_5
+    - rob2_joint_6
+
+  gains: # Required because we're controlling a velocity interface
+    rob2_joint_1: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob2_joint_2: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob2_joint_3: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob2_joint_4: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob2_joint_5: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob2_joint_6: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+
+  constraints:
+    goal_time: 1.0 # If the timestamp of the goal trajectory point is t, then following the trajectory succeeds if it reaches the goal within t +/- goal_time, and aborts otherwise.
+    stopped_velocity_tolerance: 0.01 # Velocity to be considered approximately equal to zero
+
+robot3_trajectory_controller:
+  type: velocity_controllers/JointTrajectoryController
+  joints:
+    - rob3_joint_1
+    - rob3_joint_2
+    - rob3_joint_3
+    - rob3_joint_4
+    - rob3_joint_5
+    - rob3_joint_6
+  
+  gains: # Required because we're controlling a velocity interface
+    rob3_joint_1: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob3_joint_2: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob3_joint_3: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob3_joint_4: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob3_joint_5: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+    rob3_joint_6: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+
+  constraints:
+    goal_time: 1.0 # If the timestamp of the goal trajectory point is t, then following the trajectory succeeds if it reaches the goal within t +/- goal_time, and aborts otherwise.
+    stopped_velocity_tolerance: 0.01 # Velocity to be considered approximately equal to zero
+
+positioner_trajectory_controller:
+  type: velocity_controllers/JointTrajectoryController
+  joints:
+    - rotary_table_positioner
+
+  gains: # Required because we're controlling a velocity interface
+    rotary_table_positioner: {p: 100, d: 0.2, i: 1, i_clamp: 1}
+
+  constraints:
+    goal_time: 1.0 # If the timestamp of the goal trajectory point is t, then following the trajectory succeeds if it reaches the goal within t +/- goal_time, and aborts otherwise.
+    stopped_velocity_tolerance: 0.01 # Velocity to be considered approximately equal to zero

@@ -63,6 +63,7 @@
       <axis xyz="0 0 1"/>
       <parent link="${prefix}rotary_table_top"/>
       <child link="${prefix}positioner_base"/>
+      <limit effort="1000.0" velocity="1.5"/>
     </joint>
     <joint name="${prefix}positioner_joint" type="fixed">
       <origin rpy="0.0 0.0 0.0" xyz="0 0 0.03175"/>

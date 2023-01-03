@@ -1,5 +1,5 @@
 <launch>
 	<!-- Define MoveIt controller manager plugin -->
 	<param name="moveit_controller_manager" value="moveit_ros_control_interface::MoveItControllerManager" />
-	<rosparam file="$(find hydra_moveit_config)/config/controllers.yaml"/>
+	<rosparam subst_value="true" file="$(find hydra_moveit_config)/config/controllers.yaml"/>
 </launch>

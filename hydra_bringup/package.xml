@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>hydra_bringup</name>
+  <version>0.1.0</version>
+  <description> hydra_bringup provides a roslaunch for commonly used files with the Hydra system </description>
+  <author email="arbogastaw@gmail.com">Alex Arbogast</author>
+  <maintainer email="arbogastaw@gmail.com">Alex Arbogast</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>hydra_moveit_config</exec_depend>
+  <exec_depend>hydra_control</exec_depend>
+  
+</package>
