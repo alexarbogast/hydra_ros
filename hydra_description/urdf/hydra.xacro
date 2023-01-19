@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot name="hydra" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:arg name="prefix" default=""/>
-  <xacro:property name="radius" value="0.95" />
+  <xacro:property name="radius" value="0.79375" />
   <xacro:property name="tool" default="typhoon_extruder" />
 
   <xacro:include filename="$(find hydra_description)/urdf/hydra_macro.xacro"/>
