@@ -407,7 +407,7 @@ Visualization Manager:
       Marker Alpha: 1
       Marker Scale: 0.30000001192092896
       Name: TF
-      Show Arrows: true
+      Show Arrows: false
       Show Axes: true
       Show Names: false
       Tree:
@@ -479,7 +479,7 @@ Visualization Manager:
       Marker Topic: /rviz_visual_tools
       Name: MarkerArray
       Namespaces:
-        Line Array: true
+        {}
       Queue Size: 500000
       Value: true
   Enabled: true
