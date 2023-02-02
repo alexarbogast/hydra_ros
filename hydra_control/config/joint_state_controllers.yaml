@@ -1,15 +1,15 @@
-robot1_joint_state_controller:
+joint_state_controller:
   type: joint_state_controller/JointStateController
-  publish_rate: 100
+  publish_rate: 250
 
-robot2_joint_state_controller:
-  type: joint_state_controller/JointStateController
-  publish_rate: 100
+#robot2_joint_state_controller:
+#  type: joint_state_controller/JointStateController
+#  publish_rate: 100
 
-robot3_joint_state_controller:
-  type: joint_state_controller/JointStateController
-  publish_rate: 100
+#robot3_joint_state_controller:
+#  type: joint_state_controller/JointStateController
+#  publish_rate: 100
 
-positioner_joint_state_controller:
-  type: joint_state_controller/JointStateController
-  publish_rate: 100
+#positioner_joint_state_controller:
+#  type: joint_state_controller/JointStateController
+#  publish_rate: 100

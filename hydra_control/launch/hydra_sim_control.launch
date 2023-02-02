@@ -19,16 +19,13 @@
   <rosparam file="$(find hydra_control)/config/hydra_hardware.yaml" command="load"/>
   <node name="hydra_hw_interface" pkg="moveit_sim_controller" respawn="false"
       type="moveit_sim_hw_main" output="screen" launch-prefix="$(arg launch_prefix)"/>
-  
+
   <!-- Load controller manager -->
   <rosparam file="$(find hydra_control)/config/joint_state_controllers.yaml" command="load"/>
   <rosparam file="$(find hydra_control)/config/velocity_trajectory_controllers.yaml" command="load"/>
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" 
     args="
-      robot1_joint_state_controller
-      robot2_joint_state_controller
-      robot3_joint_state_controller
-      positioner_joint_state_controller
+      joint_state_controller
       robot1_trajectory_controller
       robot2_trajectory_controller
       robot3_trajectory_controller
@@ -45,5 +42,5 @@
     "/>
 
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen"/>
-  
+ 
 </launch>
