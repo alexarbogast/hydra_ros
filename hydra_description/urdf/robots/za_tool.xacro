@@ -2,7 +2,24 @@
 <robot name="za" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:arg name="prefix" default="" />
   <xacro:arg name="tool" default="typhoon_extruder" />
-
   <xacro:include filename="$(find hydra_description)/urdf/robots/za_tool_macro.xacro" />
   <xacro:za_tool_macro prefix="$(arg prefix)" tool="$(arg tool)"/>
+  
+  <!-- 'world' frame: default pose reference frame -->
+  <link name="world" />
+  <joint name="world-$(arg prefix)base_link" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="world"/>
+    <child link="$(arg prefix)base_link"/>
+  </joint>
+  
+  <!-- Gazebo plugin for ROS Control -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <controlPeriod>0.001</controlPeriod>
+      <robotSimType>za_gazebo/ZaHWSim</robotSimType>
+    </plugin>
+    <self_collide>true</self_collide>
+  </gazebo>
 </robot>

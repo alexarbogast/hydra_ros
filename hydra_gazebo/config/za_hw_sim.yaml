@@ -1,0 +1,82 @@
+robot_hardware:
+  - robot1_hw
+  - robot2_hw
+  - robot3_hw
+
+robot1_hw:
+  type: za_gazebo/ZaHWSim
+  arm_id: rob1
+  singularity_warning_threshold:    0.0001
+  tau_ext_lowpass_filter:           1.0     
+  end_effector: "rob1_typhoon_extruder"
+
+  # Motion generators PID gains
+  motion_generators:
+    position:
+      gains:
+        rob1_joint_1: { p: 600, d: 30, i: 0 }
+        rob1_joint_2: { p: 600, d: 30, i: 0 }
+        rob1_joint_3: { p: 600, d: 30, i: 0 }
+        rob1_joint_4: { p: 600, d: 10, i: 0 }
+        rob1_joint_5: { p: 250, d: 10, i: 0 }
+        rob1_joint_6: { p: 150, d: 10, i: 0 }
+    velocity:
+      gains:
+        rob1_joint_1: { p: 30, d: 0, i: 0 }
+        rob1_joint_2: { p: 30, d: 0, i: 0 }
+        rob1_joint_3: { p: 30, d: 0, i: 0 }
+        rob1_joint_4: { p: 30, d: 0, i: 0 }
+        rob1_joint_5: { p: 10, d: 0, i: 0 }
+        rob1_joint_6: { p: 10, d: 0, i: 0 }
+
+robot2_hw:
+  type: za_gazebo/ZaHWSim
+  arm_id: rob2
+  singularity_warning_threshold:    0.0001
+  tau_ext_lowpass_filter:           1.0
+  end_effector: "rob2_typhoon_extruder"
+
+  # Motion generators PID gains
+  motion_generators:
+    position:
+      gains:
+        rob2_joint_1: { p: 600, d: 30, i: 0 }
+        rob2_joint_2: { p: 600, d: 30, i: 0 }
+        rob2_joint_3: { p: 600, d: 30, i: 0 }
+        rob2_joint_4: { p: 600, d: 10, i: 0 }
+        rob2_joint_5: { p: 250, d: 10, i: 0 }
+        rob2_joint_6: { p: 150, d: 10, i: 0 }
+    velocity:
+      gains:
+        rob2_joint_1: { p: 30, d: 0, i: 0 }
+        rob2_joint_2: { p: 30, d: 0, i: 0 }
+        rob2_joint_3: { p: 30, d: 0, i: 0 }
+        rob2_joint_4: { p: 30, d: 0, i: 0 }
+        rob2_joint_5: { p: 10, d: 0, i: 0 }
+        rob2_joint_6: { p: 10, d: 0, i: 0 }
+
+robot3_hw:
+  type: za_gazebo/ZaHWSim
+  arm_id: rob3
+  singularity_warning_threshold:    0.0001
+  tau_ext_lowpass_filter:           1.0
+  end_effector: "rob3_typhoon_extruder"
+
+  # Motion generators PID gains
+  motion_generators:
+    position:
+      gains:
+        rob3_joint_1: { p: 600, d: 30, i: 0 }
+        rob3_joint_2: { p: 600, d: 30, i: 0 }
+        rob3_joint_3: { p: 600, d: 30, i: 0 }
+        rob3_joint_4: { p: 600, d: 10, i: 0 }
+        rob3_joint_5: { p: 250, d: 10, i: 0 }
+        rob3_joint_6: { p: 50, d: 0.1, i: 0 }
+    velocity:
+      gains:
+        rob3_joint_1: { p: 30, d: 0, i: 0 }
+        rob3_joint_2: { p: 30, d: 0, i: 0 }
+        rob3_joint_3: { p: 30, d: 0, i: 0 }
+        rob3_joint_4: { p: 30, d: 0, i: 0 }
+        rob3_joint_5: { p: 10, d: 0, i: 0 }
+        rob3_joint_6: { p: 10, d: 0, i: 0 }

@@ -1,0 +1,10 @@
+<library path="lib/libhydra_hw_sim">
+  <class
+      name="hydra_gazebo/HydraHWSim"
+      type="hydra_gazebo::HydraHWSim"
+      base_class_type="gazebo_ros_control::RobotHWSim">
+      <description>
+          A custom implementation of a gazebo_ros_control plugin, which is able to simulate hydra interfaces in Gazebo.
+      </description>
+  </class>
+</library>

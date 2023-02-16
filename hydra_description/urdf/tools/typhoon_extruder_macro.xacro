@@ -7,7 +7,7 @@
 	<xacro:macro name="typhoon_extruder_macro" params="prefix">
 
 		<!-- link list -->
-		<link name="${prefix}typhoon_extruder_base">
+		<link name="${prefix}typhoon_extruder">
 			<visual>
 				<geometry>
 					<mesh filename="package://hydra_description/meshes/visual/typhoon_extruder.dae"/>
@@ -18,19 +18,24 @@
 					<mesh filename="package://hydra_description/meshes/collision/typhoon_extruder_collision.stl"/>
 				</geometry>
 			</collision>
+			<inertial>
+    			<origin xyz="0.065346 0.000016 -0.031645"/>
+    			<mass value="1.75"/>
+				<inertia ixx="0.006265" ixy="0.000003" ixz="-0.000805" iyy="0.006649" iyz="0.000002" izz="0.001704"/>
+			</inertial>
 		</link>
-		<link name="${prefix}typhoon_extruder" />
+		<link name="${prefix}typhoon_extruder_tcp" />
 
 		<!-- attach extruder to flange -->
 		<joint name="${prefix}extruder_attach_joint" type="fixed">
 			<origin xyz="0 0 0" rpy="0 0 0" />
 			<parent link="${prefix}flange"/>
-			<child link="${prefix}typhoon_extruder_base"/>
+			<child link="${prefix}typhoon_extruder"/>
 		</joint>
 		<joint name="${prefix}extruder_extruder_base" type="fixed">
 			<origin xyz="${tcp_trans}" rpy="${tcp_rot}" />
-			<parent link="${prefix}typhoon_extruder_base"/>
-			<child link="${prefix}typhoon_extruder"/>
+			<parent link="${prefix}typhoon_extruder"/>
+			<child link="${prefix}typhoon_extruder_tcp"/>
 		</joint>
 
 	</xacro:macro>

@@ -12,6 +12,7 @@
   <depend>ros_control_boilerplate</depend>
   <depend>controller_interface</depend>
   <depend>controller_manager</depend>
+  <depend>za_control</depend>
   <depend>roscpp</depend>
   <depend>tf2_msgs</depend>
   <depend>tf</depend>

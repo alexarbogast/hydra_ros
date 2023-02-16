@@ -2,6 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:property name="pos_stand_height" value="0.32853" />
+  <xacro:include filename="$(find za_description)/urdf/utils.xacro"/>
 
   <xacro:macro name="positioner_macro" params="prefix">
 
@@ -17,6 +18,7 @@
             <mesh filename="package://hydra_description/meshes/collision/positioner_stand_collision.stl"/>
           </geometry>
         </collision>
+        <xacro:default_inertial mass="1"/>
     </link>
     <link name="${prefix}rotary_table_base">
         <visual>
@@ -29,8 +31,11 @@
           <mesh filename="package://hydra_description/meshes/collision/rotary_table_collision.stl"/>
         </geometry>
       </collision>
+      <xacro:default_inertial mass="1"/>
     </link>
-    <link name="${prefix}rotary_table_top"/>
+    <link name="${prefix}rotary_table_top">
+      <xacro:default_inertial mass="1"/>
+    </link>
     
     <link name="${prefix}positioner_base">
         <visual>
@@ -43,6 +48,11 @@
           <mesh filename="package://hydra_description/meshes/collision/hydra_positioner_collision.stl"/>
         </geometry>
       </collision>
+      <inertial>
+        <origin xyz="0.000000 0.000000 0.006349"/>
+        <mass value="27.67"/>
+        <inertia ixx="1.929232" ixy="0.000000" ixz="0.000000" iyy="1.929232" iyz="0.000000" izz="3.857721"/>
+      </inertial>
     </link>
     <link name="${prefix}positioner"/>
     <link name="${prefix}positioner_static"/>
@@ -75,6 +85,8 @@
       <parent link="${prefix}rotary_table_top"/>
       <child link="${prefix}positioner_static"/>
     </joint>
+
+    <xacro:gazebo-joint joint="${prefix}rotary_table_positioner" transmission="hardware_interface/VelocityJointInterface"/>
 
   </xacro:macro>
 </robot>

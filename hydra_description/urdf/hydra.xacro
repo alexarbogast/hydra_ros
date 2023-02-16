@@ -12,4 +12,13 @@
       <parent link="world"/>
       <child  link="$(arg prefix)hydra_base"/>
   </joint>
+
+  <!-- Gazebo plugin for ROS Control -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <controlPeriod>0.001</controlPeriod>
+      <robotSimType>hydra_gazebo/HydraHWSim</robotSimType>
+    </plugin>
+    <self_collide>true</self_collide>
+  </gazebo>
 </robot>
