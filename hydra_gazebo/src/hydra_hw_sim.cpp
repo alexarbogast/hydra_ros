@@ -46,7 +46,7 @@ void HydraHWSim::writeSim(ros::Time time, ros::Duration period) {
     }
 }
 
-bool HydraHWSim::loadRobotHW(const std::string& name, 
+bool HydraHWSim::loadRobotHW(const std::string& name,
                              const urdf::Model* const urdf,
                              std::vector<transmission_interface::TransmissionInfo>& transmissions) {
     ROS_INFO_STREAM("Loading hw_interface " << name);
@@ -194,7 +194,9 @@ void HydraHWSim::filterControllerList(
         // ZaStateControllers have no resources. Prevent filtering if the
         // controller is a ZaStateController and the arm_id is found in the 
         // controller name
-        if (controller.type == "za_control/ZaStateController") {
+        bool is_custom_state_controller = controller.type == "za_control/ZaStateController" or
+                                          controller.type == "hydra_control/PositionerStateController";
+        if (is_custom_state_controller) {
             if (controller.name.find(arm_id) != std::string::npos) {
                 filtered_controller.claimed_resources = controller.claimed_resources;
                 filtered_list.push_back(filtered_controller);

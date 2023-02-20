@@ -7,4 +7,12 @@
           A custom implementation of a gazebo_ros_control plugin, which is able to simulate hydra interfaces in Gazebo.
       </description>
   </class>
+  <class
+      name="hydra_gazebo/PositionerHWSim"
+      type="hydra_gazebo::PositionerHWSim"
+      base_class_type="gazebo_ros_control::RobotHWSim">
+      <description>
+          A custom implementation of a gazebo_ros_control plugin, which is able to simulate positioner interfaces in Gazebo.
+      </description>
+  </class>
 </library>

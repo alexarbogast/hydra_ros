@@ -12,8 +12,12 @@
   <depend>ros_control_boilerplate</depend>
   <depend>controller_interface</depend>
   <depend>controller_manager</depend>
+  <depend>pluginlib</depend>
+  <depend>realtime_tools</depend>
   <depend>za_control</depend>
+  <depend>hydra_hw</depend>
   <depend>roscpp</depend>
+  <depend>sensor_msgs</depend>
   <depend>tf2_msgs</depend>
   <depend>tf</depend>
 
@@ -22,5 +26,8 @@
   <exec_depend>joint_trajectory_controller</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   
+  <export>
+    <controller_interface plugin="${prefix}/hydra_control_plugins.xml"/>
+  </export>
 </package>
 

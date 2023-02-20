@@ -1,0 +1,5 @@
+<library path="lib/libpositioner_state_controller">
+  <class name="hydra_control/PositionerStateController" type="hydra_control::PositionerStateController" base_class_type="controller_interface::ControllerBase">
+    <description>A controller that publishes the positioner state</description>
+  </class>
+</library>

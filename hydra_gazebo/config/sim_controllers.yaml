@@ -35,10 +35,12 @@ rob3_state_controller:
     - rob3_joint_5
     - rob3_joint_6
 
-# Temporary until HydraStateController
-joint_state_controller:
-  type: joint_state_controller/JointStateController
-  publish_rate: 250
+positioner_state_controller:
+  type: hydra_control/PositionerStateController
+  publish_rate: 30  # [Hz]
+  arm_id: positioner
+  joint_names:
+    - positioner_joint
 
 # Trajectory Controllers
 robot1_effort_joint_trajectory_controller:
@@ -115,3 +117,37 @@ robot3_effort_joint_trajectory_controller:
     rob3_joint_4: { goal: 0.05 }
     rob3_joint_5: { goal: 0.05 }
     rob3_joint_6: { goal: 0.05 }
+
+# Cartesian velocity controllers
+robot1_cartesian_velocity_controller:
+  type: za_controllers/CartesianVelocityController
+  arm_id: rob1
+  joints:
+    - rob1_joint_1
+    - rob1_joint_2
+    - rob1_joint_3
+    - rob1_joint_4
+    - rob1_joint_5
+    - rob1_joint_6
+
+robot2_cartesian_velocity_controller:
+  type: za_controllers/CartesianVelocityController
+  arm_id: rob2
+  joints:
+    - rob2_joint_1
+    - rob2_joint_2
+    - rob2_joint_3
+    - rob2_joint_4
+    - rob2_joint_5
+    - rob2_joint_6
+
+robot3_cartesian_velocity_controller:
+  type: za_controllers/CartesianVelocityController
+  arm_id: rob3
+  joints:
+    - rob3_joint_1
+    - rob3_joint_2
+    - rob3_joint_3
+    - rob3_joint_4
+    - rob3_joint_5
+    - rob3_joint_6

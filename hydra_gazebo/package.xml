@@ -22,6 +22,7 @@
   <depend>joint_limits_interface</depend>
   <depend>eigen_conversions</depend>
   <depend>urdf</depend>
+  <depend>hydra_control</depend>
   <depend>za_gazebo</depend>
   <depend>za_control</depend>
 
