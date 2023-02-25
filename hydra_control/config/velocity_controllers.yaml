@@ -55,7 +55,7 @@ robot3_joint_velocity_controller:
 positioner_joint_velocity_controller:
   type: velocity_controllers/JointGroupVelocityController
   joints:
-    - rotary_table_positioner
+    - positioner_joint
 
   gains: # Required because we're controlling a velocity interface
     rotary_table_positioner: {p: 100, d: 0.0, i: 0, i_clamp: 0}

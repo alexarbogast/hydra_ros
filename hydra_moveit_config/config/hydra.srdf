@@ -53,7 +53,7 @@
         <joint name="rob3_joint_6" value="0"/>
     </group_state>
     <group_state name="home" group="positioner_planning_group">
-        <joint name="rotary_table_positioner" value="0"/>
+        <joint name="positioner_joint" value="0"/>
     </group_state>
     <group_state name="home" group="hydra_planning_group">
         <joint name="rob1_joint_1" value="0"/>
@@ -74,7 +74,7 @@
         <joint name="rob3_joint_4" value="0"/>
         <joint name="rob3_joint_5" value="0"/>
         <joint name="rob3_joint_6" value="0"/>
-        <joint name="rotary_table_positioner" value="0"/>
+        <joint name="positioner_joint" value="0"/>
     </group_state>
     <group_state name="ready" group="hydra_planning_group">
         <joint name="rob1_joint_1" value="0"/>
@@ -95,7 +95,7 @@
         <joint name="rob3_joint_4" value="0"/>
         <joint name="rob3_joint_5" value="-1"/>
         <joint name="rob3_joint_6" value="0"/>
-        <joint name="rotary_table_positioner" value="0"/>
+        <joint name="positioner_joint" value="0"/>
     </group_state>
     
    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->

@@ -13,7 +13,8 @@
   <!--<include file="$(dirname)/gazebo.launch" pass_all_args="true"/>-->
   <arg name="controller" default="robot1_effort_joint_trajectory_controller
                                   robot2_effort_joint_trajectory_controller
-                                  robot3_effort_joint_trajectory_controller"
+                                  robot3_effort_joint_trajectory_controller
+                                  positioner_effort_joint_trajectory_controller"
                          doc="Which example controller should be started? (One of {effort_joint_trajectory_controller})" />
   
   <include file="$(find hydra_gazebo)/launch/hydra.launch" pass_all_args="true" />
