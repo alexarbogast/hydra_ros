@@ -126,8 +126,11 @@ positioner_effort_joint_trajectory_controller:
     positioner_joint: {p: 1000, d: 0, i: 0}
 
 # Cartesian velocity controllers
-robot1_cartesian_velocity_controller:
-  type: za_controllers/CartesianVelocityController
+robot1_task_priority_controller:
+  type: za_controllers/TaskPriorityController
+  Kp: 10
+  Ko: 30
+  z_align: [0, 0, -1]
   arm_id: rob1
   joints:
     - rob1_joint_1
@@ -137,8 +140,11 @@ robot1_cartesian_velocity_controller:
     - rob1_joint_5
     - rob1_joint_6
 
-robot2_cartesian_velocity_controller:
-  type: za_controllers/CartesianVelocityController
+robot2_task_priority_controller:
+  type: za_controllers/TaskPriorityController
+  Kp: 10
+  Ko: 30
+  z_align: [0, 0, -1]
   arm_id: rob2
   joints:
     - rob2_joint_1
@@ -148,8 +154,11 @@ robot2_cartesian_velocity_controller:
     - rob2_joint_5
     - rob2_joint_6
 
-robot3_cartesian_velocity_controller:
-  type: za_controllers/CartesianVelocityController
+robot3_task_priority_controller:
+  type: za_controllers/TaskPriorityController
+  Kp: 10
+  Ko: 30
+  z_align: [0, 0, -1]
   arm_id: rob3
   joints:
     - rob3_joint_1
