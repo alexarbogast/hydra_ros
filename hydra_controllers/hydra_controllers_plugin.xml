@@ -1,0 +1,7 @@
+<library path="lib/libhydra_controllers">
+  <class name="hydra_controllers/HydraController" type="hydra_controllers::HydraController" base_class_type="controller_interface::ControllerBase">
+    <description>
+      A combined controller that executes coordinated motion based on cartesian velocities
+    </description>
+  </class>
+</library>

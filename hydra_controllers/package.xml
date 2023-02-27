@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>hydra_controllers</name>
+  <version>0.1.0</version>
+  <description>hydra_controllers provides code for controlling the Hydra system with ros_control</description>
+  <maintainer email="arbogastaw@gmail.com">Alex Arbogast</maintainer>
+  <license>Apache 2.0</license>
+  <author>Alex Arbogast</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>eigen</build_depend>
+
+  <depend>controller_interface</depend>
+  <depend>dynamic_reconfigure</depend>
+  <depend>eigen_conversions</depend>
+  <depend>za_hw</depend>
+  <depend>za_msgs</depend>
+  <depend>za_controllers</depend>
+  <depend>hardware_interface</depend>
+  <depend>joint_limits_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>realtime_tools</depend>
+  <depend>geometry_msgs</depend>
+  <depend>roscpp</depend>
+  <depend>urdf</depend>
+
+  <exec_depend>za_control</exec_depend>
+  <exec_depend>za_description</exec_depend>
+  <exec_depend>message_runtime</exec_depend>
+
+  <export>
+    <controller_interface plugin="${prefix}/hydra_controllers_plugin.xml" />
+  </export>
+</package>

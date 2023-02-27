@@ -25,6 +25,7 @@
   <depend>hydra_control</depend>
   <depend>za_gazebo</depend>
   <depend>za_control</depend>
+  <depend>hydra_controllers</depend>
 
   <export>
     <gazebo_ros_control plugin="${prefix}/hydra_hw_sim_plugin.xml" />

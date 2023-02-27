@@ -18,6 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   hydra_control
   za_gazebo
   za_control
+  hydra_controllers
 )
 
 catkin_package(
@@ -35,6 +36,7 @@ catkin_package(
     hydra_control
     za_gazebo
     za_control
+    hydra_controllers
 )
 
 link_directories(
