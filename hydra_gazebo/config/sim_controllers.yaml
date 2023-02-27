@@ -125,11 +125,12 @@ positioner_effort_joint_trajectory_controller:
   gains:
     positioner_joint: {p: 1000, d: 0, i: 0}
 
-# Cartesian velocity controllers
+# Task priority controllers
 robot1_task_priority_controller:
   type: za_controllers/TaskPriorityController
   Kp: 10
   Ko: 30
+  Kr: 100
   z_align: [0, 0, -1]
   arm_id: rob1
   joints:
@@ -144,6 +145,7 @@ robot2_task_priority_controller:
   type: za_controllers/TaskPriorityController
   Kp: 10
   Ko: 30
+  Kr: 100
   z_align: [0, 0, -1]
   arm_id: rob2
   joints:
@@ -158,6 +160,7 @@ robot3_task_priority_controller:
   type: za_controllers/TaskPriorityController
   Kp: 10
   Ko: 30
+  Kr: 100
   z_align: [0, 0, -1]
   arm_id: rob3
   joints:
