@@ -36,7 +36,6 @@ public:
 private:
     std::map<std::string, ZaDataContainer> arms_data_;
 
-    // setpoints
     Eigen::Vector3d z_align_;
     std::vector<ros::Subscriber> setpoints_subs_;
 
@@ -55,6 +54,8 @@ private:
     bool initArm(hardware_interface::RobotHW* robot_hw, 
                  const std::string& arm_id,
                  const std::vector<std::string>& joint_names);
+    void startingArm(ZaDataContainer& arm_data);
+    void updateArm(ZaDataContainer& arm_data);
 };
 
 } // namespace hydra_controllers
