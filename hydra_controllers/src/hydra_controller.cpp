@@ -1,5 +1,5 @@
 #include <hydra_controllers/hydra_controller.h>
-#include <za_controllers/pseudo_inversion.h>
+#include <hydra_controllers/control_methods.h>
 #include <pluginlib/class_list_macros.h>
 #include <ros/ros.h>
 
@@ -158,63 +158,20 @@ void HydraController::update(const ros::Time&, const ros::Duration& period) {
 }
 
 void HydraController::updateArm(ZaDataContainer& arm_data) {
-    za::RobotState robot_state = arm_data.state_handle_->getRobotState();
-    
-    Eigen::Affine3d pose(Eigen::Matrix4d::Map(robot_state.O_T_EE.data()));
-
-    std::array<double, 36> jacobian_array = 
-        arm_data.model_handle_->getZeroJacobian(za::Frame::kEndEffector);    
-    Eigen::Map<Eigen::Matrix<double, 6, 6>> jacobian(jacobian_array.data());
-    Eigen::MatrixXd jacobian_pinv;
-    za_controllers::pseudoInverse(jacobian, jacobian_pinv, false);
-
-    /* ========= task tracking ========= */ 
-    Eigen::Vector3d pose_error = Kp_ * (arm_data.position_d_ - pose.translation());
-
-    const auto& z_eef = pose.matrix().block<3, 1>(0, 2);
-    Eigen::Vector3d orient_error = Ko_ * z_eef.cross(z_align_);
-
-    Eigen::Matrix<double, 6, 1> error(6);
-    error << pose_error, orient_error;
-
-    Eigen::Matrix<double, 6, 1> dp_d(arm_data.twist_setpoint_);
-    dp_d += error;
-
-    /* ====== redundancy resolution ====== */
-    Eigen::MatrixXd null_project = Eigen::Matrix<double, 6, 6>::Identity() 
-        - jacobian_pinv * jacobian;
-    Eigen::Matrix<double, 6, 1> dp_redundancy = Eigen::Matrix<double, 6, 1>::Zero();
-
-    std::array<double, 216> hessian_array =
-        arm_data.model_handle_->getZeroHessian(za::Frame::kEndEffector);
-    Eigen::Map<Eigen::Matrix<double, 36, 6>> hessian(hessian_array.data());
-
-    Eigen::Matrix<double, 6, 6> J_Jt = jacobian * jacobian.transpose();
-    double det_J_Jt = J_Jt.determinant();
-    auto inv_J_Jt = J_Jt.inverse();
-
-    Eigen::Matrix<double, 36, 1> vec_inv_J_Jt;
-    Eigen::MatrixXd::Map(&vec_inv_J_Jt[0], 6, 6) = inv_J_Jt;
-    
-    // find manipulability Jacobian
-    Eigen::Matrix<double, 6, 1> Jm;
-    Jm.setZero();
-    for (int i = 0; i < 6; i++) {
-        const auto& Hi = hessian.block<6, 6>(i * 6, 0);
-        Eigen::Matrix<double, 36, 1> vec_J_HiT;
-        Eigen::MatrixXd::Map(&vec_J_HiT[0], 6, 6) = jacobian * Hi.transpose();
-
-        Jm(i, 0) = sqrt(abs(det_J_Jt)) * vec_J_HiT.dot(vec_inv_J_Jt);
-    }
-
-    // use redundant axis (z-rotation) to drive the posture to maximum manipulability
-    dp_redundancy = -Kr_ * jacobian * Jm;
-    dp_redundancy.block<5, 1>(0, 0).setZero();
-
-    Eigen::Matrix<double, 6, 1> dq_cmd = (jacobian_pinv * (dp_d + dp_redundancy));
-
-    for (size_t i = 0; i < 6; ++i) {
-        arm_data.joint_handles_[i].setCommand(dq_cmd(i));
+    switch (arm_data.mode_) {
+        case ControlMode::TaskPriorityControl: {
+            TPCControllerInfo info(Kp_, Ko_, Kr_, z_align_);
+            taskPriorityControl(arm_data, info);
+            break; 
+        }
+        case ControlMode::CoordinatedTaskPriorityControl: {
+            CTPCControllerInfo info;
+            coordinatedTaskPriorityControl(arm_data, info);
+            break;
+        }
+        default:
+            ROS_ERROR_STREAM("Unknown control mode: " << (int)arm_data.mode_);
+            break;
     }
 }
 

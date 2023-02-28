@@ -13,6 +13,11 @@
 
 namespace hydra_controllers {
 
+enum class ControlMode {
+    TaskPriorityControl,
+    CoordinatedTaskPriorityControl
+};
+
 struct ZaDataContainer {
     std::unique_ptr<za_hw::ZaStateHandle> state_handle_;
     std::unique_ptr<za_hw::ZaModelHandle> model_handle_;
@@ -21,6 +26,8 @@ struct ZaDataContainer {
     Eigen::Vector3d position_d_;
     Eigen::Matrix<double, 6, 1> twist_setpoint_;
     std::unique_ptr<std::mutex> pose_twist_setpoint_mutex_;
+
+    ControlMode mode_ = ControlMode::TaskPriorityControl;
 };
 
 class HydraController : public controller_interface::MultiInterfaceController<

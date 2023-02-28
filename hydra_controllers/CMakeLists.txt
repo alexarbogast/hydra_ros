@@ -46,6 +46,7 @@ catkin_package(
 
 add_library(hydra_controllers
     src/hydra_controller.cpp
+    src/control_methods.cpp
 )
 add_dependencies(hydra_controllers
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
