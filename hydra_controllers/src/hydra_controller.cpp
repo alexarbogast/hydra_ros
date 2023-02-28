@@ -6,9 +6,83 @@ namespace hydra_controllers {
 
 const static std::string param_name = "joints"; 
 
+bool HydraController::initArm(hardware_interface::RobotHW* robot_hw,
+                        const std::string& arm_id,
+                        const std::vector<std::string>& joint_names
+                        ) {
+    ZaDataContainer arm_data;
+    auto* model_interface = robot_hw->get<za_hw::ZaModelInterface>();
+    if (model_interface == nullptr) {
+        ROS_ERROR_STREAM(
+            "HydraController: Error getting model interface from hardware");
+        return false;
+    }
+    try {
+        arm_data.model_handle_ = std::make_unique<za_hw::ZaModelHandle>(
+            model_interface->getHandle(arm_id + "_model"));
+    } catch (hardware_interface::HardwareInterfaceException& ex) {
+        ROS_ERROR_STREAM(
+            "HydraController: Exception getting model handle from "
+            "interface: "
+            << ex.what());
+        return false;
+    }
+
+    auto* state_interface = robot_hw->get<za_hw::ZaStateInterface>();
+    if (state_interface == nullptr) {
+        ROS_ERROR_STREAM(
+            "HydraController: Error getting state interface from hardware");
+        return false;
+    }
+    try {
+        arm_data.state_handle_ = std::make_unique<za_hw::ZaStateHandle>(
+                        state_interface->getHandle(arm_id + "_robot"));
+
+        // we must start in a known (non-singular) position
+        // possibly pass this as a parameter
+        std::array<double, 6> q_start = {0, 0.53, 0.47, 0, -1, 0};
+        for (size_t j = 0; j < q_start.size(); j++) {
+            if (std::abs(arm_data.state_handle_->getRobotState().q_d[j] - q_start[j]) > 0.1) {
+                ROS_ERROR_STREAM(
+                    "HydraController: Robot is not in the expected starting position ");
+                return false;
+            }
+        }
+    } catch (hardware_interface::HardwareInterfaceException& ex) {
+        ROS_ERROR_STREAM(
+            "HydraController: Exception getting state handle from "
+            "interface: "
+            << ex.what());
+        return false;
+    }
+
+    auto* velocity_joint_interface = robot_hw->get<hardware_interface::VelocityJointInterface>();
+    if (velocity_joint_interface == nullptr) {
+        ROS_ERROR_STREAM(
+            "HydraController: Error getting velocity joint interface from hardware");
+        return false;
+    }
+    for (size_t i = 0; i < 6; ++i) {
+        try {
+        arm_data.joint_handles_.push_back(velocity_joint_interface->getHandle(joint_names[i]));
+        } catch (const hardware_interface::HardwareInterfaceException& ex) {
+        ROS_ERROR_STREAM(
+            "HydraController: Exception getting joint handles: "
+            << ex.what());
+        return false;
+        }
+    }
+
+    arm_data.position_d_.setZero();
+    arm_data.twist_setpoint_.setZero();
+    arm_data.pose_twist_setpoint_mutex_ = std::make_unique<std::mutex>();
+
+    arms_data_.emplace(std::make_pair(arm_id, std::move(arm_data)));
+    return true;
+}   
+
 bool HydraController::init(hardware_interface::RobotHW* robot_hw, 
                            ros::NodeHandle& node_handle) {
-    // read ros parameters
     std::vector<std::string> arm_ids;
     if (!node_handle.getParam("arm_ids", arm_ids)) {
         ROS_ERROR("HydraController: Could not get parameter 'arm_ids'");
@@ -29,75 +103,23 @@ bool HydraController::init(hardware_interface::RobotHW* robot_hw,
     z_align_ = Eigen::Map<Eigen::Vector3d, Eigen::Unaligned>
         (z_align.data(), z_align.size());
 
-    auto* velocity_joint_interface_ = robot_hw->get<hardware_interface::VelocityJointInterface>();
-    if (velocity_joint_interface_ == nullptr) {
-        ROS_ERROR(
-            "HydraController: Could not get Cartesian velocity interface from "
-            "hardware");
-        return false;
-    }
-
-    auto* model_interface = robot_hw->get<za_hw::ZaModelInterface>();
-            if (model_interface == nullptr) {
-            ROS_ERROR_STREAM("HydraController: Error getting model interface from hardware");
-            return false;
-    }
-
-    auto* state_interface = robot_hw->get<za_hw::ZaStateInterface>();
-    if (state_interface == nullptr) {
-        ROS_ERROR("HydraController: Could not get za state interface from hardware");
-        return false;
-    }
-
-    joint_handles_.resize(arm_ids.size());
-    model_handles_.reserve(arm_ids.size());
-    state_handles_.reserve(arm_ids.size());
-    for (unsigned int i = 0; i < arm_ids.size(); i++) {
+    for (const auto& arm_id : arm_ids) {
+        boost::function<void(const za_msgs::PosVelSetpointConstPtr&)> callback = 
+            boost::bind(&HydraController::commandCallback, this, _1, arm_id);
+        
+        ros::SubscribeOptions subscriber_options;
+        subscriber_options.init(arm_id + "/command", 1, callback);
+        subscriber_options.transport_hints = ros::TransportHints().reliable().tcpNoDelay();
+        setpoints_subs_.emplace_back(node_handle.subscribe(subscriber_options));
+         
         std::vector<std::string> joint_names;
-        if (!node_handle.getParam(arm_ids[i] + "/" + param_name, joint_names)) {
+        if (!node_handle.getParam(arm_id + "/" + param_name, joint_names)) {
             ROS_ERROR_STREAM("Failed to getParam '" << param_name << 
                 "'(namespace: " << node_handle.getNamespace() << ")");
             return false; 
         }
 
-        auto& joint_handle = joint_handles_[i];
-        joint_handle.resize(joint_names.size());
-        for (size_t j = 0; j < joint_names.size(); ++j) {
-            try {
-                joint_handle[j] = velocity_joint_interface_->getHandle(joint_names[j]);
-            } catch (const hardware_interface::HardwareInterfaceException& e) {
-                ROS_ERROR_STREAM(
-                    "HydraController: Exception getting joint handles: " << e.what());
-                return false;
-            }
-        }
-
-        try {
-            model_handles_.emplace_back(std::make_unique<za_hw::ZaModelHandle>(
-                                model_interface->getHandle(arm_ids[i] + "_model")));
-        } catch (hardware_interface::HardwareInterfaceException& e) {
-            ROS_ERROR_STREAM(
-                "HydraController: Exception getting model handle from interface: " << e.what());
-            return false;
-        }
-
-        try {
-            state_handles_.emplace_back(std::make_unique<za_hw::ZaStateHandle>(
-                                state_interface->getHandle(arm_ids[i] + "_robot")));
-
-            // we must start in a known (non-singular) position
-            // possibly pass this as a parameter
-            std::array<double, 6> q_start = {0, 0.53, 0.47, 0, -1, 0};
-            for (size_t j = 0; j < q_start.size(); j++) {
-                if (std::abs(state_handles_[i]->getRobotState().q_d[j] - q_start[j]) > 0.1) {
-                    ROS_ERROR_STREAM(
-                        "HydraController: Robot is not in the expected starting position ");
-                    return false;
-                }
-            }
-        } catch (const hardware_interface::HardwareInterfaceException& e) {
-            ROS_ERROR_STREAM(
-                "HydraController: Exception getting state handle: " << e.what());
+        if (!initArm(robot_hw, arm_id, joint_names)) {
             return false;
         }
     }
@@ -132,6 +154,21 @@ void HydraController::taskpriorityParamCallback(za_controllers::taskpriority_par
     Kp_ = config.translation_gain;
     Ko_ = config.rotation_gain;
     Kr_ = config.redundancy_gain;
+}
+
+void HydraController::commandCallback(const za_msgs::PosVelSetpointConstPtr& msg, 
+                                      const std::string& arm_id) {
+    int i = 0;
+    auto& arm_data = arms_data_[arm_id];
+    std::lock_guard<std::mutex> twist_setpoint_mutex_lock(*arm_data.pose_twist_setpoint_mutex_);
+
+    arm_data.position_d_ << msg->pose.position.x, msg->pose.position.y, msg->pose.position.z;
+
+    arm_data.twist_setpoint_ << 
+        msg->twist.twist.linear.x, msg->twist.twist.linear.y, msg->twist.twist.linear.z,
+        msg->twist.twist.angular.x, msg->twist.twist.angular.y, msg->twist.twist.angular.z;
+
+    std::cout << "Got data for: " << arm_id << "!" << std::endl;
 }
 
 } // namespace hydra_controllers

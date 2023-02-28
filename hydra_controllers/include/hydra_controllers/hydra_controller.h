@@ -5,6 +5,7 @@
 #include <dynamic_reconfigure/server.h>
 #include <za_hw/za_state_interface.h>
 #include <za_hw/za_model_interface.h>
+#include <za_msgs/PosVelSetpoint.h>
 #include <ros/node_handle.h>
 #include <Eigen/Dense>
 
@@ -12,9 +13,15 @@
 
 namespace hydra_controllers {
 
-using JointHandles = std::vector<std::vector<hardware_interface::JointHandle>>;
-using StateHandles = std::vector<std::unique_ptr<za_hw::ZaStateHandle>>;
-using ModelHandles = std::vector<std::unique_ptr<za_hw::ZaModelHandle>>;
+struct ZaDataContainer {
+    std::unique_ptr<za_hw::ZaStateHandle> state_handle_;
+    std::unique_ptr<za_hw::ZaModelHandle> model_handle_;
+    std::vector<hardware_interface::JointHandle> joint_handles_;
+
+    Eigen::Vector3d position_d_;
+    Eigen::Matrix<double, 6, 1> twist_setpoint_;
+    std::unique_ptr<std::mutex> pose_twist_setpoint_mutex_;
+};
 
 class HydraController : public controller_interface::MultiInterfaceController<
                                     hardware_interface::VelocityJointInterface,
@@ -27,14 +34,11 @@ public:
     void stopping(const ros::Time&) override;
 
 private:
+    std::map<std::string, ZaDataContainer> arms_data_;
 
     // setpoints
     Eigen::Vector3d z_align_;
-
-    //hardware_interface::VelocityJointInterface* velocity_joint_interface_;
-    JointHandles joint_handles_;
-    StateHandles state_handles_;
-    ModelHandles model_handles_;
+    std::vector<ros::Subscriber> setpoints_subs_;
 
     // Dynamic reconfigure
     std::unique_ptr<dynamic_reconfigure::Server<za_controllers::taskpriority_paramConfig>>
@@ -43,6 +47,14 @@ private:
     double Kp_, Ko_, Kr_;
     void taskpriorityParamCallback(za_controllers::taskpriority_paramConfig& config,
                              uint32_t level);
+
+    std::vector<ros::Subscriber> sub_commands;
+    void commandCallback(const za_msgs::PosVelSetpointConstPtr& msg, 
+                         const std::string& arm_id);
+
+    bool initArm(hardware_interface::RobotHW* robot_hw, 
+                 const std::string& arm_id,
+                 const std::vector<std::string>& joint_names);
 };
 
 } // namespace hydra_controllers
