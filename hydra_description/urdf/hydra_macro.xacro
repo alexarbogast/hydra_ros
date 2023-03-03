@@ -4,6 +4,9 @@
     <xacro:include filename="$(find hydra_description)/urdf/positioner/positioner_macro.xacro"/>
     
     <xacro:macro name="hydra_macro" params="prefix radius tool:='tool0'">
+        <!-- Is the robot being simulated in gazebo? -->
+        <xacro:arg name="gazebo" default="true" />
+
         <xacro:za_pedestal_macro prefix="${prefix}rob1_" tool="${tool}"/>
         <xacro:za_pedestal_macro prefix="${prefix}rob2_" tool="${tool}"/>
         <xacro:za_pedestal_macro prefix="${prefix}rob3_" tool="${tool}"/>
@@ -31,6 +34,20 @@
             <parent link="${prefix}hydra_base"/>
             <child  link="${prefix}positioner_stand_base"/>
         </joint>
+
+        <xacro:if value="$(arg gazebo)">
+            <transmission name="${prefix}hydra_model">
+              <type>hydra_hw/HydraModelInterface</type>
+              <joint name="${prefix}positioner_joint">
+                <role>positioner</role>
+                <hardwareInterface>hydra_hw/HydraModelInterface</hardwareInterface>
+              </joint>
+
+              <actuator name="${prefix}_motor_positioner_joint">
+                <hardwareInterface>hydra_hw/HydraModelInterface</hardwareInterface>
+              </actuator>
+            </transmission>
+        </xacro:if>
 
     </xacro:macro>
 </robot>
