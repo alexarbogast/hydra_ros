@@ -48,7 +48,11 @@ include_directories(include
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(hydra_hw_sim src/hydra_hw_sim.cpp src/positioner_hw_sim.cpp)
+add_library(hydra_hw_sim 
+  src/hydra_hw_sim.cpp 
+  src/positioner_hw_sim.cpp 
+  src/model_kdl.cpp
+)
 target_link_libraries(hydra_hw_sim ${catkin_LIBRARIES})
 target_include_directories(hydra_hw_sim SYSTEM PUBLIC ${catkin_INCLUDE_DIRS})
 add_dependencies(hydra_hw_sim ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

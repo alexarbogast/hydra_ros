@@ -73,6 +73,10 @@ protected:
                      const urdf::Model* const urdf,
                      std::vector<transmission_interface::TransmissionInfo>& transmissions);
 
+    void initHydraModelHandle(const ros::NodeHandle& nh,
+                              const urdf::Model& urdf,
+                              const transmission_interface::TransmissionInfo& transmission);
+
     void filterControllerList(const std::list<hardware_interface::ControllerInfo>& list,
                               std::list<hardware_interface::ControllerInfo>& filtered_list,
                               hardware_interface::RobotHWSharedPtr robot_hw,

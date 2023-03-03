@@ -31,7 +31,28 @@ bool HydraHWSim::initSim(const std::string& robot_namespace,
         }
     }
 
+    for (const auto& transmission : transmissions) {
+        if (transmission.type_ == "hydra_hw/HydraModelInterface") {
+                ROS_INFO_STREAM_NAMED("hydra_hw_sim",
+                    "Found transmission interface '" << transmission.type_ << "'");
+                try {
+                    initHydraModelHandle(model_nh, *urdf, transmission);
+                    continue;
+                } catch (const std::invalid_argument& e) {
+                        ROS_ERROR_STREAM_NAMED("hydra_hw_sim", e.what());
+                        return false;
+                }
+        }
+    }
+
     return true;
+}
+
+void HydraHWSim::initHydraModelHandle(
+    const ros::NodeHandle& nh,
+    const urdf::Model& urdf,
+    const transmission_interface::TransmissionInfo& transmission) {
+    
 }
 
 void HydraHWSim::readSim(ros::Time time, ros::Duration period) {
