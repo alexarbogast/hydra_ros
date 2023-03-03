@@ -39,7 +39,7 @@
   <param name="robot_description"
     command="$(find xacro)/xacro '$(find hydra_description)/urdf/hydra.xacro'" />
 
-  <rosparam file='$(find hydra_gazebo)/config/za_hw_sim.yaml' subst_value="true" />
+  <rosparam file='$(find hydra_gazebo)/config/hydra_hw_sim.yaml' subst_value="true" />
   <rosparam file='$(find hydra_gazebo)/config/sim_controllers.yaml' subst_value="true" />
 
   <arg name="unpause" value="$(eval '' if arg('paused') else '-unpause')" />
