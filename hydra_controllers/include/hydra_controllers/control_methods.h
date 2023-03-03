@@ -1,27 +1,20 @@
 # pragma once
 
-#include <hydra_controllers/hydra_controller.h>
+#include <hydra_controllers/robot_data_container.h>
+#include <hydra_controllers/cached_controller_data.h>
 
 namespace hydra_controllers {
 
-struct TPCControllerInfo {
-    TPCControllerInfo(double Kp, double Ko, double Kr, 
-                      const Eigen::Vector3d& z_align) 
-        : Kp(Kp), Ko(Ko), Kr(Kr), z_align(z_align)
-    {} 
-
-    double Kp, Ko, Kr;
-    Eigen::Vector3d z_align;
-};
-
-struct CTPCControllerInfo {
-    double Kp, Ko, Kr;
-    Eigen::Vector3d z_align;
-};
-
 void taskPriorityControl(ZaDataContainer& arm_data,
-                         const TPCControllerInfo& context);
-void coordinatedTaskPriorityControl(ZaDataContainer& arm_data,
-                                    const CTPCControllerInfo& context);
+                         CachedModelData& input,
+                         const TPCControllerParameters& context);
 
+void coordinatedTaskPriorityControl(ZaDataContainer& arm_data,
+                                    const CTPCControllerParameters& context);
+
+void positionerControl(PositionerDataContainer& positioner_data,
+                       CachedControllerData& controller_data);
+
+void cacheControllerData(std::map<std::string, ZaDataContainer>& arms_data,
+                         CachedControllerData& data);
 } // namespace hydra_controllers

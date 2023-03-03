@@ -80,13 +80,61 @@ bool HydraController::initArm(hardware_interface::RobotHW* robot_hw,
 
     arms_data_.emplace(std::make_pair(arm_id, std::move(arm_data)));
     return true;
-}   
+}
+
+bool HydraController::initPositioner(hardware_interface::RobotHW* robot_hw,
+                                     const std::string& positioner_id,
+                                     const std::vector<std::string>& joint_names
+                                     ) {
+    auto* state_interface = robot_hw->get<hydra_hw::PositionerStateInterface>();
+    if (state_interface == nullptr) {
+        ROS_ERROR_STREAM(
+            "HydraController: Error getting positioner state interface from hardware");
+        return false;
+    }
+    try {
+        positioner_data_.state_handle_ = 
+            std::make_unique<hydra_hw::PositionerStateHandle>(
+                        state_interface->getHandle(positioner_id + "_robot"));
+    } catch (hardware_interface::HardwareInterfaceException& ex) {
+        ROS_ERROR_STREAM(
+            "HydraController: Exception getting positioner state handle from "
+            "interface: "
+            << ex.what());
+        return false;
+    }
+
+    auto* velocity_joint_interface = robot_hw->get<hardware_interface::VelocityJointInterface>();
+    if (velocity_joint_interface == nullptr) {
+        ROS_ERROR_STREAM(
+            "HydraController: Error getting velocity joint interface from hardware");
+        return false;
+    }
+    for (size_t i = 0; i < joint_names.size(); ++i) {
+        try {
+            positioner_data_.joint_handles_.push_back(
+                velocity_joint_interface->getHandle(joint_names[i]));
+        } catch (const hardware_interface::HardwareInterfaceException& ex) {
+        ROS_ERROR_STREAM(
+            "HydraController: Exception getting positioner joint handles: "
+            << ex.what());
+        return false;
+        }
+    }
+    return true;
+}
 
 bool HydraController::init(hardware_interface::RobotHW* robot_hw, 
                            ros::NodeHandle& node_handle) {
+    // read global parameters
     std::vector<std::string> arm_ids;
     if (!node_handle.getParam("arm_ids", arm_ids)) {
         ROS_ERROR("HydraController: Could not get parameter 'arm_ids'");
+        return false;
+    }
+    std::string positioner_id;
+    if (!node_handle.getParam("positioner_id", positioner_id)) {
+        ROS_ERROR("HydraController: Could not get parameter 'positioner_id'");
         return false;
     }
 
@@ -104,6 +152,7 @@ bool HydraController::init(hardware_interface::RobotHW* robot_hw,
     z_align_ = Eigen::Map<Eigen::Vector3d, Eigen::Unaligned>
         (z_align.data(), z_align.size());
 
+    // initialize manipulators
     for (const auto& arm_id : arm_ids) {
         boost::function<void(const za_msgs::PosVelSetpointConstPtr&)> callback = 
             boost::bind(&HydraController::commandCallback, this, _1, arm_id);
@@ -123,6 +172,17 @@ bool HydraController::init(hardware_interface::RobotHW* robot_hw,
         if (!initArm(robot_hw, arm_id, joint_names)) {
             return false;
         }
+    }
+
+    // initialize positioner
+    std::vector<std::string> joint_names;
+    if (!node_handle.getParam(positioner_id + "/" + param_name, joint_names)) {
+        ROS_ERROR_STREAM("Failed to getParam '" << param_name << 
+            "'(namespace: " << node_handle.getNamespace() << ")");
+        return false; 
+    }
+    if (!initPositioner(robot_hw, positioner_id, joint_names)){
+        return false;
     }
 
     dynamic_reconfigure_posvel_param_node_ =
@@ -152,27 +212,37 @@ void HydraController::startingArm(ZaDataContainer& arm_data) {
 }
 
 void HydraController::update(const ros::Time&, const ros::Duration& period) {
+    CachedControllerData cache;
+    cacheControllerData(arms_data_, cache);
+    
+    updatePositioner(positioner_data_, cache);
     for (auto& arm_data : arms_data_) {
-        updateArm(arm_data.second); 
+        updateArm(arm_data.second, cache.model_cache[arm_data.first]); 
     }
 }
 
-void HydraController::updateArm(ZaDataContainer& arm_data) {
+void HydraController::updateArm(ZaDataContainer& arm_data,
+                                CachedModelData& model_cache) {
     switch (arm_data.mode_) {
         case ControlMode::TaskPriorityControl: {
-            TPCControllerInfo info(Kp_, Ko_, Kr_, z_align_);
-            taskPriorityControl(arm_data, info);
-            break; 
+            TPCControllerParameters params(Kp_, Ko_, Kr_, z_align_);
+            taskPriorityControl(arm_data, model_cache, params);
+            break;
         }
         case ControlMode::CoordinatedTaskPriorityControl: {
-            CTPCControllerInfo info;
-            coordinatedTaskPriorityControl(arm_data, info);
+            CTPCControllerParameters params;
+            coordinatedTaskPriorityControl(arm_data, params);
             break;
         }
         default:
             ROS_ERROR_STREAM("Unknown control mode: " << (int)arm_data.mode_);
             break;
     }
+}
+
+void HydraController::updatePositioner(PositionerDataContainer& positioner_data,
+                                       CachedControllerData& controller_data) {
+    positionerControl(positioner_data, controller_data);
 }
 
 void HydraController::stopping(const ros::Time&) {

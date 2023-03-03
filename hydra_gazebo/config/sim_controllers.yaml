@@ -181,6 +181,7 @@ hydra_controller:
     - rob1
     - rob2
     - rob3
+  positioner_id: positioner 
   rob1:
     joints:
     - rob1_joint_1
@@ -205,3 +206,6 @@ hydra_controller:
     - rob3_joint_4
     - rob3_joint_5
     - rob3_joint_6
+  positioner:
+    joints:
+    - positioner_joint

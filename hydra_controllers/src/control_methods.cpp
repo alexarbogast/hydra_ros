@@ -4,24 +4,14 @@
 namespace hydra_controllers {
 
 void taskPriorityControl(ZaDataContainer& arm_data,
-                         const TPCControllerInfo& context) {
-    za::RobotState robot_state = arm_data.state_handle_->getRobotState();
-    
-    Eigen::Affine3d pose(Eigen::Matrix4d::Map(robot_state.O_T_EE.data()));
-
-    std::array<double, 36> jacobian_array = 
-        arm_data.model_handle_->getZeroJacobian(za::Frame::kEndEffector);    
-    Eigen::Map<Eigen::Matrix<double, 6, 6>> jacobian(jacobian_array.data());
-    Eigen::MatrixXd jacobian_pinv;
-    za_controllers::pseudoInverse(jacobian, jacobian_pinv, false);
-
+                         CachedModelData& input,
+                         const TPCControllerParameters& context) {
     /* ========= task tracking ========= */ 
     Eigen::Vector3d pose_error = context.Kp * 
-        (arm_data.position_d_ - pose.translation());
+        (arm_data.position_d_ - input.pose.translation());
 
-    const auto& z_eef = pose.matrix().block<3, 1>(0, 2);
+    const auto& z_eef = input.pose.matrix().block<3, 1>(0, 2);
     Eigen::Vector3d orient_error = context.Ko * z_eef.cross(context.z_align);
-
     Eigen::Matrix<double, 6, 1> error(6);
     error << pose_error, orient_error;
 
@@ -29,37 +19,11 @@ void taskPriorityControl(ZaDataContainer& arm_data,
     dp_d += error;
 
     /* ====== redundancy resolution ====== */
-    Eigen::MatrixXd null_project = Eigen::Matrix<double, 6, 6>::Identity() 
-        - jacobian_pinv * jacobian;
     Eigen::Matrix<double, 6, 1> dp_redundancy = Eigen::Matrix<double, 6, 1>::Zero();
-
-    std::array<double, 216> hessian_array =
-        arm_data.model_handle_->getZeroHessian(za::Frame::kEndEffector);
-    Eigen::Map<Eigen::Matrix<double, 36, 6>> hessian(hessian_array.data());
-
-    Eigen::Matrix<double, 6, 6> J_Jt = jacobian * jacobian.transpose();
-    double det_J_Jt = J_Jt.determinant();
-    auto inv_J_Jt = J_Jt.inverse();
-
-    Eigen::Matrix<double, 36, 1> vec_inv_J_Jt;
-    Eigen::MatrixXd::Map(&vec_inv_J_Jt[0], 6, 6) = inv_J_Jt;
-    
-    // find manipulability Jacobian
-    Eigen::Matrix<double, 6, 1> Jm;
-    Jm.setZero();
-    for (int i = 0; i < 6; i++) {
-        const auto& Hi = hessian.block<6, 6>(i * 6, 0);
-        Eigen::Matrix<double, 36, 1> vec_J_HiT;
-        Eigen::MatrixXd::Map(&vec_J_HiT[0], 6, 6) = jacobian * Hi.transpose();
-
-        Jm(i, 0) = sqrt(abs(det_J_Jt)) * vec_J_HiT.dot(vec_inv_J_Jt);
-    }
-
-    // use redundant axis (z-rotation) to drive the posture to maximum manipulability
-    dp_redundancy = -context.Kr * jacobian * Jm;
+    dp_redundancy = -context.Kr * input.Jo * input.Jm;
     dp_redundancy.block<5, 1>(0, 0).setZero();
 
-    Eigen::Matrix<double, 6, 1> dq_cmd = (jacobian_pinv * (dp_d + dp_redundancy));
+    Eigen::Matrix<double, 6, 1> dq_cmd = (input.Jo_pinv * (dp_d + dp_redundancy));
 
     for (size_t i = 0; i < 6; ++i) {
         arm_data.joint_handles_[i].setCommand(dq_cmd(i));
@@ -67,8 +31,63 @@ void taskPriorityControl(ZaDataContainer& arm_data,
 }
 
 void coordinatedTaskPriorityControl(ZaDataContainer& arm_data,
-                                    const CTPCControllerInfo& context) {
+                                    const CTPCControllerParameters& context) {
+                
+}
 
+void positionerControl(PositionerDataContainer& positioner_data,
+                       CachedControllerData& controller_data) {
+    // find dm/dqp = (dm1/dq1)*(dq1/dqp) + ... + (dmN/dqN)*(dqN/dqp)
+    double dqr_cmd = 0.5;
+    positioner_data.joint_handles_[0].setCommand(dqr_cmd); 
+    controller_data.positioner_command_ = dqr_cmd;
+}
+
+/*
+ * This function stores data that is costly to compute to avoid duplicate
+ * calculations in the robot and positioner controllers
+ */
+void cacheControllerData(std::map<std::string, ZaDataContainer>& arms_data,
+                         CachedControllerData& data) {
+    using namespace Eigen;
+    for (auto& arm : arms_data) {
+        CachedModelData model_data;
+        
+        // find pose in base frame
+        za::RobotState robot_state = arm.second.state_handle_->getRobotState();
+        model_data.pose = Matrix4d::Map(robot_state.O_T_EE.data());
+
+        // find the base frame jacobian
+        model_data.Jo.setZero();
+        std::array<double, 36> jacobian_array = 
+            arm.second.model_handle_->getZeroJacobian(za::Frame::kEndEffector);  
+        Map<Eigen::Matrix<double, 6, 6>> jacobian(jacobian_array.data());
+        model_data.Jo = Map<Eigen::Matrix<double, 6, 6>>(jacobian_array.data());
+        za_controllers::pseudoInverse(jacobian, model_data.Jo_pinv, false);
+
+        // find the gradient of the manipulability
+        model_data.Jm.setZero();
+        std::array<double, 216> hessian_array =
+        arm.second.model_handle_->getZeroHessian(za::Frame::kEndEffector);
+        Map<Matrix<double, 36, 6>> hessian(hessian_array.data());
+
+        Matrix<double, 6, 6> J_Jt = jacobian * jacobian.transpose();
+        double det_J_Jt = J_Jt.determinant();
+        auto inv_J_Jt = J_Jt.inverse();
+        
+        Matrix<double, 36, 1> vec_inv_J_Jt;
+        MatrixXd::Map(&vec_inv_J_Jt[0], 6, 6) = inv_J_Jt;
+
+        // find manipulability Jacobian
+        for (int i = 0; i < 6; i++) {
+            const auto& Hi = hessian.block<6, 6>(i * 6, 0);
+            Matrix<double, 36, 1> vec_J_HiT;
+            MatrixXd::Map(&vec_J_HiT[0], 6, 6) = jacobian * Hi.transpose();
+
+            model_data.Jm(i, 0) = sqrt(abs(det_J_Jt)) * vec_J_HiT.dot(vec_inv_J_Jt);
+        }
+        data.model_cache.emplace(std::make_pair(arm.first, std::move(model_data)));
+    }
 }
 
 } // namespace hydra_controllers

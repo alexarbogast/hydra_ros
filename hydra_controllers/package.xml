@@ -17,6 +17,7 @@
   <depend>za_hw</depend>
   <depend>za_msgs</depend>
   <depend>za_controllers</depend>
+  <depend>hydra_hw</depend>
   <depend>hardware_interface</depend>
   <depend>joint_limits_interface</depend>
   <depend>pluginlib</depend>

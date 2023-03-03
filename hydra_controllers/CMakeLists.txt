@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   za_hw
   za_msgs
   za_controllers
+  hydra_hw
   geometry_msgs
   hardware_interface
   joint_limits_interface
@@ -34,6 +35,7 @@ catkin_package(
   za_hw
   za_msgs
   za_controllers
+  hydra_hw
   geometry_msgs
   hardware_interface
   joint_limits_interface
