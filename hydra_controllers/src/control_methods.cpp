@@ -32,13 +32,12 @@ void taskPriorityControl(ZaDataContainer& arm_data,
 
 void coordinatedTaskPriorityControl(ZaDataContainer& arm_data,
                                     const CTPCControllerParameters& context) {
-                
 }
 
 void positionerControl(PositionerDataContainer& positioner_data,
                        CachedControllerData& controller_data) {
     // find dm/dqp = (dm1/dq1)*(dq1/dqp) + ... + (dmN/dqN)*(dqN/dqp)
-    double dqr_cmd = 0.5;
+    double dqr_cmd = 0.0;
     positioner_data.joint_handles_[0].setCommand(dqr_cmd); 
     controller_data.positioner_command_ = dqr_cmd;
 }

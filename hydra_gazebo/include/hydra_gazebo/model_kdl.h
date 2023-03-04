@@ -14,6 +14,22 @@ public:
              const std::vector<std::string>& arm_ids,
              const std::vector<std::string>& tips,
              const std::string positioner_frame);
+
+    /**
+     * Gets the 4x4 pose matrix for the given frame in positioner frame.
+     *
+     * The pose is represented as a 4x4 matrix in column-major format.
+     *
+     * @param[in] frame The desired frame.
+     * @param[in] q Joint position.
+     * 
+     * @return Vectorized 4x4 pose matrix, column-major.
+     */
+    std::array<double, 16> pose(
+        const std::string& arm_id,
+        hydra::Frame frame,
+        const std::array<double, 7>& q)
+        const override;
     
     /**
     * Gets the 6x7 Jacobian for the given frame, relative to that frame.

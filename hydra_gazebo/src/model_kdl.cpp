@@ -1,8 +1,12 @@
 #include <hydra_gazebo/model_kdl.h>
 #include <za_gazebo/model_kdl.h>
-
 #include <za_hw/model_base.h>
+
+#include <eigen_conversions/eigen_kdl.h>
+#include <Eigen/Dense>
 #include <kdl/tree.hpp>
+#include <kdl/chain.hpp>
+#include <kdl/chainfksolverpos_recursive.hpp>
 #include <kdl_parser/kdl_parser.hpp>
 
 namespace hydra_gazebo {
@@ -59,6 +63,31 @@ ModelKDL::ModelKDL(const urdf::Model& model,
     //    }
     //    std::cout << std::endl;
     //}
+}
+
+std::array<double, 16> ModelKDL::pose(
+        const std::string& arm_id,
+        hydra::Frame frame,
+        const std::array<double, 7>& q)
+        const {
+    KDL::JntArray kq;
+    KDL::Frame kp;
+
+    KDL::ChainFkSolverPos_recursive solver(*(this->chains_.at(arm_id)));
+    kq.data = Eigen::Matrix<double, 7, 1>(q.data());
+
+    int segmentNr = frame == hydra::Frame::kEndEffector ?
+                           this->chains_.at(arm_id)->getNrOfSegments() : segment(frame);
+    int error = solver.JntToCart(kq, kp, segmentNr);
+    if (error != KDL::SolverI::E_NOERROR) {
+      throw std::logic_error("KDL forward kinematics pose calculation failed with error: ");
+    }
+    Eigen::Affine3d p;
+    tf::transformKDLToEigen(kp, p);
+    std::array<double, 16> result;
+    Eigen::MatrixXd::Map(&result[0], 4, 4) = p.matrix();
+
+    return result;
 }
 
 std::array<double, 42> ModelKDL::positionerJacobian(const std::string& arm_id_,

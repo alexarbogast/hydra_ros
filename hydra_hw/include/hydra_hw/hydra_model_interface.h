@@ -23,6 +23,45 @@ public:
     std::string getName() const noexcept { return name_; }
 
     /**
+     * Gets the 4x4 pose matrix for the given frame in positioner, calculated from the current
+     * robot state.
+     *
+     * The pose is represented as a 4x4 matrix in column-major format.
+     *
+     * @param[in] frame The desired frame.
+     *
+     * @return Vectorized 4x4 pose matrix, column-major.
+     *
+     * @see franka::Model::pose
+     */
+    std::array<double, 16> getPose(const std::string& arm_id, 
+                                   const hydra::Frame& frame) const {
+        std::array<double, 7> q = combinedState(arm_id);
+        return model_->pose(arm_id, frame, q);
+    }
+
+    /**
+     * Gets the 4x4 pose matrix for the given frame in base frame, calculated from the given
+     * robot state.
+     *
+     * The pose is represented as a 4x4 matrix in column-major format.
+     *
+     * @param[in] frame The desired frame.
+     * @param[in] q Joint position. Unit: \f$[rad]\f$.
+     *
+     * @return Vectorized 4x4 pose matrix, column-major.
+     *
+     * @see franka::Model::pose
+     */
+    std::array<double, 16> getPose(
+        const std::string& arm_id,
+        const hydra::Frame& frame,
+        const std::array<double, 7>& q)  // NOLINT (readability-identifier-naming)
+        const {
+        return model_->pose(arm_id, frame, q);
+    }
+
+    /**
     * Gets the 6x7 Jacobian for the given frame, relative to that frame.
     *
     * The Jacobian is represented as a 6x7 matrix in column-major format.
