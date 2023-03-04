@@ -185,6 +185,22 @@ bool HydraController::init(hardware_interface::RobotHW* robot_hw,
         return false;
     }
 
+    auto* hydra_model_interface_ = robot_hw->get<hydra_hw::HydraModelInterface>();
+    if (hydra_model_interface_ == nullptr) {
+        ROS_ERROR(
+            "HydraController: Could not get Hydra model interface from "
+            "hardware");
+        return false;
+    }
+    try {
+        model_handle_ = std::make_unique<hydra_hw::HydraModelHandle>(
+            hydra_model_interface_->getHandle("hydra_model"));
+    } catch (hardware_interface::HardwareInterfaceException& e) {
+        ROS_ERROR_STREAM(
+            "HydraController: Exception getting model handle from interface: " << e.what());
+        return false;
+    }
+
     dynamic_reconfigure_posvel_param_node_ =
         ros::NodeHandle(node_handle.getNamespace() + "/dynamic_reconfigure_taskpriority_param_node");
     

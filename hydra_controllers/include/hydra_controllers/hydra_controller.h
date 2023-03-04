@@ -8,6 +8,7 @@
 #include <za_controllers/taskpriority_paramConfig.h>
 #include <hydra_controllers/robot_data_container.h>
 #include <hydra_controllers/cached_controller_data.h>
+#include <hydra_hw/hydra_model_interface.h>
 
 namespace hydra_controllers {
 
@@ -15,7 +16,8 @@ class HydraController : public controller_interface::MultiInterfaceController<
                                     hardware_interface::VelocityJointInterface,
                                     za_hw::ZaModelInterface,
                                     za_hw::ZaStateInterface,
-                                    hydra_hw::PositionerStateInterface> {
+                                    hydra_hw::PositionerStateInterface,
+                                    hydra_hw::HydraModelInterface> {
 public:
     bool init(hardware_interface::RobotHW* robot_hardware, ros::NodeHandle& node_handle) override;
     void update(const ros::Time&, const ros::Duration& period) override;
@@ -25,6 +27,7 @@ public:
 private:
     std::map<std::string, ZaDataContainer> arms_data_;
     PositionerDataContainer positioner_data_;
+    std::unique_ptr<hydra_hw::HydraModelHandle> model_handle_;
 
     Eigen::Vector3d z_align_;
     std::vector<ros::Subscriber> setpoints_subs_;

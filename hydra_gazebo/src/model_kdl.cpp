@@ -22,4 +22,15 @@ ModelKDL::ModelKDL(const urdf::Model& model,
     }
 }
 
+std::array<double, 42> ModelKDL::positionerJacobian() const {
+    static double t = 0.0;
+    t++;
+    Eigen::Matrix<double, 6, 7> Jp;
+    Jp.setConstant(t);
+
+    std::array<double, 42> Jp_array; 
+    Eigen::MatrixXd::Map(&Jp_array[0], 6, 7) = Jp;
+    return Jp_array;
+}
+
 } // namespace hydra_gazebo

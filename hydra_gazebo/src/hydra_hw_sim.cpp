@@ -1,4 +1,5 @@
 #include <hydra_gazebo/hydra_hw_sim.h>
+#include <hydra_gazebo/model_kdl.h>
 #include <std_msgs/Bool.h>
 
 namespace hydra_gazebo
@@ -11,14 +12,13 @@ bool HydraHWSim::initSim(const std::string& robot_namespace,
     this->robot_ = parent;
     this->model_nh_ = model_nh;
 
-    std::vector<std::string> robots;
-    if (!model_nh_.getParam(HARDWARE_PARAM, robots)) {
+    if (!model_nh_.getParam(HARDWARE_PARAM, robot_hw_ids_)) {
         ROS_ERROR_STREAM("Could not find " << HARDWARE_PARAM << 
                          "' parameter (namespace: " << model_nh_.getNamespace() << ").");
         return false;
     }
 
-    for (const auto& robot : robots) {
+    for (const auto& robot : robot_hw_ids_) {
         std::string arm_id;
         ros::NodeHandle nh(robot);
         if (!nh.getParam("arm_id", arm_id)) {
@@ -44,7 +44,7 @@ bool HydraHWSim::initSim(const std::string& robot_namespace,
                 }
         }
     }
-
+    registerInterface(&this->hmi_);
     return true;
 }
 
@@ -52,18 +52,58 @@ void HydraHWSim::initHydraModelHandle(
     const ros::NodeHandle& nh,
     const urdf::Model& urdf,
     const transmission_interface::TransmissionInfo& transmission) {
-    
+
+    std::map<std::string, std::shared_ptr<za_hw::ZaStateHandle>> za_state_map;    
+    try {
+        std::vector<std::string> tips;
+        for (const auto& hw_id : robot_hw_ids_) {
+            ros::NodeHandle node_handle(nh, hw_id);
+
+            // find end_effector links for model. at this point we can assume
+            // all registered interfaces of type ZaHWSim have a defined end_effector 
+            std::string type;
+            if (node_handle.getParam("type", type)) {
+                if (type == "za_gazebo/ZaHWSim") {
+                    std::string eef_link;
+                    node_handle.getParam("end_effector", eef_link);
+                    tips.push_back(eef_link);
+                }
+            }   
+        }
+
+        for (auto& hw : this->robot_hw_map_) {
+            auto* state_interface_ = hw.second->get<za_hw::ZaStateInterface>();
+            if (state_interface_ != nullptr) {
+
+                auto za_state_ptr = std::make_shared<za_hw::ZaStateHandle>(
+                    state_interface_->getHandle(hw.first + "_robot"));
+                za_state_map.emplace(std::make_pair(hw.first, std::move(za_state_ptr)));
+            }
+        }
+
+        for (auto& tip : tips) {
+            std::cout << tip << std::endl;
+        }
+
+        this->model_ =
+            std::make_unique<hydra_gazebo::ModelKDL>(urdf, tips, "positioner");
+    } catch (const std::invalid_argument& e) {
+        throw std::invalid_argument("Cannot create hydra_hw/HydraModelInterface");
+    }
+
+    this->hmi_.registerHandle(
+        hydra_hw::HydraModelHandle("hydra_model", *this->model_, za_state_map));
 }
 
 void HydraHWSim::readSim(ros::Time time, ros::Duration period) {
-    for (const auto& robot_hw : robot_hw_list_) {
-        robot_hw->readSim(time, period);
+    for (const auto& robot_hw : robot_hw_map_) {
+        robot_hw.second->readSim(time, period);
     }
 }
 
 void HydraHWSim::writeSim(ros::Time time, ros::Duration period) {
-    for (const auto& robot_hw : robot_hw_list_) {
-        robot_hw->writeSim(time, period);
+    for (const auto& robot_hw : robot_hw_map_) {
+        robot_hw.second->writeSim(time, period);
     }
 }
 
@@ -127,7 +167,7 @@ bool HydraHWSim::loadRobotHW(const std::string& name,
         return false;
     }
 
-    robot_hw_list_.push_back(robot_hw);
+    robot_hw_map_.emplace(std::make_pair(arm_id, robot_hw));
     this->registerInterfaceManager(robot_hw.get());
 
     ROS_INFO("Successfully loaded robot HW '%s'", name.c_str());
@@ -137,21 +177,21 @@ bool HydraHWSim::loadRobotHW(const std::string& name,
 bool HydraHWSim::prepareSwitch(
     const std::list<hardware_interface::ControllerInfo>& start_list,
     const std::list<hardware_interface::ControllerInfo>& stop_list) {
-    if (robot_hw_list_.size() != arm_ids_.size()) {
+    if (robot_hw_map_.size() != arm_ids_.size()) {
         ROS_ERROR_STREAM_NAMED("hydra_hw_sim", "Failed to prepare switch: " <<
             "the number of robot_hw does not match the number of arm ids.");
         return false;
     }
 
-    auto robot_hw = robot_hw_list_.begin();
+    auto robot_hw = robot_hw_map_.begin();
     auto arm_id = this->arm_ids_.begin();
 
-    for (; robot_hw != robot_hw_list_.end(); robot_hw++, arm_id++) {
+    for (; robot_hw != robot_hw_map_.end(); robot_hw++, arm_id++) {
         std::list<hardware_interface::ControllerInfo> filtered_start_list;
         std::list<hardware_interface::ControllerInfo> filtered_stop_list;
 
-        filterControllerList(start_list, filtered_start_list, *robot_hw, *arm_id);
-        filterControllerList(stop_list, filtered_stop_list, *robot_hw, *arm_id);
+        filterControllerList(start_list, filtered_start_list, robot_hw->second, *arm_id);
+        filterControllerList(stop_list, filtered_stop_list, robot_hw->second, *arm_id);
 
         #ifdef DEBUGGING_TOOLS
             std::cout << "Preparing Switch for armid: " << *arm_id << std::endl;
@@ -167,7 +207,7 @@ bool HydraHWSim::prepareSwitch(
             std::cout << std::endl;
         #endif
 
-        if (not (*robot_hw)->prepareSwitch(filtered_start_list, filtered_stop_list)) {
+        if (not (robot_hw->second)->prepareSwitch(filtered_start_list, filtered_stop_list)) {
             return false;
         }
     }
@@ -176,22 +216,22 @@ bool HydraHWSim::prepareSwitch(
 
 void HydraHWSim::doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
                            const std::list<hardware_interface::ControllerInfo>& stop_list) {
-    if (robot_hw_list_.size() != arm_ids_.size()) {
+    if (robot_hw_map_.size() != arm_ids_.size()) {
         ROS_ERROR_STREAM_NAMED("hydra_hw_sim", "Failed to prepare switch: " <<
             "the number of robot_hw does not match the number of arm ids.");
     }
 
-    auto robot_hw = robot_hw_list_.begin();
+    auto robot_hw = robot_hw_map_.begin();
     auto arm_id = this->arm_ids_.begin();
 
-    for (; robot_hw != robot_hw_list_.end(); robot_hw++, arm_id++) {
+    for (; robot_hw != robot_hw_map_.end(); robot_hw++, arm_id++) {
         std::list<hardware_interface::ControllerInfo> filtered_start_list;
         std::list<hardware_interface::ControllerInfo> filtered_stop_list;
 
-        filterControllerList(start_list, filtered_start_list, *robot_hw, *arm_id);
-        filterControllerList(stop_list, filtered_stop_list, *robot_hw, *arm_id);
+        filterControllerList(start_list, filtered_start_list, robot_hw->second, *arm_id);
+        filterControllerList(stop_list, filtered_stop_list, robot_hw->second, *arm_id);
 
-        (*robot_hw)->doSwitch(filtered_start_list, filtered_stop_list);
+        robot_hw->second->doSwitch(filtered_start_list, filtered_stop_list);
     }
 }
 

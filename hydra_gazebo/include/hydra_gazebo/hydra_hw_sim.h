@@ -2,6 +2,8 @@
 
 #include <gazebo_ros_control/robot_hw_sim.h>
 #include <za_gazebo/za_hw_sim.h>
+#include <hydra_hw/hydra_model_interface.h>
+#include <hydra_hw/model_base.h>
 #include <pluginlib/class_list_macros.h>
 #include <pluginlib/class_loader.h>
 
@@ -10,7 +12,7 @@
 namespace hydra_gazebo
 {
 static const std::string HARDWARE_PARAM = "robot_hardware";
-typedef std::vector<std::shared_ptr<gazebo_ros_control::RobotHWSim>> RobotHWList;
+typedef std::map<std::string, std::shared_ptr<gazebo_ros_control::RobotHWSim>> RobotHWMap;
 
 class HydraHWSim : public gazebo_ros_control::RobotHWSim
 {
@@ -89,9 +91,13 @@ protected:
     gazebo::physics::ModelPtr robot_;
     std::array<double, 3> gravity_earth_;
 
+    hydra_hw::HydraModelInterface hmi_;
+    std::unique_ptr<hydra_hw::ModelBase> model_;
+
     std::vector<std::string> arm_ids_;
     double tau_ext_lowpass_filter_;
-    RobotHWList robot_hw_list_;
+    std::vector<std::string> robot_hw_ids_;
+    RobotHWMap robot_hw_map_;
 
     ros::Publisher robot_initialized_pub_;
     ros::NodeHandle model_nh_;

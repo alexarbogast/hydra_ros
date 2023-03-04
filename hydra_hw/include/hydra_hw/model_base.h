@@ -18,7 +18,7 @@ public:
     *
     * @return Vectorized 6x7 Jacobian, column-major.
     */
-    std::array<double, 42> positionerJacobian();
+    virtual std::array<double, 42> positionerJacobian() const = 0;
 };
 
 } // namespace hydra_hw
