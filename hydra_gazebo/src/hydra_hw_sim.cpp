@@ -1,5 +1,6 @@
 #include <hydra_gazebo/hydra_hw_sim.h>
 #include <hydra_gazebo/model_kdl.h>
+#include <hydra_hw/positioner_state_interface.h>
 #include <std_msgs/Bool.h>
 
 namespace hydra_gazebo
@@ -53,9 +54,11 @@ void HydraHWSim::initHydraModelHandle(
     const urdf::Model& urdf,
     const transmission_interface::TransmissionInfo& transmission) {
 
-    std::map<std::string, std::shared_ptr<za_hw::ZaStateHandle>> za_state_map;    
+    std::map<std::string, std::shared_ptr<za_hw::ZaStateHandle>> za_state_map;
+    std::shared_ptr<hydra_hw::PositionerStateHandle> pos_state_handle;
     try {
-        std::vector<std::string> tips;
+        std::vector<std::string> tips, filtered_arm_ids;
+        std::string positioner_frame = "positioner_frame";
         for (const auto& hw_id : robot_hw_ids_) {
             ros::NodeHandle node_handle(nh, hw_id);
 
@@ -64,9 +67,17 @@ void HydraHWSim::initHydraModelHandle(
             std::string type;
             if (node_handle.getParam("type", type)) {
                 if (type == "za_gazebo/ZaHWSim") {
-                    std::string eef_link;
+                    std::string eef_link, arm_id;
                     node_handle.getParam("end_effector", eef_link);
+                    node_handle.getParam("arm_id", arm_id);
                     tips.push_back(eef_link);
+                    filtered_arm_ids.push_back(arm_id);
+                }
+                else if (type == "hydra_gazebo/PositionerHWSim") {
+                    if (not node_handle.getParam("frame", positioner_frame)) {
+                        ROS_ERROR_STREAM("Could not find 'frame" 
+                         "' parameter (namespace: " << node_handle.getNamespace() << ").");
+                    }
                 }
             }   
         }
@@ -74,25 +85,29 @@ void HydraHWSim::initHydraModelHandle(
         for (auto& hw : this->robot_hw_map_) {
             auto* state_interface_ = hw.second->get<za_hw::ZaStateInterface>();
             if (state_interface_ != nullptr) {
-
                 auto za_state_ptr = std::make_shared<za_hw::ZaStateHandle>(
                     state_interface_->getHandle(hw.first + "_robot"));
                 za_state_map.emplace(std::make_pair(hw.first, std::move(za_state_ptr)));
+                continue;
+            }
+            
+            auto* pos_state_interface_ = hw.second->get<hydra_hw::PositionerStateInterface>();
+            if (pos_state_interface_ != nullptr) {
+                pos_state_handle = std::make_shared<hydra_hw::PositionerStateHandle>(
+                    pos_state_interface_->getHandle(hw.first + "_robot"));
+                continue;
             }
         }
 
-        for (auto& tip : tips) {
-            std::cout << tip << std::endl;
-        }
-
         this->model_ =
-            std::make_unique<hydra_gazebo::ModelKDL>(urdf, tips, "positioner");
+            std::make_unique<hydra_gazebo::ModelKDL>(
+                urdf, filtered_arm_ids,tips, positioner_frame);
     } catch (const std::invalid_argument& e) {
         throw std::invalid_argument("Cannot create hydra_hw/HydraModelInterface");
     }
 
     this->hmi_.registerHandle(
-        hydra_hw::HydraModelHandle("hydra_model", *this->model_, za_state_map));
+        hydra_hw::HydraModelHandle("hydra_model", *this->model_, za_state_map, pos_state_handle));
 }
 
 void HydraHWSim::readSim(ros::Time time, ros::Duration period) {

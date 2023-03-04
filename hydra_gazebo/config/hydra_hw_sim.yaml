@@ -85,6 +85,7 @@ robot3_hw:
 positioner_hw:
   type: hydra_gazebo/PositionerHWSim
   arm_id: positioner
+  frame: positioner
   
   # Motion generators PID gains
   motion_generators:
