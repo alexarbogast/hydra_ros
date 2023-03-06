@@ -59,7 +59,7 @@ void coordinatedTaskPriorityControl(ZaDataContainer& arm_data,
     Eigen::MatrixXd J_rob_pinv;
     za_controllers::pseudoInverse(J_rob, J_rob_pinv); 
 
-    double pos_vel = 0.0;
+    double pos_vel = context.positioner_cmd;
     
     Eigen::Matrix<double, 6, 1> dq_cmd = J_rob_pinv * ((dp_d + dp_redundancy) - (J_pos * pos_vel));
     for (size_t i = 0; i < 6; ++i) {
@@ -70,7 +70,20 @@ void coordinatedTaskPriorityControl(ZaDataContainer& arm_data,
 void positionerControl(PositionerDataContainer& positioner_data,
                        CachedControllerData& controller_data) {
     // find dm/dqp = (dm1/dq1)*(dq1/dqp) + ... + (dmN/dqN)*(dqN/dqp)
-    double dqr_cmd = 0.0;
+    double dz_dqp = 0.0;
+    for (const auto& model_cache : controller_data.model_cache) {
+        auto& J_rob = model_cache.second.Jp.block<6, 6>(0, 1);
+        auto& J_pos = model_cache.second.Jp.block<6, 1>(0, 0);
+
+        Eigen::MatrixXd J_rob_pinv;
+        za_controllers::pseudoInverse(J_rob, J_rob_pinv);
+        auto& dqr_dqp = J_rob_pinv * (-J_pos);
+
+        auto K = Eigen::Matrix<double, 6, 6>::Identity() * 50;
+        dz_dqp += model_cache.second.Jm.transpose() * K * dqr_dqp;
+    }
+
+    double dqr_cmd = -dz_dqp;
     positioner_data.joint_handles_[0].setCommand(dqr_cmd); 
     controller_data.positioner_command_ = dqr_cmd;
 }

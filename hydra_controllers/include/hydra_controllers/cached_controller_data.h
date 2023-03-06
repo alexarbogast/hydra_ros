@@ -34,6 +34,7 @@ struct CTPCControllerParameters {
 
     double Kp, Ko, Kr;
     Eigen::Vector3d z_align;
+    double positioner_cmd;
 };
 
 /*

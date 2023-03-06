@@ -56,7 +56,8 @@ private:
     void startingArm(const std::string& arm_id,
                      ZaDataContainer& arm_data);
     void updateArm(ZaDataContainer& arm_data,
-                   CachedModelData& model_cache);
+                   CachedModelData& model_cache,
+                   double positioner_cmd);
 };
 
 } // namespace hydra_controllers

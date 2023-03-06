@@ -248,12 +248,14 @@ void HydraController::update(const ros::Time&, const ros::Duration& period) {
     
     updatePositioner(positioner_data_, cache);
     for (auto& arm_data : arms_data_) {
-        updateArm(arm_data.second, cache.model_cache[arm_data.first]); 
+        updateArm(arm_data.second, cache.model_cache[arm_data.first],
+                  cache.positioner_command_); 
     }
 }
 
 void HydraController::updateArm(ZaDataContainer& arm_data,
-                                CachedModelData& model_cache) {
+                                CachedModelData& model_cache,
+                                double positioner_cmd) {
     switch (arm_data.mode_) {
         case ControlMode::TaskPriorityControl: {
             TPCControllerParameters params(Kp_, Ko_, Kr_, z_align_);
@@ -262,6 +264,7 @@ void HydraController::updateArm(ZaDataContainer& arm_data,
         }
         case ControlMode::CoordinatedTaskPriorityControl: {
             CTPCControllerParameters params(Kp_, Ko_, Kr_, z_align_);
+            params.positioner_cmd = positioner_cmd;
             coordinatedTaskPriorityControl(arm_data, model_cache, params);
             break;
         }
