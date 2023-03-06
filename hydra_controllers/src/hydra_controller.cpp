@@ -216,20 +216,35 @@ bool HydraController::init(hardware_interface::RobotHW* robot_hw,
 
 void HydraController::starting(const ros::Time&) {
     for (auto& arm_data : arms_data_) {
-        startingArm(arm_data.second);
+        startingArm(arm_data.first, arm_data.second);
     }
 }
 
-void HydraController::startingArm(ZaDataContainer& arm_data) {
-    za::RobotState initial_state = arm_data.state_handle_->getRobotState();
-
-    Eigen::Affine3d initial_transformation(Eigen::Matrix4d::Map(initial_state.O_T_EE.data()));
-    arm_data.position_d_ = initial_transformation.translation();
+void HydraController::startingArm(const std::string& arm_id,
+                                  ZaDataContainer& arm_data) {
+    switch (arm_data.mode_) {
+        case ControlMode::TaskPriorityControl: {
+            za::RobotState initial_state = arm_data.state_handle_->getRobotState();
+            
+            Eigen::Affine3d initial_transformation(Eigen::Matrix4d::Map(initial_state.O_T_EE.data()));
+            arm_data.position_d_ = initial_transformation.translation();
+            break;
+        }
+        case ControlMode::CoordinatedTaskPriorityControl: {
+            Eigen::Affine3d initial_transformation(
+                Eigen::Matrix4d::Map(model_handle_->
+                    getPose(arm_id, hydra::Frame::kEndEffector).data()));
+            arm_data.position_d_ = initial_transformation.translation();
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 void HydraController::update(const ros::Time&, const ros::Duration& period) {
     CachedControllerData cache;
-    cacheControllerData(arms_data_, cache);
+    cacheControllerData(arms_data_, model_handle_, cache);
     
     updatePositioner(positioner_data_, cache);
     for (auto& arm_data : arms_data_) {
@@ -246,8 +261,8 @@ void HydraController::updateArm(ZaDataContainer& arm_data,
             break;
         }
         case ControlMode::CoordinatedTaskPriorityControl: {
-            CTPCControllerParameters params;
-            coordinatedTaskPriorityControl(arm_data, params);
+            CTPCControllerParameters params(Kp_, Ko_, Kr_, z_align_);
+            coordinatedTaskPriorityControl(arm_data, model_cache, params);
             break;
         }
         default:

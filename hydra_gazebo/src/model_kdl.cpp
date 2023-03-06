@@ -97,8 +97,6 @@ std::array<double, 42> ModelKDL::positionerJacobian(const std::string& arm_id_,
     KDL::JntArray kq;
     KDL::Jacobian J(7);  // NOLINT(readability-identifier-naming)
     kq.data = Eigen::Matrix<double, 7, 1>(q.data());
-
-    std::cout << arm_id_ << std::endl;
     
     KDL::ChainJntToJacSolver solver(*(this->chains_.at(arm_id_)));
     int segmentNr = frame == hydra::Frame::kEndEffector ?

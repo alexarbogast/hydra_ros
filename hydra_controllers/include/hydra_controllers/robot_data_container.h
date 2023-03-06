@@ -22,7 +22,7 @@ struct ZaDataContainer {
     Eigen::Matrix<double, 6, 1> twist_setpoint_;
     std::unique_ptr<std::mutex> pose_twist_setpoint_mutex_;
 
-    ControlMode mode_ = ControlMode::TaskPriorityControl;
+    ControlMode mode_ = ControlMode::CoordinatedTaskPriorityControl;
 };
 
 struct PositionerDataContainer {

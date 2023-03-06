@@ -26,6 +26,12 @@ struct TPCControllerParameters {
  * used to relay current gains to control loop
  */
 struct CTPCControllerParameters {
+    CTPCControllerParameters() = default;
+    CTPCControllerParameters(double Kp, double Ko, double Kr, 
+                      const Eigen::Vector3d& z_align) 
+        : Kp(Kp), Ko(Ko), Kr(Kr), z_align(z_align)
+    {} 
+
     double Kp, Ko, Kr;
     Eigen::Vector3d z_align;
 };
@@ -37,7 +43,7 @@ struct CTPCControllerParameters {
  * calculations in the robot and positioner controllers
  */
 struct CachedModelData {
-    /* Pose */
+    /* Pose in baseframe */
     Eigen::Affine3d pose;
 
     /* Base frame jacobian */
@@ -49,6 +55,12 @@ struct CachedModelData {
     /* Manipulability jacobian */
     Eigen::Matrix<double, 6, 1> Jm;
 
+    /* ========== coordinated tpc data =============*/
+    /* Positioner jacobian */
+    Eigen::Matrix<double, 6, 7> Jp;
+    
+    /* Pose in positioner frame */
+    Eigen::Affine3d pose_p;
 };
 
 /*

@@ -101,7 +101,7 @@ void HydraHWSim::initHydraModelHandle(
 
         this->model_ =
             std::make_unique<hydra_gazebo::ModelKDL>(
-                urdf, filtered_arm_ids,tips, positioner_frame);
+                urdf, filtered_arm_ids, tips, positioner_frame);
     } catch (const std::invalid_argument& e) {
         throw std::invalid_argument("Cannot create hydra_hw/HydraModelInterface");
     }

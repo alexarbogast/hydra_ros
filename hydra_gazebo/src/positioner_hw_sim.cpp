@@ -200,6 +200,7 @@ void PositionerHWSim::readSim(ros::Time time, ros::Duration period) {
         auto joint = pair.second;
         joint->update(period);
     }
+    this->updatePositionerState(time);
 }
 
 void PositionerHWSim::writeSim(ros::Time /*time*/, ros::Duration period) {
@@ -253,6 +254,17 @@ double PositionerHWSim::velocityControl(za_gazebo::Joint& joint, double setpoint
     return boost::algorithm::clamp(
         joint.velocity_controller.computeCommand(setpoint - joint.velocity, period),
         -joint.limits.max_effort, joint.limits.max_effort);
+}
+
+void PositionerHWSim::updatePositionerState(ros::Time time) {
+    for (const auto& joint : this->joints_) {
+        this->robot_state_.q = joint.second->position;
+        this->robot_state_.dq = joint.second->velocity;
+        
+        this->robot_state_.q_d = joint.second->getDesiredPosition();
+        this->robot_state_.dq_d = joint.second->getDesiredVelocity();
+        this->robot_state_.ddq_d = joint.second->getDesiredAcceleration();
+    }
 }
 
 bool PositionerHWSim::prepareSwitch(

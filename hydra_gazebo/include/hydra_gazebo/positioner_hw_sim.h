@@ -99,6 +99,8 @@ protected:
     double positionControl(za_gazebo::Joint& joint, double setpoint, const ros::Duration& period);
     double velocityControl(za_gazebo::Joint& joint, double setpoint, const ros::Duration& period);
 
+    void updatePositionerState(ros::Time time);
+
     template <int N>
     std::array<double, N> readArray(std::string param, std::string name = "") {
         std::array<double, N> x;

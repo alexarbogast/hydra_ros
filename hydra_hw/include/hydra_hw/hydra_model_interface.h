@@ -96,8 +96,8 @@ private:
     inline std::array<double, 7> combinedState(const std::string& arm_id) const {
         auto& robot_state = robot_state_map_.at(arm_id)->getRobotState();
         std::array<double, 7> q;
-        std::copy(std::begin(robot_state.q), std::end(robot_state.q), std::begin(q));
-        q[6] = pos_state_handle_->getPositionerState().q;
+        std::copy(std::begin(robot_state.q), std::end(robot_state.q), std::next(std::begin(q)));
+        q[0] = pos_state_handle_->getPositionerState().q;
         return q;
     }
 
