@@ -4,8 +4,9 @@
   <arg name="model" default="hydra.xacro"/>
   <arg name="gui" default="true" />
   <arg name="rvizconfig" default="$(find hydra_description)/rviz/hydra_model_viewer.rviz" />
+  <arg name="load_robot_description" default="true"/>
 
-  <param name="robot_description" command="$(find xacro)/xacro $(find hydra_description)/urdf/$(arg model)" />
+  <param if="$(arg load_robot_description)" name="robot_description" command="xacro  '$(find hydra_description)/urdf/$(arg model)'"/>
 
   <node if="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
   <node unless="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />

@@ -300,8 +300,8 @@ void HydraController::commandCallback(const za_msgs::PosVelSetpointConstPtr& msg
     arm_data.position_d_ << msg->pose.position.x, msg->pose.position.y, msg->pose.position.z;
 
     arm_data.twist_setpoint_ << 
-        msg->twist.twist.linear.x, msg->twist.twist.linear.y, msg->twist.twist.linear.z,
-        msg->twist.twist.angular.x, msg->twist.twist.angular.y, msg->twist.twist.angular.z;
+        msg->twist.linear.x, msg->twist.linear.y, msg->twist.linear.z,
+        msg->twist.angular.x, msg->twist.angular.y, msg->twist.angular.z;
 }
 
 } // namespace hydra_controllers

@@ -22,6 +22,7 @@ bool PositionerStateController::init(hardware_interface::RobotHW* robot_hardware
         ROS_INFO_STREAM("ZaStateController: Did not find publish_rate. Using default "
                          << publish_rate << " [Hz].");
     }
+    trigger_publish_ = robot_hw::TriggerRate(publish_rate);
 
     if (!controller_node_handle.getParam("joint_names", joint_names_) ||
       joint_names_.size() != 1) {
