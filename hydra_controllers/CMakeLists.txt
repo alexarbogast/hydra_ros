@@ -84,3 +84,7 @@ install(DIRECTORY include/${PROJECT_NAME}/
 install(FILES hydra_controllers_plugin.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
+catkin_install_python(
+  PROGRAMS test/hydra_controller_test.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)

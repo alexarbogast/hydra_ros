@@ -293,9 +293,20 @@ bool HydraController::serviceCallback(SwitchCoordination::Request& req,
     std::lock_guard<std::mutex> mode_mutex_lock(*arm_data.pose_twist_setpoint_mutex_);
     if (req.coordinated) {
         arm_data.mode_ = ControlMode::CoordinatedTaskPriorityControl;
+        Eigen::Affine3d initial_transformation(
+                Eigen::Matrix4d::Map(model_handle_->
+                    getPose(req.arm_id, hydra::Frame::kEndEffector).data()));
+        arm_data.position_d_ = initial_transformation.translation();
+        arm_data.twist_setpoint_.setZero();
     } 
     else {
         arm_data.mode_ = ControlMode::TaskPriorityControl;
+        za::RobotState robot_state = arm_data.state_handle_->getRobotState();
+
+        Eigen::Affine3d initial_transformation(
+                Eigen::Matrix4d::Map(robot_state.O_T_EE.data()));
+        arm_data.position_d_ = initial_transformation.translation();
+        arm_data.twist_setpoint_.setZero();
     }
     resp.success = true;
     return true;
