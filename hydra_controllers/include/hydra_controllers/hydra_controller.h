@@ -8,6 +8,7 @@
 #include <hydra_controllers/hydra_paramConfig.h>
 #include <hydra_controllers/robot_data_container.h>
 #include <hydra_controllers/cached_controller_data.h>
+#include <hydra_controllers/control_methods.h>
 #include <hydra_hw/hydra_model_interface.h>
 
 namespace hydra_controllers {
@@ -25,7 +26,7 @@ public:
     void stopping(const ros::Time&) override;
 
 private:
-    std::map<std::string, ZaDataContainer> arms_data_;
+    ArmDataMap arms_data_;
     PositionerDataContainer positioner_data_;
     std::unique_ptr<hydra_hw::HydraModelHandle> model_handle_;
 

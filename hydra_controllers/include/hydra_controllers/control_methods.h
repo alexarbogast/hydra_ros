@@ -6,6 +6,8 @@
 
 namespace hydra_controllers {
 
+typedef std::map<std::string, ZaDataContainer> ArmDataMap;
+
 void taskPriorityControl(ZaDataContainer& arm_data,
                          CachedModelData& input,
                          const ControllerParameters& context);
@@ -16,10 +18,11 @@ void coordinatedTaskPriorityControl(ZaDataContainer& arm_data,
                                     double positioner_cmd);
 
 void positionerControl(PositionerDataContainer& positioner_data,
+                       const ArmDataMap& arm_data,
                        CachedControllerData& controller_data,
                        const ControllerParameters& context);
 
-void cacheControllerData(std::map<std::string, ZaDataContainer>& arms_data,
+void cacheControllerData(ArmDataMap& arms_data,
                          const std::unique_ptr<hydra_hw::HydraModelHandle>& model_handle,
                          CachedControllerData& data);
 } // namespace hydra_controllers

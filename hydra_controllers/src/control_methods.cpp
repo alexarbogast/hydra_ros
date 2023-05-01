@@ -68,20 +68,24 @@ void coordinatedTaskPriorityControl(ZaDataContainer& arm_data,
 }
 
 void positionerControl(PositionerDataContainer& positioner_data,
+                       const ArmDataMap& arm_data,
                        CachedControllerData& controller_data,
                        const ControllerParameters& context) {
     // find dm/dqp = (dm1/dq1)*(dq1/dqp) + ... + (dmN/dqN)*(dqN/dqp)
     double dz_dqp = 0.0;
-    for (const auto& model_cache : controller_data.model_cache) {
-        auto& J_rob = model_cache.second.Jp.block<6, 6>(0, 1);
-        auto& J_pos = model_cache.second.Jp.block<6, 1>(0, 0);
+    for (const auto& arm : arm_data) {
+        if (arm.second.mode_ == ControlMode::CoordinatedTaskPriorityControl) {
+            auto& model_cache = controller_data.model_cache[arm.first];
+            auto J_rob = model_cache.Jp.block<6, 6>(0, 1);
+            auto J_pos = model_cache.Jp.block<6, 1>(0, 0);
 
-        Eigen::MatrixXd J_rob_pinv;
-        za_controllers::pseudoInverse(J_rob, J_rob_pinv);
-        auto& dqr_dqp = J_rob_pinv * (-J_pos);
+            Eigen::MatrixXd J_rob_pinv;
+            za_controllers::pseudoInverse(J_rob, J_rob_pinv);
+            auto& dqr_dqp = J_rob_pinv * (-J_pos);
 
-        auto K = Eigen::Matrix<double, 6, 6>::Identity() * context.Kpos;
-        dz_dqp += model_cache.second.Jm.transpose() * K * dqr_dqp;
+            auto K = Eigen::Matrix<double, 6, 6>::Identity() * context.Kpos;
+            dz_dqp += model_cache.Jm.transpose() * K * dqr_dqp;
+        }
     }
 
     double dqr_cmd = -dz_dqp;

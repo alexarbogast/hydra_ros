@@ -1,5 +1,4 @@
 #include <hydra_controllers/hydra_controller.h>
-#include <hydra_controllers/control_methods.h>
 #include <pluginlib/class_list_macros.h>
 #include <ros/ros.h>
 
@@ -259,13 +258,10 @@ void HydraController::updateArm(ZaDataContainer& arm_data,
                                 double positioner_cmd) {
     switch (arm_data.mode_) {
         case ControlMode::TaskPriorityControl: {
-            // TPCControllerParameters params(Kp_, Ko_, Kr_, z_align_);
             taskPriorityControl(arm_data, model_cache, controller_params_);
             break;
         }
         case ControlMode::CoordinatedTaskPriorityControl: {
-            // CTPCControllerParameters params(Kp_, Ko_, Kr_, Kpos_, z_align_);
-            // params.positioner_cmd = positioner_cmd;
             coordinatedTaskPriorityControl(arm_data, model_cache, 
                                         controller_params_, positioner_cmd);
             break;
@@ -278,7 +274,8 @@ void HydraController::updateArm(ZaDataContainer& arm_data,
 
 void HydraController::updatePositioner(PositionerDataContainer& positioner_data,
                                        CachedControllerData& controller_data) {
-    positionerControl(positioner_data, controller_data, controller_params_);
+    positionerControl(positioner_data, arms_data_,
+                      controller_data, controller_params_);
 }
 
 void HydraController::stopping(const ros::Time&) {
