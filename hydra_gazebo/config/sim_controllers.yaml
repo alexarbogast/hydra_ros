@@ -128,9 +128,9 @@ positioner_effort_joint_trajectory_controller:
 # Task priority controllers
 robot1_task_priority_controller:
   type: za_controllers/TaskPriorityController
-  Kp: 10
+  Kp: 100
   Ko: 30
-  Kr: 100
+  Kr: 500
   z_align: [0, 0, -1]
   arm_id: rob1
   joints:
@@ -143,9 +143,9 @@ robot1_task_priority_controller:
 
 robot2_task_priority_controller:
   type: za_controllers/TaskPriorityController
-  Kp: 10
+  Kp: 100
   Ko: 30
-  Kr: 100
+  Kr: 500
   z_align: [0, 0, -1]
   arm_id: rob2
   joints:
@@ -158,9 +158,9 @@ robot2_task_priority_controller:
 
 robot3_task_priority_controller:
   type: za_controllers/TaskPriorityController
-  Kp: 10
+  Kp: 100
   Ko: 30
-  Kr: 100
+  Kr: 500
   z_align: [0, 0, -1]
   arm_id: rob3
   joints:
@@ -173,9 +173,10 @@ robot3_task_priority_controller:
 
 hydra_controller:
   type: hydra_controllers/HydraController
-  Kp: 10
+  Kp: 100
   Ko: 30
-  Kr: 100
+  Kr: 500
+  Kpos: 500
   z_align: [0, 0, -1]
   arm_ids:
     - rob1

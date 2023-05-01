@@ -5,7 +5,7 @@
 #include <za_msgs/PosVelSetpoint.h>
 #include <ros/node_handle.h>
 
-#include <za_controllers/taskpriority_paramConfig.h>
+#include <hydra_controllers/hydra_paramConfig.h>
 #include <hydra_controllers/robot_data_container.h>
 #include <hydra_controllers/cached_controller_data.h>
 #include <hydra_hw/hydra_model_interface.h>
@@ -29,15 +29,14 @@ private:
     PositionerDataContainer positioner_data_;
     std::unique_ptr<hydra_hw::HydraModelHandle> model_handle_;
 
-    Eigen::Vector3d z_align_;
     std::vector<ros::Subscriber> setpoints_subs_;
 
     // Dynamic reconfigure
-    std::unique_ptr<dynamic_reconfigure::Server<za_controllers::taskpriority_paramConfig>>
+    std::unique_ptr<dynamic_reconfigure::Server<hydra_controllers::hydra_paramConfig>>
         dynamic_server_posvel_param_;
     ros::NodeHandle dynamic_reconfigure_posvel_param_node_;
-    double Kp_, Ko_, Kr_;
-    void taskpriorityParamCallback(za_controllers::taskpriority_paramConfig& config,
+    ControllerParameters controller_params_;
+    void taskpriorityParamCallback(hydra_controllers::hydra_paramConfig& config,
                              uint32_t level);
 
     std::vector<ros::Subscriber> sub_commands;

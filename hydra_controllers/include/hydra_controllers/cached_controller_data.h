@@ -9,32 +9,15 @@ namespace hydra_controllers {
  *
  * used to relay current gains to control loop
  */
-struct TPCControllerParameters {
-    TPCControllerParameters() = default;
-    TPCControllerParameters(double Kp, double Ko, double Kr, 
+struct ControllerParameters {
+    ControllerParameters() = default;
+    ControllerParameters(double Kp, double Ko, double Kr, 
                       const Eigen::Vector3d& z_align) 
         : Kp(Kp), Ko(Ko), Kr(Kr), z_align(z_align)
     {} 
 
-    double Kp, Ko, Kr;
+    double Kp, Ko, Kr, Kpos;
     Eigen::Vector3d z_align;
-};
-
-/*
- * Coordinated Task Priority Control Parameters
- *
- * used to relay current gains to control loop
- */
-struct CTPCControllerParameters {
-    CTPCControllerParameters() = default;
-    CTPCControllerParameters(double Kp, double Ko, double Kr, 
-                      const Eigen::Vector3d& z_align) 
-        : Kp(Kp), Ko(Ko), Kr(Kr), z_align(z_align)
-    {} 
-
-    double Kp, Ko, Kr;
-    Eigen::Vector3d z_align;
-    double positioner_cmd;
 };
 
 /*

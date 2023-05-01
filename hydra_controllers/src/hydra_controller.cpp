@@ -138,10 +138,11 @@ bool HydraController::init(hardware_interface::RobotHW* robot_hw,
         return false;
     }
 
-    if (not node_handle.getParam("Kp", Kp_) or 
-        not node_handle.getParam("Ko", Ko_) or
-        not node_handle.getParam("Kr", Kr_)) {
-        ROS_ERROR("Missing controller gains 'Kp' or 'Ko' or 'Kr'");
+    if (not node_handle.getParam("Kp", controller_params_.Kp) or 
+        not node_handle.getParam("Ko", controller_params_.Ko) or
+        not node_handle.getParam("Kr", controller_params_.Kr) or
+        not node_handle.getParam("Kpos", controller_params_.Kpos)) {
+        ROS_ERROR("Missing controller gains 'Kp' or 'Ko' or 'Kr' or 'Kpos'");
         return false;
     }
     std::vector<double> z_align;
@@ -149,7 +150,7 @@ bool HydraController::init(hardware_interface::RobotHW* robot_hw,
         ROS_ERROR("Missing z alignment axis 'z_align'");
         return false;
     }
-    z_align_ = Eigen::Map<Eigen::Vector3d, Eigen::Unaligned>
+    controller_params_.z_align = Eigen::Map<Eigen::Vector3d, Eigen::Unaligned>
         (z_align.data(), z_align.size());
 
     // initialize manipulators
@@ -205,7 +206,7 @@ bool HydraController::init(hardware_interface::RobotHW* robot_hw,
         ros::NodeHandle(node_handle.getNamespace() + "/dynamic_reconfigure_taskpriority_param_node");
     
     dynamic_server_posvel_param_ = std::make_unique<
-        dynamic_reconfigure::Server<za_controllers::taskpriority_paramConfig>>(
+        dynamic_reconfigure::Server<hydra_controllers::hydra_paramConfig>>(
             dynamic_reconfigure_posvel_param_node_);
     
     dynamic_server_posvel_param_->setCallback(
@@ -258,14 +259,15 @@ void HydraController::updateArm(ZaDataContainer& arm_data,
                                 double positioner_cmd) {
     switch (arm_data.mode_) {
         case ControlMode::TaskPriorityControl: {
-            TPCControllerParameters params(Kp_, Ko_, Kr_, z_align_);
-            taskPriorityControl(arm_data, model_cache, params);
+            // TPCControllerParameters params(Kp_, Ko_, Kr_, z_align_);
+            taskPriorityControl(arm_data, model_cache, controller_params_);
             break;
         }
         case ControlMode::CoordinatedTaskPriorityControl: {
-            CTPCControllerParameters params(Kp_, Ko_, Kr_, z_align_);
-            params.positioner_cmd = positioner_cmd;
-            coordinatedTaskPriorityControl(arm_data, model_cache, params);
+            // CTPCControllerParameters params(Kp_, Ko_, Kr_, Kpos_, z_align_);
+            // params.positioner_cmd = positioner_cmd;
+            coordinatedTaskPriorityControl(arm_data, model_cache, 
+                                        controller_params_, positioner_cmd);
             break;
         }
         default:
@@ -276,7 +278,7 @@ void HydraController::updateArm(ZaDataContainer& arm_data,
 
 void HydraController::updatePositioner(PositionerDataContainer& positioner_data,
                                        CachedControllerData& controller_data) {
-    positionerControl(positioner_data, controller_data);
+    positionerControl(positioner_data, controller_data, controller_params_);
 }
 
 void HydraController::stopping(const ros::Time&) {
@@ -285,11 +287,12 @@ void HydraController::stopping(const ros::Time&) {
   // BUILT-IN STOPPING BEHAVIOR SLOW DOWN THE ROBOT.
 }
 
-void HydraController::taskpriorityParamCallback(za_controllers::taskpriority_paramConfig& config,
+void HydraController::taskpriorityParamCallback(hydra_controllers::hydra_paramConfig& config,
                                                 uint32_t /*level*/) {
-    Kp_ = config.translation_gain;
-    Ko_ = config.rotation_gain;
-    Kr_ = config.redundancy_gain;
+    controller_params_.Kp = config.translation_gain;
+    controller_params_.Ko = config.rotation_gain;
+    controller_params_.Kr = config.redundancy_gain;
+    controller_params_.Kpos = config.positioner_gain;
 }
 
 void HydraController::commandCallback(const za_msgs::PosVelSetpointConstPtr& msg, 

@@ -5,7 +5,7 @@ namespace hydra_controllers {
 
 void taskPriorityControl(ZaDataContainer& arm_data,
                          CachedModelData& input,
-                         const TPCControllerParameters& context) {
+                         const ControllerParameters& context) {
     /* ========= task tracking ========= */ 
     Eigen::Vector3d pose_error = context.Kp * 
         (arm_data.position_d_ - input.pose.translation());
@@ -32,7 +32,8 @@ void taskPriorityControl(ZaDataContainer& arm_data,
 
 void coordinatedTaskPriorityControl(ZaDataContainer& arm_data,
                                     CachedModelData& input,
-                                    const CTPCControllerParameters& context) {
+                                    const ControllerParameters& context,
+                                    double positioner_cmd) {
     /* ========= task tracking ========= */ 
     Eigen::Vector3d pose_error = context.Kp *
         (arm_data.position_d_ - input.pose_p.translation());
@@ -59,16 +60,16 @@ void coordinatedTaskPriorityControl(ZaDataContainer& arm_data,
     Eigen::MatrixXd J_rob_pinv;
     za_controllers::pseudoInverse(J_rob, J_rob_pinv); 
 
-    double pos_vel = context.positioner_cmd;
-    
-    Eigen::Matrix<double, 6, 1> dq_cmd = J_rob_pinv * ((dp_d + dp_redundancy) - (J_pos * pos_vel));
+    Eigen::Matrix<double, 6, 1> dq_cmd = J_rob_pinv * ((dp_d + dp_redundancy) 
+                                        - (J_pos * positioner_cmd));
     for (size_t i = 0; i < 6; ++i) {
         arm_data.joint_handles_[i].setCommand(dq_cmd(i));
     }
 }
 
 void positionerControl(PositionerDataContainer& positioner_data,
-                       CachedControllerData& controller_data) {
+                       CachedControllerData& controller_data,
+                       const ControllerParameters& context) {
     // find dm/dqp = (dm1/dq1)*(dq1/dqp) + ... + (dmN/dqN)*(dqN/dqp)
     double dz_dqp = 0.0;
     for (const auto& model_cache : controller_data.model_cache) {
@@ -79,7 +80,7 @@ void positionerControl(PositionerDataContainer& positioner_data,
         za_controllers::pseudoInverse(J_rob, J_rob_pinv);
         auto& dqr_dqp = J_rob_pinv * (-J_pos);
 
-        auto K = Eigen::Matrix<double, 6, 6>::Identity() * 50;
+        auto K = Eigen::Matrix<double, 6, 6>::Identity() * context.Kpos;
         dz_dqp += model_cache.second.Jm.transpose() * K * dqr_dqp;
     }
 

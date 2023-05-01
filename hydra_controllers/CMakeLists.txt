@@ -25,6 +25,10 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(Eigen3 REQUIRED)
 
+generate_dynamic_reconfigure_options(
+  cfg/hydra_param.cfg
+)
+
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES za_controllers

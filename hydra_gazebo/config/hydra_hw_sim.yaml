@@ -23,12 +23,12 @@ robot1_hw:
         rob1_joint_6: { p: 150, d: 10, i: 0 }
     velocity:
       gains:
-        rob1_joint_1: { p: 200, d: 0, i: 0 }
-        rob1_joint_2: { p: 200, d: 0, i: 0 }
+        rob1_joint_1: { p: 300, d: 0, i: 0 }
+        rob1_joint_2: { p: 250, d: 0, i: 0 }
         rob1_joint_3: { p: 150, d: 0, i: 0 }
         rob1_joint_4: { p: 30,  d: 0, i: 0 }
-        rob1_joint_5: { p: 15,  d: 0, i: 0 }
-        rob1_joint_6: { p: 1,   d: 0, i: 0 }
+        rob1_joint_5: { p: 30,  d: 0, i: 0 }
+        rob1_joint_6: { p: 5,   d: 0, i: 0 }
 
 robot2_hw:
   type: za_gazebo/ZaHWSim
@@ -49,12 +49,12 @@ robot2_hw:
         rob2_joint_6: { p: 150, d: 10, i: 0 }
     velocity:
       gains:
-        rob2_joint_1: { p: 200, d: 0, i: 0 }
-        rob2_joint_2: { p: 200, d: 0, i: 0 }
+        rob2_joint_1: { p: 300, d: 0, i: 0 }
+        rob2_joint_2: { p: 250, d: 0, i: 0 }
         rob2_joint_3: { p: 150, d: 0, i: 0 }
         rob2_joint_4: { p: 30,  d: 0, i: 0 }
-        rob2_joint_5: { p: 15,  d: 0, i: 0 }
-        rob2_joint_6: { p: 1,   d: 0, i: 0 }
+        rob2_joint_5: { p: 30,  d: 0, i: 0 }
+        rob2_joint_6: { p: 5,   d: 0, i: 0 }
 
 robot3_hw:
   type: za_gazebo/ZaHWSim
@@ -75,12 +75,12 @@ robot3_hw:
         rob3_joint_6: { p: 50, d: 0.1, i: 0 }
     velocity:
       gains:
-        rob3_joint_1: { p: 200, d: 0, i: 0 }
-        rob3_joint_2: { p: 200, d: 0, i: 0 }
+        rob3_joint_1: { p: 300, d: 0, i: 0 }
+        rob3_joint_2: { p: 250, d: 0, i: 0 }
         rob3_joint_3: { p: 150, d: 0, i: 0 }
         rob3_joint_4: { p: 30,  d: 0, i: 0 }
-        rob3_joint_5: { p: 15,  d: 0, i: 0 }
-        rob3_joint_6: { p: 1,   d: 0, i: 0 }
+        rob3_joint_5: { p: 30,  d: 0, i: 0 }
+        rob3_joint_6: { p: 5,   d: 0, i: 0 }
 
 positioner_hw:
   type: hydra_gazebo/PositionerHWSim
