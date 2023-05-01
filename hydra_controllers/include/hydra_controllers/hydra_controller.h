@@ -9,6 +9,7 @@
 #include <hydra_controllers/robot_data_container.h>
 #include <hydra_controllers/cached_controller_data.h>
 #include <hydra_controllers/control_methods.h>
+#include <hydra_controllers/SwitchCoordination.h>
 #include <hydra_hw/hydra_model_interface.h>
 
 namespace hydra_controllers {
@@ -39,6 +40,10 @@ private:
     ControllerParameters controller_params_;
     void taskpriorityParamCallback(hydra_controllers::hydra_paramConfig& config,
                              uint32_t level);
+
+    ros::ServiceServer coordination_server_;
+    bool serviceCallback(SwitchCoordination::Request& req,
+                         SwitchCoordination::Response& resp);
 
     std::vector<ros::Subscriber> sub_commands;
     void commandCallback(const za_msgs::PosVelSetpointConstPtr& msg, 

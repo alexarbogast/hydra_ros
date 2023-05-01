@@ -152,6 +152,9 @@ bool HydraController::init(hardware_interface::RobotHW* robot_hw,
     controller_params_.z_align = Eigen::Map<Eigen::Vector3d, Eigen::Unaligned>
         (z_align.data(), z_align.size());
 
+    // initialize coordination server
+    coordination_server_ = node_handle.advertiseService("switch_coordination", &HydraController::serviceCallback, this);
+
     // initialize manipulators
     for (const auto& arm_id : arm_ids) {
         boost::function<void(const za_msgs::PosVelSetpointConstPtr&)> callback = 
@@ -282,6 +285,20 @@ void HydraController::stopping(const ros::Time&) {
   // WARNING: DO NOT SEND ZERO VELOCITIES HERE AS IN CASE OF ABORTING DURING MOTION
   // A JUMP TO ZERO WILL BE COMMANDED PUTTING HIGH LOADS ON THE ROBOT. LET THE DEFAULT
   // BUILT-IN STOPPING BEHAVIOR SLOW DOWN THE ROBOT.
+}
+
+bool HydraController::serviceCallback(SwitchCoordination::Request& req,
+                                      SwitchCoordination::Response& resp) {
+    auto& arm_data = arms_data_[req.arm_id];
+    std::lock_guard<std::mutex> mode_mutex_lock(*arm_data.pose_twist_setpoint_mutex_);
+    if (req.coordinated) {
+        arm_data.mode_ = ControlMode::CoordinatedTaskPriorityControl;
+    } 
+    else {
+        arm_data.mode_ = ControlMode::TaskPriorityControl;
+    }
+    resp.success = true;
+    return true;
 }
 
 void HydraController::taskpriorityParamCallback(hydra_controllers::hydra_paramConfig& config,

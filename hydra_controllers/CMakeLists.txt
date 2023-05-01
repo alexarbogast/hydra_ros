@@ -25,9 +25,14 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(Eigen3 REQUIRED)
 
+add_service_files(
+  DIRECTORY srv
+  FILES SwitchCoordination.srv
+)
 generate_dynamic_reconfigure_options(
   cfg/hydra_param.cfg
 )
+generate_messages(DEPENDENCIES std_msgs)
 
 catkin_package(
   INCLUDE_DIRS include
