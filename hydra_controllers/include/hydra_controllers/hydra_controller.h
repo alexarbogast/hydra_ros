@@ -12,6 +12,8 @@
 #include <hydra_controllers/SwitchCoordination.h>
 #include <hydra_hw/hydra_model_interface.h>
 
+#include <cartesian_trajectory_adapter/multi_trajectory_adapter.h>
+
 namespace hydra_controllers {
 
 class HydraController : public controller_interface::MultiInterfaceController<
@@ -19,7 +21,8 @@ class HydraController : public controller_interface::MultiInterfaceController<
                                     za_hw::ZaModelInterface,
                                     za_hw::ZaStateInterface,
                                     hydra_hw::PositionerStateInterface,
-                                    hydra_hw::HydraModelInterface> {
+                                    hydra_hw::HydraModelInterface>,
+                        public cartesian_trajectory_controllers::MultiTrajectoryAdapter{
 public:
     bool init(hardware_interface::RobotHW* robot_hardware, ros::NodeHandle& node_handle) override;
     void update(const ros::Time&, const ros::Duration& period) override;
@@ -30,8 +33,6 @@ private:
     ArmDataMap arms_data_;
     PositionerDataContainer positioner_data_;
     std::unique_ptr<hydra_hw::HydraModelHandle> model_handle_;
-
-    std::vector<ros::Subscriber> setpoints_subs_;
 
     // Dynamic reconfigure
     std::unique_ptr<dynamic_reconfigure::Server<hydra_controllers::hydra_paramConfig>>
@@ -44,10 +45,6 @@ private:
     ros::ServiceServer coordination_server_;
     bool serviceCallback(SwitchCoordination::Request& req,
                          SwitchCoordination::Response& resp);
-
-    std::vector<ros::Subscriber> sub_commands;
-    void commandCallback(const za_msgs::PosVelSetpointConstPtr& msg, 
-                         const std::string& arm_id);
 
     bool initPositioner(hardware_interface::RobotHW* robot_hw,
                         const std::string& positioner_id,

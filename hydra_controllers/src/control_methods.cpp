@@ -8,14 +8,15 @@ void taskPriorityControl(ZaDataContainer& arm_data,
                          const ControllerParameters& context) {
     /* ========= task tracking ========= */ 
     Eigen::Vector3d pose_error = context.Kp * 
-        (arm_data.position_d_ - input.pose.translation());
+        (arm_data.setpoint_.p - input.pose.translation());
 
     const auto& z_eef = input.pose.matrix().block<3, 1>(0, 2);
     Eigen::Vector3d orient_error = context.Ko * z_eef.cross(context.z_align);
     Eigen::Matrix<double, 6, 1> error(6);
     error << pose_error, orient_error;
 
-    Eigen::Matrix<double, 6, 1> dp_d(arm_data.twist_setpoint_);
+    Eigen::Matrix<double, 6, 1> dp_d;
+    dp_d << arm_data.setpoint_.v, arm_data.setpoint_.w;
     dp_d += error;
 
     /* ====== redundancy resolution ====== */
@@ -36,14 +37,15 @@ void coordinatedTaskPriorityControl(ZaDataContainer& arm_data,
                                     double positioner_cmd) {
     /* ========= task tracking ========= */ 
     Eigen::Vector3d pose_error = context.Kp *
-        (arm_data.position_d_ - input.pose_p.translation());
+        (arm_data.setpoint_.p - input.pose_p.translation());
 
     const auto& z_eef = input.pose.matrix().block<3, 1>(0, 2);
     Eigen::Vector3d orient_error = context.Ko * z_eef.cross(context.z_align);
     Eigen::Matrix<double, 6, 1> error(6);
     error << pose_error, orient_error;
 
-    Eigen::Matrix<double, 6, 1> dp_d(arm_data.twist_setpoint_);
+    Eigen::Matrix<double, 6, 1> dp_d;
+    dp_d << arm_data.setpoint_.v, arm_data.setpoint_.w;
     dp_d += error;
 
     /* ====== redundancy resolution ====== */

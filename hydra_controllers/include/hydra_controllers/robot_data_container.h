@@ -7,6 +7,8 @@
 #include <Eigen/Dense>
 #include <mutex>
 
+#include <cartesian_trajectory/cartesian_state.h>
+
 namespace hydra_controllers {
 enum class ControlMode {
     TaskPriorityControl,
@@ -18,9 +20,7 @@ struct ZaDataContainer {
     std::unique_ptr<za_hw::ZaModelHandle> model_handle_;
     std::vector<hardware_interface::JointHandle> joint_handles_;
 
-    Eigen::Vector3d position_d_;
-    Eigen::Matrix<double, 6, 1> twist_setpoint_;
-    std::unique_ptr<std::mutex> pose_twist_setpoint_mutex_;
+    cartesian_controllers::CartesianState setpoint_;
 
     ControlMode mode_ = ControlMode::TaskPriorityControl;
 };

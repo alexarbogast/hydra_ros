@@ -2,10 +2,11 @@ cmake_minimum_required(VERSION 3.4)
 project(hydra_controllers)
 
 set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(catkin REQUIRED COMPONENTS
+  cartesian_trajectory_adapter
   controller_interface
   dynamic_reconfigure
   eigen_conversions
@@ -38,6 +39,7 @@ catkin_package(
   INCLUDE_DIRS include
   LIBRARIES za_controllers
   CATKIN_DEPENDS
+  cartesian_trajectory_adapter
   controller_interface
   dynamic_reconfigure
   eigen_conversions

@@ -213,7 +213,8 @@ void PositionerHWSim::writeSim(ros::Time /*time*/, ros::Duration period) {
             effort = positionControl(*joint, joint->desired_position, period);
         }
         else if (joint->control_method == za_gazebo::ControlMethod::VELOCITY) {
-                effort = velocityControl(*joint, joint->desired_velocity, period);
+            //effort = velocityControl(*joint, joint->desired_velocity, period);
+            joint->handle->SetVelocity(0, joint->desired_velocity);
         } 
         else if (joint->control_method == za_gazebo::ControlMethod::EFFORT) {
             effort = joint->command;

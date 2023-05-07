@@ -73,10 +73,6 @@ bool HydraController::initArm(hardware_interface::RobotHW* robot_hw,
         }
     }
 
-    arm_data.position_d_.setZero();
-    arm_data.twist_setpoint_.setZero();
-    arm_data.pose_twist_setpoint_mutex_ = std::make_unique<std::mutex>();
-
     arms_data_.emplace(std::make_pair(arm_id, std::move(arm_data)));
     return true;
 }
@@ -156,15 +152,7 @@ bool HydraController::init(hardware_interface::RobotHW* robot_hw,
     coordination_server_ = node_handle.advertiseService("switch_coordination", &HydraController::serviceCallback, this);
 
     // initialize manipulators
-    for (const auto& arm_id : arm_ids) {
-        boost::function<void(const za_msgs::PosVelSetpointConstPtr&)> callback = 
-            boost::bind(&HydraController::commandCallback, this, _1, arm_id);
-        
-        ros::SubscribeOptions subscriber_options;
-        subscriber_options.init(arm_id + "/command", 1, callback);
-        subscriber_options.transport_hints = ros::TransportHints().reliable().tcpNoDelay();
-        setpoints_subs_.emplace_back(node_handle.subscribe(subscriber_options));
-         
+    for (const auto& arm_id : arm_ids) {         
         std::vector<std::string> joint_names;
         if (!node_handle.getParam(arm_id + "/" + param_name, joint_names)) {
             ROS_ERROR_STREAM("Failed to getParam '" << param_name << 
@@ -214,6 +202,12 @@ bool HydraController::init(hardware_interface::RobotHW* robot_hw,
     dynamic_server_posvel_param_->setCallback(
         boost::bind(&HydraController::taskpriorityParamCallback, this, _1, _2));
 
+    /* Initialize trajectory adapters */
+    std::vector<cartesian_trajectory_controllers::StateHandle> setpoints;
+    setpoints.reserve(arms_data_.size());
+    std::transform(arms_data_.begin(), arms_data_.end(), std::back_inserter(setpoints),
+                   [](const auto& pair) { return &pair.second.setpoint_; });
+    MultiTrajectoryAdapter::init(node_handle, arm_ids, setpoints);
     return true;
 }
 
@@ -230,14 +224,14 @@ void HydraController::startingArm(const std::string& arm_id,
             za::RobotState initial_state = arm_data.state_handle_->getRobotState();
             
             Eigen::Affine3d initial_transformation(Eigen::Matrix4d::Map(initial_state.O_T_EE.data()));
-            arm_data.position_d_ = initial_transformation.translation();
+            arm_data.setpoint_.p = initial_transformation.translation();
             break;
         }
         case ControlMode::CoordinatedTaskPriorityControl: {
             Eigen::Affine3d initial_transformation(
                 Eigen::Matrix4d::Map(model_handle_->
                     getPose(arm_id, hydra::Frame::kEndEffector).data()));
-            arm_data.position_d_ = initial_transformation.translation();
+            arm_data.setpoint_.p = initial_transformation.translation();
             break;
         }
         default:
@@ -251,6 +245,13 @@ void HydraController::update(const ros::Time&, const ros::Duration& period) {
     
     updatePositioner(positioner_data_, cache);
     for (auto& arm_data : arms_data_) {
+        // ================== trajectory generation ===================
+        auto& traj_adap = *(adapters_.at(arm_data.first));
+        if (traj_adap.isActive() && !traj_adap.isDone()) {
+            traj_adap.sample(period.toSec(), arm_data.second.setpoint_);
+        }
+        
+        // ================== control ================================
         updateArm(arm_data.second, cache.model_cache[arm_data.first],
                   cache.positioner_command_); 
     }
@@ -290,14 +291,13 @@ void HydraController::stopping(const ros::Time&) {
 bool HydraController::serviceCallback(SwitchCoordination::Request& req,
                                       SwitchCoordination::Response& resp) {
     auto& arm_data = arms_data_[req.arm_id];
-    std::lock_guard<std::mutex> mode_mutex_lock(*arm_data.pose_twist_setpoint_mutex_);
     if (req.coordinated) {
         arm_data.mode_ = ControlMode::CoordinatedTaskPriorityControl;
         Eigen::Affine3d initial_transformation(
                 Eigen::Matrix4d::Map(model_handle_->
                     getPose(req.arm_id, hydra::Frame::kEndEffector).data()));
-        arm_data.position_d_ = initial_transformation.translation();
-        arm_data.twist_setpoint_.setZero();
+        arm_data.setpoint_ = cartesian_controllers::CartesianState();
+        arm_data.setpoint_.p = initial_transformation.translation();
     } 
     else {
         arm_data.mode_ = ControlMode::TaskPriorityControl;
@@ -305,8 +305,8 @@ bool HydraController::serviceCallback(SwitchCoordination::Request& req,
 
         Eigen::Affine3d initial_transformation(
                 Eigen::Matrix4d::Map(robot_state.O_T_EE.data()));
-        arm_data.position_d_ = initial_transformation.translation();
-        arm_data.twist_setpoint_.setZero();
+        arm_data.setpoint_ = cartesian_controllers::CartesianState();
+        arm_data.setpoint_.p = initial_transformation.translation();
     }
     resp.success = true;
     return true;
@@ -318,18 +318,6 @@ void HydraController::taskpriorityParamCallback(hydra_controllers::hydra_paramCo
     controller_params_.Ko = config.rotation_gain;
     controller_params_.Kr = config.redundancy_gain;
     controller_params_.Kpos = config.positioner_gain;
-}
-
-void HydraController::commandCallback(const za_msgs::PosVelSetpointConstPtr& msg, 
-                                      const std::string& arm_id) {
-    auto& arm_data = arms_data_[arm_id];
-    std::lock_guard<std::mutex> twist_setpoint_mutex_lock(*arm_data.pose_twist_setpoint_mutex_);
-
-    arm_data.position_d_ << msg->pose.position.x, msg->pose.position.y, msg->pose.position.z;
-
-    arm_data.twist_setpoint_ << 
-        msg->twist.linear.x, msg->twist.linear.y, msg->twist.linear.z,
-        msg->twist.angular.x, msg->twist.angular.y, msg->twist.angular.z;
 }
 
 } // namespace hydra_controllers
