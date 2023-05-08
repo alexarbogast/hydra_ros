@@ -1,6 +1,7 @@
 #include <hydra_controllers/hydra_controller.h>
-#include <pluginlib/class_list_macros.h>
+
 #include <ros/ros.h>
+#include <pluginlib/class_list_macros.h>
 
 namespace hydra_controllers {
 
@@ -202,12 +203,8 @@ bool HydraController::init(hardware_interface::RobotHW* robot_hw,
     dynamic_server_posvel_param_->setCallback(
         boost::bind(&HydraController::taskpriorityParamCallback, this, _1, _2));
 
-    /* Initialize trajectory adapters */
-    std::vector<cartesian_trajectory_controllers::StateHandle> setpoints;
-    setpoints.reserve(arms_data_.size());
-    std::transform(arms_data_.begin(), arms_data_.end(), std::back_inserter(setpoints),
-                   [](const auto& pair) { return &pair.second.setpoint_; });
-    MultiTrajectoryAdapter::init(node_handle, arm_ids, setpoints);
+    MultiTrajectoryAdapter::init(node_handle, arm_ids,
+        boost::bind(&HydraController::adapterCallback, this, _1, _2));
     return true;
 }
 
@@ -290,7 +287,8 @@ void HydraController::stopping(const ros::Time&) {
 
 bool HydraController::serviceCallback(SwitchCoordination::Request& req,
                                       SwitchCoordination::Response& resp) {
-    auto& arm_data = arms_data_[req.arm_id];
+    LOCK_MULTI_ADAPTER_DATA(req.arm_id);
+    auto& arm_data = arms_data_.at(req.arm_id);
     if (req.coordinated) {
         arm_data.mode_ = ControlMode::CoordinatedTaskPriorityControl;
         Eigen::Affine3d initial_transformation(
@@ -310,6 +308,36 @@ bool HydraController::serviceCallback(SwitchCoordination::Request& req,
     }
     resp.success = true;
     return true;
+}
+
+void HydraController::adapterCallback(const std::string& arm_id,
+                                      cartesian_controllers::CartesianState& state) const {
+    auto& arm_data = arms_data_.at(arm_id);
+    switch (arm_data.mode_) {
+        case ControlMode::TaskPriorityControl: {
+            za::RobotState initial_state = arm_data.state_handle_->getRobotState();
+            Eigen::Affine3d transformation(Eigen::Matrix4d::Map(initial_state.O_T_EE.data()));
+            
+            state.p = transformation.translation();
+            state.q = Eigen::Quaterniond(transformation.rotation());
+            break;
+        }
+        case ControlMode::CoordinatedTaskPriorityControl: {
+            Eigen::Affine3d transformation(
+                Eigen::Matrix4d::Map(model_handle_->
+                    getPose(arm_id, hydra::Frame::kEndEffector).data()));
+            
+            state.p = transformation.translation();
+            state.q = Eigen::Quaterniond(transformation.rotation());
+            break;
+        }
+        default:
+            break;
+    }
+
+    // use last setpoint velocity as prediction
+    state.v = arm_data.setpoint_.v;
+    state.w = arm_data.setpoint_.w;
 }
 
 void HydraController::taskpriorityParamCallback(hydra_controllers::hydra_paramConfig& config,

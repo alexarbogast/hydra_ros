@@ -29,6 +29,8 @@ public:
     void starting(const ros::Time&) override;
     void stopping(const ros::Time&) override;
 
+    void adapterCallback(const std::string& arm_id, 
+                         cartesian_controllers::CartesianState& state) const;
 private:
     ArmDataMap arms_data_;
     PositionerDataContainer positioner_data_;
