@@ -48,5 +48,10 @@ To run the combined multi-robot controller
 ```shell script
 roslaunch hydra_gazebo hydra.launch controller:=hydra_controller
 ```
+### Coordinated Cartesian Trajectory Execution
+To execute a trajectory, you will need to create an actionlib client that sends a trajectory to the [cartesian_controllers](https://github.com/alexarbogast/cartesian_controllers) trajectory adapter. An example is provided in [hydra_controllers_test.py](hydra_controllers/test/hydra_controller_test.py)
 
-To actually execute a trajectory, you will need a node that feeds the controllers a setpoint. An example for executing linear trajectories with 4th order smoothing is provided at [kintrol](https://github.com/alexarbogast/kintrol.git). The kintrol package implements an online trajectory generator using [ruckig](https://github.com/pantor/ruckig).
+To run the test:
+```shell script
+rosrun hydra_controllers hydra_controller_test.py
+```
