@@ -55,6 +55,7 @@ private:
                           CachedControllerData& controller_data);
 
     bool initArm(hardware_interface::RobotHW* robot_hw, 
+                 ros::NodeHandle& node_handle,
                  const std::string& arm_id,
                  const std::vector<std::string>& joint_names);
     void startingArm(const std::string& arm_id,

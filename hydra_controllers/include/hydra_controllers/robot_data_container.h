@@ -4,6 +4,8 @@
 #include <za_hw/za_model_interface.h>
 #include <hydra_hw/positioner_state_interface.h>
 #include <hardware_interface/joint_command_interface.h>
+#include <realtime_tools/realtime_publisher.h>
+#include <std_msgs/Float64MultiArray.h>
 #include <Eigen/Dense>
 #include <mutex>
 
@@ -21,8 +23,10 @@ struct ZaDataContainer {
     std::vector<hardware_interface::JointHandle> joint_handles_;
 
     cartesian_controllers::CartesianState setpoint_;
-
     ControlMode mode_ = ControlMode::TaskPriorityControl;
+
+    // introspection topics
+    std::unique_ptr<realtime_tools::RealtimePublisher<std_msgs::Float64MultiArray>> publisher_command_;
 };
 
 struct PositionerDataContainer {

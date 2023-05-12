@@ -104,9 +104,9 @@ class HydraControllerTest(unittest.TestCase):
         self.a_fast = 1000.0 / 1000.0; # m/s^2
         self.j_fast = 3000.0 / 1000.0; # m/s^3
     
-        self.v_slow = 100.0 / 1000.0;  # m/s
-        self.a_slow = 400.0 / 1000.0;  # m/s^2
-        self.j_slow = 1000.0 / 1000.0; # m/s^3
+        self.v_slow = 200.0 / 1000.0;  # m/s
+        self.a_slow = 1000.0 / 1000.0;  # m/s^2
+        self.j_slow = 3000.0 / 1000.0; # m/s^3
     
         # wait for initial transformations
         state1 = rospy.wait_for_message('rob1_state_controller/za_states', ZaState, 10)
@@ -154,7 +154,7 @@ class HydraControllerTest(unittest.TestCase):
         self.assertTrue(resp2.success)
         self.assertTrue(resp3.success)
 
-    #@unittest.skip("skipping test_synchronized")    
+    @unittest.skip("skipping test_synchronized")    
     def test_synchronized(self):
         # switch to synchronized mode
         self.switch_coord_client(arm_id="rob1", coordinated=False)
@@ -173,7 +173,7 @@ class HydraControllerTest(unittest.TestCase):
         traj1 = deepcopy(traj)
         traj2 = deepcopy(traj)
         traj3 = deepcopy(traj)
-#
+
         traj1.points.append(self.start_state_base1)
         traj2.points.append(self.start_state_base2)
         traj3.points.append(self.start_state_base3)

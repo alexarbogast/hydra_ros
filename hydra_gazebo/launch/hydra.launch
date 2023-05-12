@@ -49,7 +49,6 @@
         args="-param robot_description -urdf -z 0.01 -model $(arg arm_id) $(arg unpause)
         $(arg initial_joint_positions)
         "/>
-  />
 
   <!-- spawns the controller after the robot was put into its initial joint pose -->
   <node pkg="controller_manager"

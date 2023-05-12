@@ -8,6 +8,7 @@ namespace hydra_controllers {
 const static std::string param_name = "joints"; 
 
 bool HydraController::initArm(hardware_interface::RobotHW* robot_hw,
+                        ros::NodeHandle& node_handle,
                         const std::string& arm_id,
                         const std::vector<std::string>& joint_names
                         ) {
@@ -73,6 +74,12 @@ bool HydraController::initArm(hardware_interface::RobotHW* robot_hw,
         return false;
         }
     }
+    
+    ros::NodeHandle nh_(node_handle, arm_id);
+    arm_data.publisher_command_.reset(
+        new realtime_tools::RealtimePublisher<std_msgs::Float64MultiArray>(
+            nh_, "introspection", 1
+        ));
 
     arms_data_.emplace(std::make_pair(arm_id, std::move(arm_data)));
     return true;
@@ -161,7 +168,7 @@ bool HydraController::init(hardware_interface::RobotHW* robot_hw,
             return false; 
         }
 
-        if (!initArm(robot_hw, arm_id, joint_names)) {
+        if (!initArm(robot_hw, node_handle, arm_id, joint_names)) {
             return false;
         }
     }
@@ -334,10 +341,6 @@ void HydraController::adapterCallback(const std::string& arm_id,
         default:
             break;
     }
-
-    // use last setpoint velocity as prediction
-    state.v = arm_data.setpoint_.v;
-    state.w = arm_data.setpoint_.w;
 }
 
 void HydraController::taskpriorityParamCallback(hydra_controllers::hydra_paramConfig& config,

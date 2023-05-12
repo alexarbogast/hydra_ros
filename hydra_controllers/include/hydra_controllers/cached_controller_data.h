@@ -45,6 +45,9 @@ struct CachedModelData {
     
     /* Pose in positioner frame */
     Eigen::Affine3d pose_p;
+
+    /* Base Frame in positioner frame*/
+    Eigen::Affine3d base_frame_p;
 };
 
 /*
