@@ -1,4 +1,5 @@
 <launch>
+  <arg name="use_rviz" default="true" />
 
   <!-- load hydra controllers -->
   <include file="$(find hydra_control)/launch/hydra_sim_control.launch" />
@@ -9,7 +10,7 @@
   </include>
 
   <!-- Show in Rviz -->
-  <include file="$(find hydra_bringup)/launch/hydra_visualize.launch" >
+  <include file="$(find hydra_bringup)/launch/hydra_visualize.launch" if="$(arg use_rviz)">
     <arg name="load_robot_description" value="false" />
   </include>
 

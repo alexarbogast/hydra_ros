@@ -2,8 +2,11 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:property name="pos_stand_height" value="0.32853" />
+  <xacro:include filename="$(find za_description)/urdf/utils.xacro"/>
 
   <xacro:macro name="positioner_macro" params="prefix">
+    <!-- Is the robot being simulated in gazebo?" -->
+    <xacro:arg name="gazebo" default="true" />
 
     <!-- link list -->
     <link name="${prefix}positioner_stand_base">
@@ -17,6 +20,7 @@
             <mesh filename="package://hydra_description/meshes/collision/positioner_stand_collision.stl"/>
           </geometry>
         </collision>
+        <xacro:default_inertial mass="1"/>
     </link>
     <link name="${prefix}rotary_table_base">
         <visual>
@@ -29,8 +33,11 @@
           <mesh filename="package://hydra_description/meshes/collision/rotary_table_collision.stl"/>
         </geometry>
       </collision>
+      <xacro:default_inertial mass="1"/>
     </link>
-    <link name="${prefix}rotary_table_top"/>
+    <link name="${prefix}rotary_table_top">
+      <xacro:default_inertial mass="1"/>
+    </link>
     
     <link name="${prefix}positioner_base">
         <visual>
@@ -43,6 +50,11 @@
           <mesh filename="package://hydra_description/meshes/collision/hydra_positioner_collision.stl"/>
         </geometry>
       </collision>
+      <inertial>
+        <origin xyz="0.000000 0.000000 0.006349"/>
+        <mass value="27.67"/>
+        <inertia ixx="1.929232" ixy="0.000000" ixz="0.000000" iyy="1.929232" iyz="0.000000" izz="3.857721"/>
+      </inertial>
     </link>
     <link name="${prefix}positioner"/>
     <link name="${prefix}positioner_static"/>
@@ -58,14 +70,15 @@
       <parent link="${prefix}rotary_table_base"/>
       <child link="${prefix}rotary_table_top"/>
     </joint>
-    <joint name="${prefix}rotary_table_positioner" type="continuous">
+    <joint name="${prefix}positioner_joint" type="continuous">
+    <!--<joint name="${prefix}rotary_table_positioner" type="continuous">-->
       <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
       <axis xyz="0 0 1"/>
       <parent link="${prefix}rotary_table_top"/>
       <child link="${prefix}positioner_base"/>
       <limit effort="1000.0" velocity="1.5"/>
     </joint>
-    <joint name="${prefix}positioner_joint" type="fixed">
+    <joint name="${prefix}positioner_tcp_joint" type="fixed">
       <origin rpy="0.0 0.0 0.0" xyz="0 0 0.03175"/>
       <parent link="${prefix}positioner_base"/>
       <child link="${prefix}positioner"/>
@@ -76,5 +89,17 @@
       <child link="${prefix}positioner_static"/>
     </joint>
 
+    <!-- Define additional Gazebo tags -->
+    <xacro:if value="$(arg gazebo)">
+      <xacro:gazebo-joint joint="${prefix}positioner_joint" transmission="hardware_interface/EffortJointInterface"/>
+      <xacro:gazebo-joint joint="${prefix}positioner_joint" transmission="hardware_interface/VelocityJointInterface"/>
+      <xacro:gazebo-joint joint="${prefix}positioner_joint" transmission="hardware_interface/PositionJointInterface"/>
+
+      <transmission name="${prefix}positioner_state">
+        <type>hydra_hw/PositionerStateInterface</type>
+        <joint name="${prefix}positioner_joint"><hardwareInterface>hydra_hw/PositionerStateInterface</hardwareInterface></joint>
+        <actuator name="${prefix}positioner_motor"><hardwareInterface>hydra_hw/PositionerStateInterface</hardwareInterface></actuator>
+      </transmission>
+    </xacro:if>
   </xacro:macro>
 </robot>

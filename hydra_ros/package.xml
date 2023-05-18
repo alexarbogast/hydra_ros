@@ -10,9 +10,12 @@
 	<buildtool_depend>catkin</buildtool_depend>
 
 	<exec_depend>hydra_description</exec_depend>
-	<exec_depend>hydra_ikfast_plugin</exec_depend>
 	<exec_depend>hydra_moveit_config</exec_depend>
 	<exec_depend>hydra_control</exec_depend>
+	<exec_depend>hydra_bringup</exec_depend>
+	<exec_depend>hydra_controllers</exec_depend>
+	<exec_depend>hydra_gazebo</exec_depend>
+	<exec_depend>hydra_hw</exec_depend>
 
 	<export>
 		<metapackage/>

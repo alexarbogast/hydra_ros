@@ -1,0 +1,212 @@
+# State Controllers - must contain arm_id tag for combined hw
+rob1_state_controller:
+  type: za_control/ZaStateController
+  publish_rate: 30  # [Hz]
+  arm_id: rob1
+  joint_names:
+    - rob1_joint_1
+    - rob1_joint_2
+    - rob1_joint_3
+    - rob1_joint_4
+    - rob1_joint_5
+    - rob1_joint_6
+
+rob2_state_controller:
+  type: za_control/ZaStateController
+  publish_rate: 30  # [Hz]
+  arm_id: rob2
+  joint_names:
+    - rob2_joint_1
+    - rob2_joint_2
+    - rob2_joint_3
+    - rob2_joint_4
+    - rob2_joint_5
+    - rob2_joint_6
+
+rob3_state_controller:
+  type: za_control/ZaStateController
+  publish_rate: 30  # [Hz]
+  arm_id: rob3
+  joint_names:
+    - rob3_joint_1
+    - rob3_joint_2
+    - rob3_joint_3
+    - rob3_joint_4
+    - rob3_joint_5
+    - rob3_joint_6
+
+positioner_state_controller:
+  type: hydra_control/PositionerStateController
+  publish_rate: 30  # [Hz]
+  arm_id: positioner
+  joint_names:
+    - positioner_joint
+
+# Trajectory Controllers
+robot1_effort_joint_trajectory_controller:
+  type: effort_controllers/JointTrajectoryController
+  joints:
+    - rob1_joint_1
+    - rob1_joint_2
+    - rob1_joint_3
+    - rob1_joint_4
+    - rob1_joint_5
+    - rob1_joint_6
+  gains:
+    rob1_joint_1: { p: 1000, d: 300, i: 0 }
+    rob1_joint_2: { p: 1200, d: 300, i: 0 }
+    rob1_joint_3: { p: 1000, d: 200, i: 0 }
+    rob1_joint_4: { p: 300, d: 30,  i: 0 }
+    rob1_joint_5: { p: 75, d: 10,  i: 0 }
+    rob1_joint_6: { p: 30, d: 3,   i: 0 }
+  constraints:
+    goal_time: 0.5
+    rob1_joint_1: { goal: 0.05 }
+    rob1_joint_2: { goal: 0.05 }
+    rob1_joint_3: { goal: 0.05 }
+    rob1_joint_4: { goal: 0.05 }
+    rob1_joint_5: { goal: 0.05 }
+    rob1_joint_6: { goal: 0.05 }
+
+robot2_effort_joint_trajectory_controller:
+  type: effort_controllers/JointTrajectoryController
+  joints:
+    - rob2_joint_1
+    - rob2_joint_2
+    - rob2_joint_3
+    - rob2_joint_4
+    - rob2_joint_5
+    - rob2_joint_6
+  gains:
+    rob2_joint_1: { p: 1000, d: 300, i: 0 }
+    rob2_joint_2: { p: 1200, d: 300, i: 0 }
+    rob2_joint_3: { p: 1000, d: 200, i: 0 }
+    rob2_joint_4: { p: 300, d: 30,  i: 0 }
+    rob2_joint_5: { p: 75, d: 10,  i: 0 }
+    rob2_joint_6: { p: 30, d: 3,   i: 0 }
+  constraints:
+    goal_time: 0.5
+    rob2_joint_1: { goal: 0.05 }
+    rob2_joint_2: { goal: 0.05 }
+    rob2_joint_3: { goal: 0.05 }
+    rob2_joint_4: { goal: 0.05 }
+    rob2_joint_5: { goal: 0.05 }
+    rob2_joint_6: { goal: 0.05 }
+
+robot3_effort_joint_trajectory_controller:
+  type: effort_controllers/JointTrajectoryController
+  joints:
+    - rob3_joint_1
+    - rob3_joint_2
+    - rob3_joint_3
+    - rob3_joint_4
+    - rob3_joint_5
+    - rob3_joint_6
+  gains:
+    rob3_joint_1: { p: 1000, d: 300, i: 0 }
+    rob3_joint_2: { p: 1200, d: 300, i: 0 }
+    rob3_joint_3: { p: 1000, d: 200, i: 0 }
+    rob3_joint_4: { p: 300, d: 30,  i: 0 }
+    rob3_joint_5: { p: 75, d: 10,  i: 0 }
+    rob3_joint_6: { p: 30, d: 3,   i: 0 }
+  constraints:
+    goal_time: 0.5
+    rob3_joint_1: { goal: 0.05 }
+    rob3_joint_2: { goal: 0.05 }
+    rob3_joint_3: { goal: 0.05 }
+    rob3_joint_4: { goal: 0.05 }
+    rob3_joint_5: { goal: 0.05 }
+    rob3_joint_6: { goal: 0.05 }
+
+positioner_effort_joint_trajectory_controller:
+  type: effort_controllers/JointTrajectoryController
+  joints:
+    - positioner_joint
+  gains:
+    positioner_joint: {p: 1000, d: 0, i: 0}
+
+# Task priority controllers
+robot1_task_priority_controller:
+  type: za_controllers/TaskPriorityController
+  Kp: 100
+  Ko: 30
+  Kr: 500
+  z_align: [0, 0, -1]
+  arm_id: rob1
+  joints:
+    - rob1_joint_1
+    - rob1_joint_2
+    - rob1_joint_3
+    - rob1_joint_4
+    - rob1_joint_5
+    - rob1_joint_6
+
+robot2_task_priority_controller:
+  type: za_controllers/TaskPriorityController
+  Kp: 100
+  Ko: 30
+  Kr: 500
+  z_align: [0, 0, -1]
+  arm_id: rob2
+  joints:
+    - rob2_joint_1
+    - rob2_joint_2
+    - rob2_joint_3
+    - rob2_joint_4
+    - rob2_joint_5
+    - rob2_joint_6
+
+robot3_task_priority_controller:
+  type: za_controllers/TaskPriorityController
+  Kp: 100
+  Ko: 30
+  Kr: 500
+  z_align: [0, 0, -1]
+  arm_id: rob3
+  joints:
+    - rob3_joint_1
+    - rob3_joint_2
+    - rob3_joint_3
+    - rob3_joint_4
+    - rob3_joint_5
+    - rob3_joint_6
+
+hydra_controller:
+  type: hydra_controllers/HydraController
+  Kp: 100
+  Ko: 30
+  Kr: 500
+  Kpos: 500
+  z_align: [0, 0, -1]
+  arm_ids:
+    - rob1
+    - rob2
+    - rob3
+  positioner_id: positioner 
+  rob1:
+    joints:
+    - rob1_joint_1
+    - rob1_joint_2
+    - rob1_joint_3
+    - rob1_joint_4
+    - rob1_joint_5
+    - rob1_joint_6
+  rob2:
+    joints:
+    - rob2_joint_1
+    - rob2_joint_2
+    - rob2_joint_3
+    - rob2_joint_4
+    - rob2_joint_5
+    - rob2_joint_6
+  rob3:
+    joints:
+    - rob3_joint_1
+    - rob3_joint_2
+    - rob3_joint_3
+    - rob3_joint_4
+    - rob3_joint_5
+    - rob3_joint_6
+  positioner:
+    joints:
+    - positioner_joint

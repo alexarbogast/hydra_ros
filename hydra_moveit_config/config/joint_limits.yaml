@@ -98,7 +98,7 @@ joint_limits:
     max_velocity: 6.283185307179586
     has_acceleration_limits: false
     max_acceleration: 0
-  rotary_table_positioner:
+  positioner_joint:
     has_velocity_limits: true
     max_velocity: 1.5
     has_acceleration_limits: false
