@@ -7,13 +7,12 @@ void taskPriorityControl(ZaDataContainer& arm_data,
                          CachedModelData& input,
                          const ControllerParameters& context) {
     /* ========= task tracking ========= */ 
-    Eigen::Vector3d pose_error = context.Kp * 
-        (arm_data.setpoint_.p - input.pose.translation());
+    Eigen::Vector3d pose_error = arm_data.setpoint_.p - input.pose.translation();
 
     const auto& z_eef = input.pose.matrix().block<3, 1>(0, 2);
-    Eigen::Vector3d orient_error = context.Ko * z_eef.cross(context.z_align);
+    Eigen::Vector3d orient_error = z_eef.cross(context.z_align);
     Eigen::Matrix<double, 6, 1> error(6);
-    error << pose_error, orient_error;
+    error << context.Kp * pose_error, context.Ko * orient_error;
 
     Eigen::Matrix<double, 6, 1> dp_d;
     dp_d << arm_data.setpoint_.v, arm_data.setpoint_.w;
@@ -50,7 +49,7 @@ void coordinatedTaskPriorityControl(ZaDataContainer& arm_data,
                                     const ControllerParameters& context,
                                     double positioner_cmd) {
     /* ========= task tracking ========= */ 
-    Eigen::Vector3d pose_error = (arm_data.setpoint_.p - input.pose_p.translation());
+    Eigen::Vector3d pose_error = arm_data.setpoint_.p - input.pose_p.translation();
 
     const auto& z_eef = input.pose.matrix().block<3, 1>(0, 2);
     Eigen::Vector3d orient_error = z_eef.cross(context.z_align);
