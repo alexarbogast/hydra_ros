@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Robot Customization -->
+  <arg name="arm_id"                      doc="Name of the robot to launch. One of 'rob1', 'rob2', 'rob3"/>
+  <arg name="hardware"    default="sim"   doc="One of 'sim', 'hal'"/>
+  <arg name="sim"         default="true"  doc="Should the hal interface be launched in sim mode? 
+                                               (only applies if hardware == hal)"/>
+  <arg name="rviz"        default="false" doc="Should RVIz be launched?"/>
+  <arg name="controller"  default="position_trajectory_controller" doc="Which controller should be started?"/>
+
+  <!-- HAL Configuration -->
+  <arg name="hal_debug_output" default="false" doc="Should HAL output debug messages to console?"/>
+  <arg name="hal_debug_level"  default="1"     doc="Set HAL debug level, 0-5"/>
+
+  <group ns="$(arg arm_id)">
+    <include file="$(find za_robot)/launch/za_robot.launch" pass_all_args="true"/>
+  </group>
+
+</launch>
