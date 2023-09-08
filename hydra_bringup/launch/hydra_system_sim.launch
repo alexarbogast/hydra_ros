@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Configuration -->
+  <arg name="rviz" default="false" doc="Should RVIz be launched?"/>
+  
+  <!-- Launch robot 1 -->
+  <include file="$(find hydra_bringup)/launch/hydra_robot.launch">
+    <arg name="arm_id" value="rob1"/>
+    <arg name="hardware" value="sim"/>
+    <arg name="sim" value="true"/>
+  </include>
+
+  <!-- Launch robot 2 -->
+  <include file="$(find hydra_bringup)/launch/hydra_robot.launch">
+    <arg name="arm_id" value="rob2"/>
+    <arg name="hardware" value="sim"/>
+    <arg name="sim" value="true"/>
+  </include>
+  
+  <!-- Robot ROS Topics and Rviz -->
+  <group if="$(arg rviz)">
+    <include file="$(find hydra_bringup)/launch/hydra_visualization.launch">
+      <arg name="load_robot_description" value="true"/>
+      <arg name="rvizconfig" value="$(find hydra_bringup)/rviz/hydra.rviz"/>
+    </include>
+  </group>
+</launch>
