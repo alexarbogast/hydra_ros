@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>hydra_gazebo</name>
+  <version>0.1.0</version>
+  <description>hydra_gazebo</description>
+  <author email="arbogastaw@gmail.com">Alex Arbogast</author>
+  <maintainer email="arbogastaw@gmail.com">Alex Arbogast</maintainer>
+
+  <license>BSD</license>
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <build_depend>gazebo_dev</build_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <depend>roscpp</depend>
+  <depend>gazebo_ros_control</depend>
+  <depend>kdl_parser</depend>
+  <depend>boost_sml</depend>
+  <depend>control_toolbox</depend>
+  <depend>hardware_interface</depend>
+  <depend>joint_limits_interface</depend>
+  <depend>eigen_conversions</depend>
+  <depend>urdf</depend>
+  <depend>hydra_control</depend>
+  <depend>za_gazebo</depend>
+  <depend>za_control</depend>
+  <depend>hydra_controllers</depend>
+
+  <export>
+    <gazebo_ros_control plugin="${prefix}/hydra_hw_sim_plugin.xml" />
+  </export>
+</package>

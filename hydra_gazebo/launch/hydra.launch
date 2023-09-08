@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<launch>
+  
+  <!-- Gazebo & GUI Configuration -->
+  <arg name="gazebo"      default="true"  doc="Should the gazebo simulation be launched? Use false in case if you want to include this file and launch gazebo yourself" />
+  <arg name="headless"    default="false" doc="Should the gazebo GUI be launched?" />
+  <arg name="paused"      default="false" doc="Should the simulation directly be stopped at 0s?" />
+  <arg name="world"       default="worlds/empty.world" doc="Filename to a SDF World for gazebo to use" />
+  <arg name="rviz"        default="false" doc="Should RVIz be launched?" />
+
+  <!-- Robot Customization -->
+  <arg name="arm_id"      default="hydra"    doc="Name of the robot to spawn" />
+  <arg name="controller"  default=" " doc="Which example controller should be started? (One of {effort_joint_trajectory_controller})" />
+  <arg name="initial_joint_positions"
+       doc="Initial joint configuration of robots. Specify as a list of name/value pairs in form of '-J [name-of-joint] [value-in-rad]'."
+       default="-J rob1_joint_1 0       -J rob2_joint_1 0       -J rob3_joint_1 0    
+                -J rob1_joint_2 0.53    -J rob2_joint_2 0.53    -J rob3_joint_2 0.53 
+                -J rob1_joint_3 0.47    -J rob2_joint_3 0.47    -J rob3_joint_3 0.47 
+                -J rob1_joint_4 0       -J rob2_joint_4 0       -J rob3_joint_4 0    
+                -J rob1_joint_5 -1      -J rob2_joint_5 -1      -J rob3_joint_5 -1   
+                -J rob1_joint_6 0       -J rob2_joint_6 0       -J rob3_joint_6 0"   
+       />
+  
+  <!-- The list of the joint_states topics of all combined robots to fuse to a complete topic -->
+  <arg name="joint_states_source_list" default="[rob1_state_controller/joint_states, 
+                                                 rob2_state_controller/joint_states, 
+                                                 rob3_state_controller/joint_states,
+                                                 positioner_state_controller/joint_states]"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch" if="$(arg gazebo)">
+    <arg name="world_name" value="$(arg world)"/>
+    <!-- Always start in paused mode, and only unpause when spawning the model -->
+    <arg name="paused" value="true"/>
+    <arg name="gui" value="$(eval not arg('headless'))"/>
+    <arg name="use_sim_time" value="true"/>
+  </include>
+
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <param name="robot_description"
+    command="$(find xacro)/xacro '$(find hydra_description)/urdf/hydra.xacro'" />
+
+  <rosparam file='$(find hydra_gazebo)/config/hydra_hw_sim.yaml' subst_value="true" />
+  <rosparam file='$(find hydra_gazebo)/config/sim_controllers.yaml' subst_value="true" />
+
+  <arg name="unpause" value="$(eval '' if arg('paused') else '-unpause')" />
+  <node name="$(arg arm_id)_model_spawner"
+        pkg="gazebo_ros"
+        type="spawn_model"
+        args="-param robot_description -urdf -z 0.01 -model $(arg arm_id) $(arg unpause)
+        $(arg initial_joint_positions)
+        "/>
+
+  <!-- spawns the controller after the robot was put into its initial joint pose -->
+  <node pkg="controller_manager"
+        type="spawner"
+        name="$(arg arm_id)_controller_spawner"
+        respawn="false" output="screen"
+        args="rob1_state_controller 
+              rob2_state_controller
+              rob3_state_controller
+              positioner_state_controller
+              $(arg controller)"    
+  />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="joint_state_publisher" type="joint_state_publisher" pkg="joint_state_publisher">
+    <rosparam param="source_list"  subst_value="true">$(arg joint_states_source_list)</rosparam>
+    <param name="rate" value="30"/>
+  </node>
+</launch>

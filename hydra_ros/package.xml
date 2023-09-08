@@ -9,10 +9,11 @@
 	<author>Alex Arbogast</author>
 	<buildtool_depend>catkin</buildtool_depend>
 
+	<exec_depend>hydra_bringup</exec_depend>
 	<exec_depend>hydra_description</exec_depend>
-	<exec_depend>hydra_ikfast_plugin</exec_depend>
+	<exec_depend>hydra_gazebo</exec_depend>
+	<exec_depend>hydra_hardware</exec_depend>
 	<exec_depend>hydra_moveit_config</exec_depend>
-	<exec_depend>hydra_control</exec_depend>
 
 	<export>
 		<metapackage/>
