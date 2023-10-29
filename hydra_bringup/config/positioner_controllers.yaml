@@ -1,14 +1,24 @@
-joint_state_controller:
-  type: joint_state_controller/JointStateController
-  publish_rate: 50
+positioner:
+  controller_manager:
+    ros__parameters:
+      update_rate: 100 # Hz
+      joint_trajectory_controller:
+        type: joint_trajectory_controller/JointTrajectoryController
+      joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
+  
+  joint_trajectory_controller:
+    ros__parameters:
+      joints:
+        - positioner_joint
 
-position_trajectory_controller:
-  type: position_controllers/JointTrajectoryController
-  joints:
-    - positioner_joint
-  gains:
-    positioner_joint:
-      p: 100
-      d: 1
-      i: 1
-      i_clamp: 1
+      command_interfaces:
+        - position
+
+      state_interfaces:
+        - position
+        - velocity
+
+      constraints:
+        stopped_velocity_tolerance: 0.01 # Defaults to 0.01
+        goal_time: 0.0 # Defaults to 0.0 (start immediately)

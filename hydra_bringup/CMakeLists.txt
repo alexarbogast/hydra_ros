@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.5)
 project(hydra_bringup)
 
-find_package(catkin REQUIRED)
+find_package(ament_cmake REQUIRED)
 
-catkin_package()
-
-install(DIRECTORY config launch rviz
-    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+install(DIRECTORY 
+  config launch rviz  
+  DESTINATION share/${PROJECT_NAME}
 )
+
+ament_package()
