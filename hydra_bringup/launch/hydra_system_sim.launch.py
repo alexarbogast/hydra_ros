@@ -43,26 +43,6 @@ def generate_launch_description():
             "rviz": "false",
         }.items(),
     )
-    rob3_robot_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare("hydra_bringup"),
-                "launch", "hydra_robot.launch.py",
-            ])
-        ]),
-        launch_arguments={
-            "arm_id": "rob3",
-            "rviz": "false",
-        }.items(),
-    )
-    positioner_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare("hydra_bringup"),
-                "launch", "hydra_positioner.launch.py",
-            ])
-        ]),
-    )
 
     visualization_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -79,7 +59,5 @@ def generate_launch_description():
         visualization_launch,
         rob1_robot_launch,
         rob2_robot_launch,
-        rob3_robot_launch,
-        positioner_launch,
     ]
     return LaunchDescription(declared_arguments + nodes_to_start)

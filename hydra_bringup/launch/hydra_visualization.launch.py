@@ -53,9 +53,7 @@ def generate_launch_description():
         name="joint_state_publisher",
         parameters=[
             {"source_list": ["rob1/joint_states",
-                             "rob2/joint_states",
-                             "rob3/joint_states",
-                             "positioner/joint_states"],
+                             "rob2/joint_states"],
              "rate": 50.0}
         ],
     )

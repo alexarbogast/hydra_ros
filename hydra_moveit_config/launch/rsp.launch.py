@@ -32,9 +32,7 @@ def generate_launch_description():
         respawn=True,
         parameters=[
             {"source_list": ["rob1/joint_states",
-                             "rob2/joint_states",
-                             "rob3/joint_states",
-                             "positioner/joint_states"],
+                             "rob2/joint_states"],
              "rate": freq}
         ],
     )

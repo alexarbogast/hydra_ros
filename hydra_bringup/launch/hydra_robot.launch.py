@@ -51,7 +51,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "arm_id",
             description="Name (prefix) of the robot to launch",
-            choices=["rob1", "rob2", "rob3"],
+            choices=["rob1", "rob2"],
         )
     )
     declared_arguments.append(

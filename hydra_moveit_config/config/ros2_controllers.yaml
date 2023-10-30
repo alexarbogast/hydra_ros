@@ -58,35 +58,3 @@ rob2:
       constraints:
         stopped_velocity_tolerance: 0.01 # Defaults to 0.01
         goal_time: 0.0 # Defaults to 0.0 (start immediately)
-
-
-rob3:
-  controller_manager:
-    ros__parameters:
-      update_rate: 100  # Hz
-      joint_trajectory_controller:
-        type: joint_trajectory_controller/JointTrajectoryController
-      joint_state_broadcaster:
-        type: joint_state_broadcaster/JointStateBroadcaster
-
-  joint_trajectory_controller:
-    ros__parameters:
-      joints:
-        - rob3_joint_1
-        - rob3_joint_2
-        - rob3_joint_3
-        - rob3_joint_4
-        - rob3_joint_5
-        - rob3_joint_6
-
-      command_interfaces:
-        - position
-
-      state_interfaces:
-        - position
-        - velocity
-
-      constraints:
-        stopped_velocity_tolerance: 0.01 # Defaults to 0.01
-        goal_time: 0.0 # Defaults to 0.0 (start immediately)
-

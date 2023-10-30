@@ -17,7 +17,7 @@ from moveit_configs_utils import MoveItConfigsBuilder
 def generate_launch_description():
     moveit_config = MoveItConfigsBuilder("hydra", package_name="hydra_moveit_config").to_moveit_configs()
     ld = LaunchDescription()
-    robots = ["rob1", "rob2", "rob3"]
+    robots = ["rob1", "rob2"]
 
     robot_controllers = PathJoinSubstitution(
         [FindPackageShare("hydra_moveit_config"), "config", "ros2_controllers.yaml"]
@@ -42,18 +42,5 @@ def generate_launch_description():
             ]
         )
         ld.add_action(launch_ns_robot)
-
-    positioner_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare("hydra_bringup"),
-                "launch", "hydra_positioner.launch.py",
-            ])
-        ]),
-        launch_arguments={
-            "namespace": "positioner"
-        }.items()
-    )
-    ld.add_action(positioner_launch)
 
     return ld

@@ -15,16 +15,9 @@
     <group name="rob2_planning_group">
         <chain base_link="rob2_base_link" tip_link="rob2_flange"/>
     </group>
-    <group name="rob3_planning_group">
-        <chain base_link="rob3_base_link" tip_link="rob3_flange"/>
-    </group>
-    <group name="positioner_planning_group">
-        <chain base_link="rotary_table_base" tip_link="positioner"/>
-    </group>
     <group name="hydra_planning_group">
         <group name="rob1_planning_group"/>
         <group name="rob2_planning_group"/>
-        <group name="rob3_planning_group"/>
     </group>
     <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
     <group_state name="home" group="rob1_planning_group">
@@ -42,17 +35,6 @@
         <joint name="rob2_joint_4" value="0.0"/>
         <joint name="rob2_joint_5" value="-1.0"/>
         <joint name="rob2_joint_6" value="0.0"/>
-    </group_state>
-    <group_state name="home" group="rob3_planning_group">
-        <joint name="rob3_joint_1" value="0.0"/>
-        <joint name="rob3_joint_2" value="0.53"/>
-        <joint name="rob3_joint_3" value="0.47"/>
-        <joint name="rob3_joint_4" value="0.0"/>
-        <joint name="rob3_joint_5" value="-1.0"/>
-        <joint name="rob3_joint_6" value="0.0"/>
-    </group_state>
-    <group_state name="home" group="positioner_planning_group">
-        <joint name="positioner_joint" value="0"/>
     </group_state>
     <group_state name="home" group="hydra_planning_group">
         <joint name="rob1_joint_1" value="0.0"/>
@@ -90,17 +72,6 @@
         <joint name="rob2_joint_5" value="0"/>
         <joint name="rob2_joint_6" value="0"/>
     </group_state>
-    <group_state name="zeros" group="rob3_planning_group">
-        <joint name="rob3_joint_1" value="0"/>
-        <joint name="rob3_joint_2" value="0"/>
-        <joint name="rob3_joint_3" value="0"/>
-        <joint name="rob3_joint_4" value="0"/>
-        <joint name="rob3_joint_5" value="0"/>
-        <joint name="rob3_joint_6" value="0"/>
-    </group_state>
-    <group_state name="zeros" group="positioner_planning_group">
-        <joint name="positioner_joint" value="0"/>
-    </group_state>
     <group_state name="zeros" group="hydra_planning_group">
         <joint name="rob1_joint_1" value="0"/>
         <joint name="rob1_joint_2" value="0"/>
@@ -122,46 +93,6 @@
         <joint name="rob3_joint_6" value="0"/>
     </group_state>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
-    <disable_collisions link1="positioner_base" link2="positioner_stand_base" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob1_base_link" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob1_link_1" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob1_link_2" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob1_link_3" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob1_pedestal_base" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob2_base_link" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob2_link_1" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob2_link_2" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob2_link_3" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob2_pedestal_base" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob3_base_link" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob3_link_1" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob3_link_2" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob3_link_3" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rob3_pedestal_base" reason="Never"/>
-    <disable_collisions link1="positioner_base" link2="rotary_table_base" reason="Adjacent"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob1_base_link" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob1_link_1" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob1_link_2" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob1_link_3" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob1_link_4" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob1_pedestal_base" reason="Adjacent"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob2_base_link" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob2_link_1" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob2_link_2" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob2_link_3" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob2_link_4" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob2_link_5" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob2_link_6" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob2_pedestal_base" reason="Adjacent"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob3_base_link" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob3_link_1" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob3_link_2" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob3_link_3" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob3_link_4" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob3_link_5" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob3_link_6" reason="Never"/>
-    <disable_collisions link1="positioner_stand_base" link2="rob3_pedestal_base" reason="Adjacent"/>
-    <disable_collisions link1="positioner_stand_base" link2="rotary_table_base" reason="Adjacent"/>
     <disable_collisions link1="rob1_base_link" link2="rob1_link_1" reason="Adjacent"/>
     <disable_collisions link1="rob1_base_link" link2="rob1_link_2" reason="Never"/>
     <disable_collisions link1="rob1_base_link" link2="rob1_pedestal_base" reason="Adjacent"/>
@@ -183,7 +114,6 @@
     <disable_collisions link1="rob1_base_link" link2="rob3_link_6" reason="Never"/>
     <disable_collisions link1="rob1_base_link" link2="rob3_pedestal_base" reason="Never"/>
     <disable_collisions link1="rob1_base_link" link2="rob3_typhoon_extruder" reason="Never"/>
-    <disable_collisions link1="rob1_base_link" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob1_link_1" link2="rob1_link_2" reason="Adjacent"/>
     <disable_collisions link1="rob1_link_1" link2="rob1_link_3" reason="Never"/>
     <disable_collisions link1="rob1_link_1" link2="rob1_pedestal_base" reason="Never"/>
@@ -205,7 +135,6 @@
     <disable_collisions link1="rob1_link_1" link2="rob3_link_6" reason="Never"/>
     <disable_collisions link1="rob1_link_1" link2="rob3_pedestal_base" reason="Never"/>
     <disable_collisions link1="rob1_link_1" link2="rob3_typhoon_extruder" reason="Never"/>
-    <disable_collisions link1="rob1_link_1" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob1_link_2" link2="rob1_link_3" reason="Adjacent"/>
     <disable_collisions link1="rob1_link_2" link2="rob1_link_5" reason="Never"/>
     <disable_collisions link1="rob1_link_2" link2="rob1_link_6" reason="Never"/>
@@ -228,7 +157,6 @@
     <disable_collisions link1="rob1_link_2" link2="rob3_link_6" reason="Never"/>
     <disable_collisions link1="rob1_link_2" link2="rob3_pedestal_base" reason="Never"/>
     <disable_collisions link1="rob1_link_2" link2="rob3_typhoon_extruder" reason="Never"/>
-    <disable_collisions link1="rob1_link_2" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob1_link_3" link2="rob1_link_4" reason="Adjacent"/>
     <disable_collisions link1="rob1_link_3" link2="rob1_link_5" reason="Never"/>
     <disable_collisions link1="rob1_link_3" link2="rob1_link_6" reason="Never"/>
@@ -252,7 +180,6 @@
     <disable_collisions link1="rob1_link_3" link2="rob3_link_6" reason="Never"/>
     <disable_collisions link1="rob1_link_3" link2="rob3_pedestal_base" reason="Never"/>
     <disable_collisions link1="rob1_link_3" link2="rob3_typhoon_extruder" reason="Never"/>
-    <disable_collisions link1="rob1_link_3" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob1_link_4" link2="rob1_link_5" reason="Adjacent"/>
     <disable_collisions link1="rob1_link_4" link2="rob2_base_link" reason="Never"/>
     <disable_collisions link1="rob1_link_4" link2="rob2_link_1" reason="Never"/>
@@ -309,7 +236,6 @@
     <disable_collisions link1="rob1_pedestal_base" link2="rob3_link_6" reason="Never"/>
     <disable_collisions link1="rob1_pedestal_base" link2="rob3_pedestal_base" reason="Adjacent"/>
     <disable_collisions link1="rob1_pedestal_base" link2="rob3_typhoon_extruder" reason="Never"/>
-    <disable_collisions link1="rob1_pedestal_base" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob1_typhoon_extruder" link2="rob2_base_link" reason="Never"/>
     <disable_collisions link1="rob1_typhoon_extruder" link2="rob2_link_1" reason="Never"/>
     <disable_collisions link1="rob1_typhoon_extruder" link2="rob2_link_2" reason="Never"/>
@@ -330,7 +256,6 @@
     <disable_collisions link1="rob2_base_link" link2="rob3_link_6" reason="Never"/>
     <disable_collisions link1="rob2_base_link" link2="rob3_pedestal_base" reason="Never"/>
     <disable_collisions link1="rob2_base_link" link2="rob3_typhoon_extruder" reason="Never"/>
-    <disable_collisions link1="rob2_base_link" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob2_link_1" link2="rob2_link_2" reason="Adjacent"/>
     <disable_collisions link1="rob2_link_1" link2="rob2_link_3" reason="Never"/>
     <disable_collisions link1="rob2_link_1" link2="rob2_pedestal_base" reason="Never"/>
@@ -343,7 +268,6 @@
     <disable_collisions link1="rob2_link_1" link2="rob3_link_6" reason="Never"/>
     <disable_collisions link1="rob2_link_1" link2="rob3_pedestal_base" reason="Never"/>
     <disable_collisions link1="rob2_link_1" link2="rob3_typhoon_extruder" reason="Never"/>
-    <disable_collisions link1="rob2_link_1" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob2_link_2" link2="rob2_link_3" reason="Adjacent"/>
     <disable_collisions link1="rob2_link_2" link2="rob2_link_5" reason="Never"/>
     <disable_collisions link1="rob2_link_2" link2="rob2_link_6" reason="Never"/>
@@ -356,7 +280,6 @@
     <disable_collisions link1="rob2_link_2" link2="rob3_link_5" reason="Never"/>
     <disable_collisions link1="rob2_link_2" link2="rob3_link_6" reason="Never"/>
     <disable_collisions link1="rob2_link_2" link2="rob3_pedestal_base" reason="Never"/>
-    <disable_collisions link1="rob2_link_2" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob2_link_3" link2="rob2_link_4" reason="Adjacent"/>
     <disable_collisions link1="rob2_link_3" link2="rob2_link_5" reason="Never"/>
     <disable_collisions link1="rob2_link_3" link2="rob2_link_6" reason="Never"/>
@@ -370,7 +293,6 @@
     <disable_collisions link1="rob2_link_3" link2="rob3_link_5" reason="Never"/>
     <disable_collisions link1="rob2_link_3" link2="rob3_link_6" reason="Never"/>
     <disable_collisions link1="rob2_link_3" link2="rob3_pedestal_base" reason="Never"/>
-    <disable_collisions link1="rob2_link_3" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob2_link_4" link2="rob2_link_5" reason="Adjacent"/>
     <disable_collisions link1="rob2_link_4" link2="rob3_base_link" reason="Never"/>
     <disable_collisions link1="rob2_link_4" link2="rob3_link_1" reason="Never"/>
@@ -400,7 +322,6 @@
     <disable_collisions link1="rob2_pedestal_base" link2="rob3_link_6" reason="Never"/>
     <disable_collisions link1="rob2_pedestal_base" link2="rob3_pedestal_base" reason="Adjacent"/>
     <disable_collisions link1="rob2_pedestal_base" link2="rob3_typhoon_extruder" reason="Never"/>
-    <disable_collisions link1="rob2_pedestal_base" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob2_typhoon_extruder" link2="rob3_base_link" reason="Never"/>
     <disable_collisions link1="rob2_typhoon_extruder" link2="rob3_link_1" reason="Never"/>
     <disable_collisions link1="rob2_typhoon_extruder" link2="rob3_link_2" reason="Never"/>
@@ -408,25 +329,20 @@
     <disable_collisions link1="rob3_base_link" link2="rob3_link_1" reason="Adjacent"/>
     <disable_collisions link1="rob3_base_link" link2="rob3_link_2" reason="Never"/>
     <disable_collisions link1="rob3_base_link" link2="rob3_pedestal_base" reason="Adjacent"/>
-    <disable_collisions link1="rob3_base_link" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob3_link_1" link2="rob3_link_2" reason="Adjacent"/>
     <disable_collisions link1="rob3_link_1" link2="rob3_link_3" reason="Never"/>
     <disable_collisions link1="rob3_link_1" link2="rob3_pedestal_base" reason="Never"/>
-    <disable_collisions link1="rob3_link_1" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob3_link_2" link2="rob3_link_3" reason="Adjacent"/>
     <disable_collisions link1="rob3_link_2" link2="rob3_link_5" reason="Never"/>
     <disable_collisions link1="rob3_link_2" link2="rob3_link_6" reason="Never"/>
     <disable_collisions link1="rob3_link_2" link2="rob3_pedestal_base" reason="Never"/>
-    <disable_collisions link1="rob3_link_2" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob3_link_3" link2="rob3_link_4" reason="Adjacent"/>
     <disable_collisions link1="rob3_link_3" link2="rob3_link_5" reason="Never"/>
     <disable_collisions link1="rob3_link_3" link2="rob3_link_6" reason="Never"/>
     <disable_collisions link1="rob3_link_3" link2="rob3_pedestal_base" reason="Never"/>
     <disable_collisions link1="rob3_link_3" link2="rob3_typhoon_extruder" reason="Never"/>
-    <disable_collisions link1="rob3_link_3" link2="rotary_table_base" reason="Never"/>
     <disable_collisions link1="rob3_link_4" link2="rob3_link_5" reason="Adjacent"/>
     <disable_collisions link1="rob3_link_5" link2="rob3_link_6" reason="Adjacent"/>
     <disable_collisions link1="rob3_link_5" link2="rob3_typhoon_extruder" reason="Never"/>
     <disable_collisions link1="rob3_link_6" link2="rob3_typhoon_extruder" reason="Adjacent"/>
-    <disable_collisions link1="rob3_pedestal_base" link2="rotary_table_base" reason="Never"/>
 </robot>

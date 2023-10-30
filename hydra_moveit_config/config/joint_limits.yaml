@@ -8,11 +8,6 @@ default_acceleration_scaling_factor: 0.5
 # Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
 # Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
 joint_limits:
-  positioner_joint:
-    has_velocity_limits: true
-    max_velocity: 1.5
-    has_acceleration_limits: false
-    max_acceleration: 0
   rob1_joint_1:
     has_velocity_limits: true
     max_velocity: 2.6000000000000001
@@ -69,36 +64,6 @@ joint_limits:
     has_acceleration_limits: false
     max_acceleration: 0
   rob2_joint_6:
-    has_velocity_limits: true
-    max_velocity: 6.2831853071795862
-    has_acceleration_limits: false
-    max_acceleration: 0
-  rob3_joint_1:
-    has_velocity_limits: true
-    max_velocity: 2.6000000000000001
-    has_acceleration_limits: false
-    max_acceleration: 0
-  rob3_joint_2:
-    has_velocity_limits: true
-    max_velocity: 1.8999999999999999
-    has_acceleration_limits: false
-    max_acceleration: 0
-  rob3_joint_3:
-    has_velocity_limits: true
-    max_velocity: 2.6000000000000001
-    has_acceleration_limits: false
-    max_acceleration: 0
-  rob3_joint_4:
-    has_velocity_limits: true
-    max_velocity: 3.5
-    has_acceleration_limits: false
-    max_acceleration: 0
-  rob3_joint_5:
-    has_velocity_limits: true
-    max_velocity: 3.8999999999999999
-    has_acceleration_limits: false
-    max_acceleration: 0
-  rob3_joint_6:
     has_velocity_limits: true
     max_velocity: 6.2831853071795862
     has_acceleration_limits: false
