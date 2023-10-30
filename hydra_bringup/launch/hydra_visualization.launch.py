@@ -43,7 +43,8 @@ def generate_launch_description():
         name="robot_state_publisher",
         output="screen",
         parameters=[
-            {"robot_description": ParameterValue(robot_description, value_type=str)}
+            {"robot_description": ParameterValue(robot_description, value_type=str),
+             "publish_frequency": 50.0}
         ],
     )
     joint_state_publisher_node = Node(
@@ -51,10 +52,11 @@ def generate_launch_description():
         executable="joint_state_publisher",
         name="joint_state_publisher",
         parameters=[
-            {"sources_list": ["rob1/joint_states",
-                              "rob2/joint_states",
-                              "rob3/joint_states",
-                              "positioner/joint_states"]}
+            {"source_list": ["rob1/joint_states",
+                             "rob2/joint_states",
+                             "rob3/joint_states",
+                             "positioner/joint_states"],
+             "rate": 50.0}
         ],
     )
     rviz_node = Node(

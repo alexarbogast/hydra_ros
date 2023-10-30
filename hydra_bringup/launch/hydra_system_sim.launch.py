@@ -17,11 +17,7 @@ def generate_launch_description():
         )
     )
     rviz = LaunchConfiguration("rviz")
-
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("hydra_bringup"), "rviz", "hydra.rviz"]
-    )
-
+    
     # fmt: off
     rob1_robot_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
