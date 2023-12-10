@@ -5,15 +5,30 @@
   <arg name="hardware"    default="sim"   doc="One of 'sim', 'hal'"/>
   <arg name="sim"         default="true"  doc="Should the hal interface be launched in sim mode? 
                                                (only applies if hardware == hal)"/>
-  <arg name="rviz"        default="false" doc="Should RVIz be launched?"/>
   <arg name="controller"  default="position_trajectory_controller" doc="Which controller should be started?"/>
+  <arg name="tool"        default="typhoon_extruder" doc="The robot link to be used as the tool."/>
+  <arg name="rviz"        default="false" doc="Should RVIz be launched?"/>
 
   <!-- HAL Configuration -->
   <arg name="hal_debug_output" default="false" doc="Should HAL output debug messages to console?"/>
   <arg name="hal_debug_level"  default="1"     doc="Set HAL debug level, 0-5"/>
 
   <group ns="$(arg arm_id)">
-    <include file="$(find za_robot)/launch/za_robot.launch" pass_all_args="true"/>
-  </group>
+    <!-- Load the robot description -->
+    <param name="robot_description" command="xacro $(find hydra_description)/urdf/robots/za_tool.xacro prefix:=$(arg arm_id)_"/>
 
+    <!-- Launch the appropriate hardware interface -->
+    <include file="$(find za_hardware)/launch/$(arg hardware)_hardware.launch" pass_all_args="true"/>
+
+    <!-- Load ros_control controllers -->
+    <include file="$(find za_robot)/launch/ros_controllers.launch" pass_all_args="true"/>
+
+    <!-- Robot ROS Topics and Rviz -->
+    <group if="$(arg rviz)">
+      <include file="$(find za_robot)/launch/za_visualization.launch">
+        <arg name="load_robot_description" value="false"/>
+        <arg name="arm_id" value="(arg arm_id)"/>
+      </include>
+    </group>
+  </group>
 </launch>
