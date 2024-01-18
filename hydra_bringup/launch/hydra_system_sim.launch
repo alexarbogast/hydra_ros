@@ -2,6 +2,7 @@
 <launch>
   <!-- Configuration -->
   <arg name="rviz" default="false" doc="Should RVIz be launched?"/>
+  <arg name="rvizconfig" default="$(find hydra_bringup)/rviz/hydra.rviz"/>
   
   <!-- Launch robot 1 -->
   <include file="$(find hydra_bringup)/launch/hydra_robot.launch">
@@ -31,7 +32,7 @@
   <group if="$(arg rviz)">
     <include file="$(find hydra_bringup)/launch/hydra_visualization.launch">
       <arg name="load_robot_description" value="true"/>
-      <arg name="rvizconfig" value="$(find hydra_bringup)/rviz/hydra.rviz"/>
+      <arg name="rvizconfig" value="$(arg rvizconfig)"/>
     </include>
   </group>
 </launch>
