@@ -34,7 +34,7 @@ Clone the repository to your local workspace. If you have not previously cloned 
 [hydra_description](https://github.com/alexarbogast/hydra_description) package, you will need to clone recursively. 
 
 ```shell script
-mkdir catkin_ws/src && cd catkin_ws/src
+mkdir -p catkin_ws/src && cd catkin_ws/src
 git clone --recurse-submodules https://github.com/alexarbogast/hydra_ros.git
 ```
 
