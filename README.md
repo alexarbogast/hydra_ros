@@ -1,9 +1,18 @@
 # hydra_ros
-**ROS integration for the Hydra multi-robot system**
+**ROS integration for the Hydra multi-robot system**. This ROS metapackage
+provides launch files and configuration for the Hydra multi-robot system. See
+this repository's branches for different variants of the multi robot system
+configuration.
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/46149643/221465891-7995e74a-185d-49c6-80c6-7d63d122b182.png" width=80% height=80%>
+  <img src=https://github.com/alexarbogast/hydra_description/assets/46149643/a3f9397e-aa6c-4c70-a886-bd3c5cb4b925 width=600/>
 </p>
+
+> [!NOTE]
+> __`master`__ variant:
+>
+> The master branch contains the default setup: Three robots space evenly around
+> a 1-DOF positioner table.
 
 ## Contents
 
