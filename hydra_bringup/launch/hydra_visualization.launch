@@ -7,8 +7,7 @@
   <!-- The list of the joint_states topics of all combined robots to fuse to a complete topic -->
   <arg name="joint_states_source_list" default="[rob1/joint_states, 
                                                  rob2/joint_states, 
-                                                 rob3/joint_states,
-                                                 positioner/joint_states]"/>
+                                                 rob3/joint_states]"/>
 
   <!-- Load robot description -->
   <param if="$(arg load_robot_description)" name="robot_description" 

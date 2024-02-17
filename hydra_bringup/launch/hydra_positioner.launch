@@ -1,23 +1,33 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="model" default="positioner/positioner.xacro"/>
+  <!-- Robot Customization -->
+  <arg name="arm_id"                      doc="Name of the robot to launch. One of 'rob1', 'rob2', 'rob3"/>
+  <arg name="hardware"    default="sim"   doc="One of 'sim', 'hal'"/>
+  <arg name="sim"         default="true"  doc="Should the hal interface be launched in sim mode? 
+                                               (only applies if hardware == hal)"/>
   <arg name="controller"  default="position_trajectory_controller" doc="Which controller should be started?"/>
-  
-  <group ns="positioner">
-    <!-- Load positioner description -->
-    <param name="robot_description" command="xacro $(find hydra_description)/urdf/$(arg model)"/>
+  <arg name="rviz"        default="false" doc="Should RVIz be launched?"/>
 
-    <!-- Launch hardware interface -->
-    <include file="$(find hydra_hardware)/launch/positioner_hardware.launch"/>
+  <!-- HAL Configuration -->
+  <arg name="hal_debug_output" default="false" doc="Should HAL output debug messages to console?"/>
+  <arg name="hal_debug_level"  default="1"     doc="Set HAL debug level, 0-5"/>
 
-    <!-- Launch controllers -->
-    <rosparam file="$(find hydra_bringup)/config/positioner_controllers.yaml"/>
+  <group ns="$(arg arm_id)">
+    <!-- Load the robot description -->
+    <param name="robot_description" command="xacro $(find hydra_description)/urdf/robots/za_positioner.xacro prefix:=$(arg arm_id)_"/>
 
-    <node pkg="controller_manager"
-          type="spawner"
-          name="positioner_controller_spawner"
-          respawn="false" output="screen"
-          args="joint_state_controller $(arg controller)"
-    />
+    <!-- Launch the appropriate hardware interface -->
+    <include file="$(find za_hardware)/launch/$(arg hardware)_hardware.launch" pass_all_args="true"/>
+
+    <!-- Load ros_control controllers -->
+    <include file="$(find za_robot)/launch/ros_controllers.launch" pass_all_args="true"/>
+
+    <!-- Robot ROS Topics and Rviz -->
+    <group if="$(arg rviz)">
+      <include file="$(find za_robot)/launch/za_visualization.launch">
+        <arg name="load_robot_description" value="false"/>
+        <arg name="arm_id" value="(arg arm_id)"/>
+      </include>
+    </group>
   </group>
 </launch>
