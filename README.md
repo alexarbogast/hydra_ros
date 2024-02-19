@@ -2,8 +2,14 @@
 **ROS integration for the Hydra multi-robot system**
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/46149643/221465891-7995e74a-185d-49c6-80c6-7d63d122b182.png" width=80% height=80%>
+  <img src=https://github.com/alexarbogast/za_ros/assets/46149643/02d6b3e5-c266-4b67-a2fe-4b5805c6f989 width=600/>
 </p>
+
+> [!NOTE]
+> __`ampf`__ variant:
+>
+> The ampf branch contains the setup of the physical system at
+> [ampf](https://ampf.research.gatech.edu/).
 
 ## Contents
 
@@ -83,9 +89,6 @@ roslaunch hydra_bringup hydra_robot.launch hardware:=hal arm_id:=rob1
 # docker container 2
 roslaunch hydra_bringup hydra_robot.launch hardware:=hal arm_id:=rob2
 
-# docker container 3
-roslaunch hydra_bringup hydra_robot.launch hardware:=hal arm_id:=rob3
-
 # host computer
 roslaunch hydra_bringup hydra_visualization.launch 
 ```
@@ -94,7 +97,6 @@ hardware interface from the host computer:
 ```shell
 rostopic pub /rob1/hal_io/state_cmd std_msgs/UInt32 "data: 2"
 rostopic pub /rob2/hal_io/state_cmd std_msgs/UInt32 "data: 2"
-rostopic pub /rob3/hal_io/state_cmd std_msgs/UInt32 "data: 2"
 ``` 
 
 ### Running the System on Hardware
@@ -110,9 +112,6 @@ roslaunch hydra_bringup hydra_robot.launch hardware:=hal sim:=false arm_id:=rob1
 
 # docker container 2 on robot 2 computer
 roslaunch hydra_bringup hydra_robot.launch hardware:=hal sim:=false arm_id:=rob2
-
-# docker container 3 on robot 3 computer
-roslaunch hydra_bringup hydra_robot.launch hardware:=hal sim:=false arm_id:=rob3
 
 # host computer
 roslaunch hydra_bringup hydra_visualization.launch 
