@@ -5,14 +5,15 @@ this repository's branches for different variants of the multi robot system
 configuration.
 
 <p align="center">
-  <img src=https://github.com/alexarbogast/hydra_description/assets/46149643/a3f9397e-aa6c-4c70-a886-bd3c5cb4b925 width=600/>
+  <img src=https://github.com/alexarbogast/za_ros/assets/46149643/ee7f7bb1-abc0-44a2-aa61-de2652a10314 width=600/>
 </p>
 
 > [!NOTE]
-> __`master`__ variant:
+> __`robot_positioner`__ variant:
 >
-> The master branch contains the default setup: Three robots space evenly around
-> a 1-DOF positioner table.
+> The robot_positioner branch contains an experimental setup using the third
+> robot as the positioner. Coordinated motion control for this system
+> configuration is still a work in progress.
 
 ## Contents
 
