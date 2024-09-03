@@ -4,7 +4,7 @@
 	<version>0.1.0</version>
 	<description>Metapackage for hydra_ros</description>
 	<maintainer email="arbogastaw@gmail.com">Alex Arbogast</maintainer>
-	<license>BSD</license>
+	<license>Apache2</license>
 
 	<author>Alex Arbogast</author>
 	<buildtool_depend>catkin</buildtool_depend>
