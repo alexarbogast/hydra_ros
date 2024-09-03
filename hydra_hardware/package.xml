@@ -7,7 +7,7 @@
   <maintainer email="arbogastaw@gmail.com">Alex Arbogast</maintainer>
   <author email="arbogastaw@gmail.com">Alex Arbogast</author>
 
-  <license>BSD</license>
+  <license>Apache2</license>
 
   <depend>rospy</depend>
 
