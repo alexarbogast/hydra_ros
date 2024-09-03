@@ -3,15 +3,12 @@
   <name>hydra_hardware</name>
   <version>0.1.0</version>
   <description>Hydra multi-robot hardware configuration</description>
-
   <maintainer email="arbogastaw@gmail.com">Alex Arbogast</maintainer>
   <author email="arbogastaw@gmail.com">Alex Arbogast</author>
-
-  <license>BSD</license>
-
-  <depend>rospy</depend>
+  <license>Apache2</license>
 
   <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
 
   <!-- <exec_depend>controller_manager</exec_depend> -->
   <exec_depend>joint_state_publisher</exec_depend>

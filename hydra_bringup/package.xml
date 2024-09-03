@@ -5,7 +5,7 @@
   <description> hydra_bringup provides a roslaunch for commonly used files with the Hydra system </description>
   <author email="arbogastaw@gmail.com">Alex Arbogast</author>
   <maintainer email="arbogastaw@gmail.com">Alex Arbogast</maintainer>
-  <license>BSD</license>
+  <license>Apache2</license>
 
   <buildtool_depend>catkin</buildtool_depend>
 

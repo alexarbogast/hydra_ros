@@ -1,4 +1,7 @@
 # hydra_ros
+
+[![license - apache 2.0](https://img.shields.io/:license-Apache%202.0-yellowgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+
 **ROS integration for the Hydra multi-robot system**
 
 <p align="center">
