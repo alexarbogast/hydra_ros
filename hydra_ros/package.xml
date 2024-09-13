@@ -4,7 +4,7 @@
 	<version>0.2.0</version>
 	<description>ROS2 metapackage for hydra_ros</description>
 	<maintainer email="arbogastaw@gmail.com">Alex Arbogast</maintainer>
-	<license>BSD</license>
+	<license>Apache2</license>
 
 	<author>Alex Arbogast</author>
 	<buildtool_depend>ament_cmake</buildtool_depend>
