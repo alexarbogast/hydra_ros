@@ -1,5 +1,11 @@
 # hydra_ros
-**ROS integration for the Hydra multi-robot system**
+
+[![license - apache 2.0](https://img.shields.io/:license-Apache%202.0-yellowgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+
+**ROS integration for the Hydra multi-robot system**. This ROS metapackage
+provides launch files and configuration for the Hydra multi-robot system. See
+this repository's branches for different variants of the multi robot system
+configuration.
 
 <p align="center">
   <img src=https://github.com/alexarbogast/hydra_description/assets/46149643/a3f9397e-aa6c-4c70-a886-bd3c5cb4b925 width=600/>
@@ -36,10 +42,11 @@ required.
 
 ## Installation
 
-Clone the repository to your local workspace. If you have not previously cloned the 
-[hydra_description](https://github.com/alexarbogast/hydra_description) package, you will need to clone recursively. 
+Clone the repository to your local workspace. If you have not previously cloned
+the [hydra_description](https://github.com/alexarbogast/hydra_description)
+package, you will need to clone recursively. 
 
-```shell
+```sh
 mkdir -p colcon_ws/src && cd colcon_ws/src
 git clone --recurse-submodules https://github.com/alexarbogast/hydra_ros.git
 cd hydra_ros
@@ -47,7 +54,7 @@ git checkout ros2
 ```
 
 Build your workspace
-```shell
+```sh
 cd ../../
 colcon build --symlink-install
 ```
@@ -59,9 +66,9 @@ colcon build --symlink-install
 To view the system in Rviz, run the following command after sourcing your bash
 file:
 
-```shell
+```sh
 ros2 launch hydra_bringup hydra_visualization.launch
-``` 
+```
 
 ### Running the System in Simulation
 There are two forms of simulation for the system. The first uses the
@@ -74,9 +81,10 @@ in
 [za_hardware](https://github.com/alexarbogast/za_ros/tree/hw_merge/za_hardware).
 
 **Launch all hardware interfaces and controllers on the same computer using the `sim_hw_interface`**:
-```shell
+
+```sh
 ros2 launch hydra_bringup hydra_system_sim.launch rviz:=true
-``` 
+```
 
 From here you can run any custom controllers or start MoveIt! to begin planning. 
 
@@ -86,7 +94,9 @@ a namespace. The launch file should be run in seperate Docker containers. This
 works on seperate robot computers or all on the same machine. **Launch all
 hardware interfaces (hal_hw_interface) in seperate docker containers and
 visualize the system**:
-```shell
+
+
+```sh
 # docker container 1
 ros2 launch hydra_bringup hydra_robot.launch hardware:=hal arm_id:=rob1
 
@@ -99,22 +109,25 @@ ros2 launch hydra_bringup hydra_robot.launch hardware:=hal arm_id:=rob3
 # host computer
 ros2 launch hydra_bringup hydra_visualization.launch 
 ```
+
 The "motors" can be activated by publishing the following ROS messages to the
 hardware interface from the host computer:
-```shell
+
+
+```sh
 ros2 topic pub /rob1/hal_io/state_cmd std_msgs/UInt32 "data: 2"
 ros2 topic pub /rob2/hal_io/state_cmd std_msgs/UInt32 "data: 2"
 ros2 topic pub /rob3/hal_io/state_cmd std_msgs/UInt32 "data: 2"
-``` 
+```
 
 ### Running the System on Hardware
 
 The only difference here is that the `sim:=false` argument should be passed to
 the robot launch when running the hardware interface that will actually connect
-to EtherCat. *Note: See [za_docker](https://github.com/alexarbogast/za_docker) 
+to EtherCat. *Note: See [za_docker](https://github.com/alexarbogast/za_docker)
 for instructions on running the containers in execution mode*
 
-```shell
+```sh
 # docker container 1 on robot 1 computer
 ros2 launch hydra_bringup hydra_robot.launch hardware:=hal sim:=false arm_id:=rob1
 
@@ -136,7 +149,7 @@ systems. However, it still works for point-to-point collision-free motion. You
 can use MoveIt! to plan for the Hydra system using any of the runtime
 configurations listed above.
 
-```shell
+```sh
 # host computer
 ros2 launch hydra_bringup moveit_planning.launch
 ```
