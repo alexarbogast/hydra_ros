@@ -2,8 +2,14 @@
 **ROS integration for the Hydra multi-robot system**
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/46149643/221465891-7995e74a-185d-49c6-80c6-7d63d122b182.png" width=80% height=80%>
+  <img src=https://github.com/alexarbogast/hydra_description/assets/46149643/a3f9397e-aa6c-4c70-a886-bd3c5cb4b925 width=600/>
 </p>
+
+> [!NOTE]
+> __`ros2`__ variant:
+>
+> The ros2 branch contains the default setup: Three robots spaced evenly around
+> a 1-DOF positioner table.
 
 ## Contents
 
@@ -33,14 +39,17 @@ required.
 Clone the repository to your local workspace. If you have not previously cloned the 
 [hydra_description](https://github.com/alexarbogast/hydra_description) package, you will need to clone recursively. 
 
-```shell script
-mkdir catkin_ws/src && cd catkin_ws/src
+```shell
+mkdir -p colcon_ws/src && cd colcon_ws/src
 git clone --recurse-submodules https://github.com/alexarbogast/hydra_ros.git
+cd hydra_ros
+git checkout ros2
 ```
 
 Build your workspace
-```shell script
-catkin build
+```shell
+cd ../../
+colcon build --symlink-install
 ```
 
 <a id='3'></a>
@@ -49,8 +58,9 @@ catkin build
 ### Visualizing the robot description 
 To view the system in Rviz, run the following command after sourcing your bash
 file:
+
 ```shell
-roslaunch hydra_bringup hydra_visualization.launch
+ros2 launch hydra_bringup hydra_visualization.launch
 ``` 
 
 ### Running the System in Simulation
@@ -65,7 +75,7 @@ in
 
 **Launch all hardware interfaces and controllers on the same computer using the `sim_hw_interface`**:
 ```shell
-roslaunch hydra_bringup hydra_system_sim.launch rviz:=true
+ros2 launch hydra_bringup hydra_system_sim.launch rviz:=true
 ``` 
 
 From here you can run any custom controllers or start MoveIt! to begin planning. 
@@ -78,23 +88,23 @@ hardware interfaces (hal_hw_interface) in seperate docker containers and
 visualize the system**:
 ```shell
 # docker container 1
-roslaunch hydra_bringup hydra_robot.launch hardware:=hal arm_id:=rob1
+ros2 launch hydra_bringup hydra_robot.launch hardware:=hal arm_id:=rob1
 
 # docker container 2
-roslaunch hydra_bringup hydra_robot.launch hardware:=hal arm_id:=rob2
+ros2 launch hydra_bringup hydra_robot.launch hardware:=hal arm_id:=rob2
 
 # docker container 3
-roslaunch hydra_bringup hydra_robot.launch hardware:=hal arm_id:=rob3
+ros2 launch hydra_bringup hydra_robot.launch hardware:=hal arm_id:=rob3
 
 # host computer
-roslaunch hydra_bringup hydra_visualization.launch 
+ros2 launch hydra_bringup hydra_visualization.launch 
 ```
-The "motors" can be activated by publishing the following ros messages to the
+The "motors" can be activated by publishing the following ROS messages to the
 hardware interface from the host computer:
 ```shell
-rostopic pub /rob1/hal_io/state_cmd std_msgs/UInt32 "data: 2"
-rostopic pub /rob2/hal_io/state_cmd std_msgs/UInt32 "data: 2"
-rostopic pub /rob3/hal_io/state_cmd std_msgs/UInt32 "data: 2"
+ros2 topic pub /rob1/hal_io/state_cmd std_msgs/UInt32 "data: 2"
+ros2 topic pub /rob2/hal_io/state_cmd std_msgs/UInt32 "data: 2"
+ros2 topic pub /rob3/hal_io/state_cmd std_msgs/UInt32 "data: 2"
 ``` 
 
 ### Running the System on Hardware
@@ -106,16 +116,16 @@ for instructions on running the containers in execution mode*
 
 ```shell
 # docker container 1 on robot 1 computer
-roslaunch hydra_bringup hydra_robot.launch hardware:=hal sim:=false arm_id:=rob1
+ros2 launch hydra_bringup hydra_robot.launch hardware:=hal sim:=false arm_id:=rob1
 
 # docker container 2 on robot 2 computer
-roslaunch hydra_bringup hydra_robot.launch hardware:=hal sim:=false arm_id:=rob2
+ros2 launch hydra_bringup hydra_robot.launch hardware:=hal sim:=false arm_id:=rob2
 
 # docker container 3 on robot 3 computer
-roslaunch hydra_bringup hydra_robot.launch hardware:=hal sim:=false arm_id:=rob3
+ros2 launch hydra_bringup hydra_robot.launch hardware:=hal sim:=false arm_id:=rob3
 
 # host computer
-roslaunch hydra_bringup hydra_visualization.launch 
+ros2 launch hydra_bringup hydra_visualization.launch
 ```
 After engaging the motors with the commands listed above, you can begin planning
 with MoveIt!.
@@ -128,5 +138,5 @@ configurations listed above.
 
 ```shell
 # host computer
-roslaunch hydra_bringup moveit_planning.launch
+ros2 launch hydra_bringup moveit_planning.launch
 ```
