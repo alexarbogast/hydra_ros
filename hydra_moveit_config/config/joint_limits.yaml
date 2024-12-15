@@ -16,90 +16,90 @@ joint_limits:
   rob1_joint_1:
     has_velocity_limits: true
     max_velocity: 2.6
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 6
   rob1_joint_2:
     has_velocity_limits: true
     max_velocity: 1.9
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 10
   rob1_joint_3:
     has_velocity_limits: true
     max_velocity: 2.6
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 12
   rob1_joint_4:
     has_velocity_limits: true
     max_velocity: 3.5
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 10
   rob1_joint_5:
     has_velocity_limits: true
     max_velocity: 3.9
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 12
   rob1_joint_6:
     has_velocity_limits: true
     max_velocity: 6.283185307179586
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 20
   rob2_joint_1:
     has_velocity_limits: true
     max_velocity: 2.6
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 6
   rob2_joint_2:
     has_velocity_limits: true
     max_velocity: 1.9
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 10
   rob2_joint_3:
     has_velocity_limits: true
     max_velocity: 2.6
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 12
   rob2_joint_4:
     has_velocity_limits: true
     max_velocity: 3.5
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 10
   rob2_joint_5:
     has_velocity_limits: true
     max_velocity: 3.9
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 12
   rob2_joint_6:
     has_velocity_limits: true
     max_velocity: 6.283185307179586
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 20
   rob3_joint_1:
     has_velocity_limits: true
     max_velocity: 2.6
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 6
   rob3_joint_2:
     has_velocity_limits: true
     max_velocity: 1.9
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 10
   rob3_joint_3:
     has_velocity_limits: true
     max_velocity: 2.6
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 12
   rob3_joint_4:
     has_velocity_limits: true
     max_velocity: 3.5
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 10
   rob3_joint_5:
     has_velocity_limits: true
     max_velocity: 3.9
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 12
   rob3_joint_6:
     has_velocity_limits: true
     max_velocity: 6.283185307179586
-    has_acceleration_limits: false
-    max_acceleration: 0
+    has_acceleration_limits: true
+    max_acceleration: 20

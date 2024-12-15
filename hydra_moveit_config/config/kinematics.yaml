@@ -3,26 +3,26 @@ rob1_planning_group:
   kinematics_solver_search_resolution: 0.005
   kinematics_solver_timeout: 0.005
   goal_joint_tolerance: 0.0001
-  goal_position_tolerance: 0.0001
-  goal_orientation_tolerance: 0.001
+  goal_position_tolerance: 0.000001
+  goal_orientation_tolerance: 0.0001
 rob2_planning_group:
   kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
   kinematics_solver_search_resolution: 0.005
   kinematics_solver_timeout: 0.005
   goal_joint_tolerance: 0.0001
-  goal_position_tolerance: 0.0001
-  goal_orientation_tolerance: 0.001
+  goal_position_tolerance: 0.000001
+  goal_orientation_tolerance: 0.0001
 rob3_planning_group:
   kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
   kinematics_solver_search_resolution: 0.005
   kinematics_solver_timeout: 0.005
   goal_joint_tolerance: 0.0001
-  goal_position_tolerance: 0.0001
-  goal_orientation_tolerance: 0.001
+  goal_position_tolerance: 0.000001
+  goal_orientation_tolerance: 0.0001
 positioner_planning_group:
   kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
   kinematics_solver_search_resolution: 0.005
   kinematics_solver_timeout: 0.005
   goal_joint_tolerance: 0.0001
-  goal_position_tolerance: 0.0001
-  goal_orientation_tolerance: 0.001
+  goal_position_tolerance: 0.000001
+  goal_orientation_tolerance: 0.0001
