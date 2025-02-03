@@ -3,12 +3,14 @@
   <!-- Configuration -->
   <arg name="rviz" default="false" doc="Should RVIz be launched?"/>
   <arg name="rvizconfig" default="$(find hydra_bringup)/rviz/hydra.rviz"/>
+  <arg name="tool" default="typhoon_extruder" doc="One of 'typhoon_extruder', 'marker_tool', 'tool0'"/>
   
   <!-- Launch robot 1 -->
   <include file="$(find hydra_bringup)/launch/hydra_robot.launch">
     <arg name="arm_id" value="rob1"/>
     <arg name="hardware" value="sim"/>
     <arg name="sim" value="true"/>
+    <arg name="tool" value="$(arg tool)"/>
   </include>
 
   <!-- Launch robot 2 -->
@@ -16,6 +18,7 @@
     <arg name="arm_id" value="rob2"/>
     <arg name="hardware" value="sim"/>
     <arg name="sim" value="true"/>
+    <arg name="tool" value="$(arg tool)"/>
   </include>
   
   <!-- Robot ROS Topics and Rviz -->
@@ -23,6 +26,7 @@
     <include file="$(find hydra_bringup)/launch/hydra_visualization.launch">
       <arg name="load_robot_description" value="true"/>
       <arg name="rvizconfig" value="$(arg rvizconfig)"/>
+      <arg name="tool" value="$(arg tool)"/>
     </include>
   </group>
 </launch>

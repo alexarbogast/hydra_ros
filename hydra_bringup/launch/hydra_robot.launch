@@ -6,7 +6,7 @@
   <arg name="sim"         default="true"  doc="Should the hal interface be launched in sim mode? 
                                                (only applies if hardware == hal)"/>
   <arg name="controller"  default="position_trajectory_controller" doc="Which controller should be started?"/>
-  <arg name="tool"        default="typhoon_extruder" doc="The robot link to be used as the tool."/>
+  <arg name="tool"        default="typhoon_extruder" doc="One of 'typhoon_extruder', 'marker_tool', 'tool0'"/>
   <arg name="rviz"        default="false" doc="Should RVIz be launched?"/>
 
   <!-- HAL Configuration -->
@@ -15,7 +15,8 @@
 
   <group ns="$(arg arm_id)">
     <!-- Load the robot description -->
-    <param name="robot_description" command="xacro $(find hydra_description)/urdf/robots/za_tool.xacro prefix:=$(arg arm_id)_"/>
+    <param name="robot_description" command="xacro
+      '$(find hydra_description)/urdf/hydra.xacro' tool:=$(arg tool)"/>
 
     <!-- Launch the appropriate hardware interface -->
     <include file="$(find za_hardware)/launch/$(arg hardware)_hardware.launch" pass_all_args="true"/>

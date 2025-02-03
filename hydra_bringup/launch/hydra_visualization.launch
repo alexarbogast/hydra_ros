@@ -4,6 +4,7 @@
   <arg name="model" default="hydra.xacro"/>
   <arg name="rvizconfig" default="$(find hydra_bringup)/rviz/hydra.rviz"/>
   <arg name="load_robot_description" default="true"/>
+  <arg name="tool" default="typhoon_extruder" doc="One of 'typhoon_extruder', 'marker_tool', 'tool0'"/>
 
   <!-- The list of the joint_states topics of all combined robots to fuse to a complete topic -->
   <arg name="joint_states_source_list" default="[rob1/joint_states, 
@@ -11,7 +12,7 @@
 
   <!-- Load robot description -->
   <param if="$(arg load_robot_description)" name="robot_description" 
-         command="xacro $(find hydra_description)/urdf/$(arg model)"/>
+         command="xacro $(find hydra_description)/urdf/$(arg model) tool:=$(arg tool)"/>
 
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
   <node name="joint_state_publisher" type="joint_state_publisher" pkg="joint_state_publisher">
