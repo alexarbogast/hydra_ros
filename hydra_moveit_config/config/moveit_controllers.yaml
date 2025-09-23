@@ -1,3 +1,48 @@
 # MoveIt uses this configuration for controller management
 
-moveit_controller_manager: moveit_ros_control_interface/Ros2ControlMultiManagerFix
+# moveit_controller_manager: moveit_ros_control_interface/Ros2ControlMultiManager
+
+moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
+
+moveit_simple_controller_manager:
+  controller_names:
+    - rob1_planning_group_controller
+    - rob2_planning_group_controller
+    - rob3_planning_group_controller
+    - positioner_planning_group_controller
+
+  rob1_planning_group_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    joints:
+      - rob1_joint_1
+      - rob1_joint_2
+      - rob1_joint_3
+      - rob1_joint_4
+      - rob1_joint_5
+      - rob1_joint_6
+  rob2_planning_group_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    joints:
+      - rob2_joint_1
+      - rob2_joint_2
+      - rob2_joint_3
+      - rob2_joint_4
+      - rob2_joint_5
+      - rob2_joint_6
+  rob3_planning_group_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    joints:
+      - rob3_joint_1
+      - rob3_joint_2
+      - rob3_joint_3
+      - rob3_joint_4
+      - rob3_joint_5
+      - rob3_joint_6
+  positioner_planning_group_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    joints:
+      - positioner_joint

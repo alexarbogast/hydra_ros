@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hydra">
+
+    <!-- Import hydra urdf file -->
+    <xacro:include filename="$(find hydra_description)/urdf/hydra.xacro" />
+
+</robot>

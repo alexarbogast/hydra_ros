@@ -25,7 +25,7 @@ def launch_setup(context, *args, **kwargs):
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([
                     PathJoinSubstitution([
-                        FindPackageShare("za_robot"), 
+                        FindPackageShare("za_robot"),
                         "launch", "za_robot.launch.py",
                     ]),
                 ]),

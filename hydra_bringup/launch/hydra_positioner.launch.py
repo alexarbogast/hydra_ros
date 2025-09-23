@@ -16,7 +16,7 @@ def generate_launch_description():
     controller = PathJoinSubstitution(
         [FindPackageShare("hydra_bringup"), "config", "positioner_controllers.yaml"]
     )
-        
+
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(

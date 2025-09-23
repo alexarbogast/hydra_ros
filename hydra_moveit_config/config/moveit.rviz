@@ -3,10 +3,9 @@ Panels:
     Help Height: 0
     Name: Displays
     Property Tree Widget:
-      Expanded:
-        - /MotionPlanning1
+      Expanded: ~
       Splitter Ratio: 0.5
-    Tree Height: 942
+    Tree Height: 353
   - Class: rviz_common/Help
     Name: Help
   - Class: rviz_common/Views
@@ -35,263 +34,7 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Alpha: 1
-      Class: rviz_default_plugins/RobotModel
-      Collision Enabled: false
-      Description File: ""
-      Description Source: Topic
-      Description Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /robot_description
-      Enabled: true
-      Links:
-        All Links Enabled: true
-        Expand Joint Details: false
-        Expand Link Details: false
-        Expand Tree: false
-        Link Tree Style: Links in Alphabetic Order
-        hydra_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        positioner:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        positioner_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        positioner_stand_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        positioner_static:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob1_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob1_base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob1_flange:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob1_link_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob1_link_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob1_link_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob1_link_4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob1_link_5:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob1_link_6:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob1_pedestal_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob1_pedestal_top:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob1_tool0:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob1_typhoon_extruder:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob1_typhoon_extruder_tcp:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob2_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob2_base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob2_flange:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob2_link_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob2_link_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob2_link_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob2_link_4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob2_link_5:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob2_link_6:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob2_pedestal_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob2_pedestal_top:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob2_tool0:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob2_typhoon_extruder:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob2_typhoon_extruder_tcp:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob3_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob3_base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob3_flange:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob3_link_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob3_link_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob3_link_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob3_link_4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob3_link_5:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob3_link_6:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob3_pedestal_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob3_pedestal_top:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob3_tool0:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rob3_typhoon_extruder:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rob3_typhoon_extruder_tcp:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rotary_table_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rotary_table_top:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        world:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-      Mass Properties:
-        Inertia: false
-        Mass: false
-      Name: RobotModel
-      TF Prefix: ""
-      Update Interval: 0
-      Value: true
-      Visual Enabled: true
-    - Acceleration_Scaling_Factor: 0.5
+    - Acceleration_Scaling_Factor: 0.1
       Class: moveit_rviz_plugin/MotionPlanning
       Enabled: true
       Move Group Namespace: ""
@@ -571,7 +314,7 @@ Visualization Manager:
         TextHeight: 0.07999999821186066
       Planning Request:
         Colliding Link Color: 255; 0; 0
-        Goal State Alpha: 0.5
+        Goal State Alpha: 1
         Goal State Color: 250; 128; 0
         Interactive Marker Size: 0
         Joint Violation Color: 255; 0; 255
@@ -832,7 +575,263 @@ Visualization Manager:
         Show Robot Collision: false
         Show Robot Visual: false
       Value: true
-      Velocity_Scaling_Factor: 0.5
+      Velocity_Scaling_Factor: 0.1
+    - Alpha: 1
+      Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description File: ""
+      Description Source: Topic
+      Description Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /robot_description
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        hydra_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        positioner:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        positioner_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        positioner_stand_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        positioner_static:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob1_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob1_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob1_flange:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob1_link_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob1_link_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob1_link_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob1_link_4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob1_link_5:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob1_link_6:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob1_pedestal_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob1_pedestal_top:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob1_tool0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob1_typhoon_extruder:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob1_typhoon_extruder_tcp:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob2_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob2_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob2_flange:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob2_link_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob2_link_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob2_link_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob2_link_4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob2_link_5:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob2_link_6:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob2_pedestal_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob2_pedestal_top:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob2_tool0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob2_typhoon_extruder:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob2_typhoon_extruder_tcp:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob3_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob3_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob3_flange:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob3_link_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob3_link_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob3_link_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob3_link_4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob3_link_5:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob3_link_6:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob3_pedestal_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob3_pedestal_top:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob3_tool0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rob3_typhoon_extruder:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rob3_typhoon_extruder_tcp:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rotary_table_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rotary_table_top:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        world:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+      Mass Properties:
+        Inertia: false
+        Mass: false
+      Name: RobotModel
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -851,30 +850,30 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 2.882572889328003
+      Distance: 2.8098559379577637
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.04470880702137947
-        Y: 0.012194614857435226
-        Z: 0.6936956644058228
+        X: 0.008929258212447166
+        Y: -0.03018273413181305
+        Z: 0.6123191118240356
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.2450002282857895
+      Pitch: 0.3049999177455902
       Target Frame: world
       Value: Orbit (rviz_default_plugins)
-      Yaw: 3.1838159561157227
+      Yaw: 2.8901805877685547
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 2086
+  Height: 1043
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -883,9 +882,9 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000001000000000000036a00000794fc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000007000fffffffb000000100044006900730070006c0061007900730100000069000004120000017800fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000487000003760000028f00fffffffb0000000800480065006c0070000000029a0000006e000000cf00fffffffb0000000a005600690065007700730000000657000001a60000012300ffffff000010160000079400000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000010000000000000273000003a5fc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000005300fffffffb000000100044006900730070006c006100790073010000004a000001ae000000f700fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000001ff000001f0000001e400fffffffb0000000800480065006c0070000000029a0000006e0000008700fffffffb0000000a005600690065007700730000000333000000cb000000cb00ffffff00000506000003a500000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 5004
-  X: 3524
+  Width: 1920
+  X: 0
   Y: 0

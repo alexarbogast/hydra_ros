@@ -7,6 +7,7 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
+
 def generate_launch_description():
     declared_arguments = []
     declared_arguments.append(
@@ -17,7 +18,7 @@ def generate_launch_description():
         )
     )
     rviz = LaunchConfiguration("rviz")
-    
+
     # fmt: off
     rob1_robot_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
