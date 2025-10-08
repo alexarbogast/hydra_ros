@@ -1,57 +1,37 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
-from launch.actions import GroupAction, OpaqueFunction
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.actions import DeclareLaunchArgument
+from launch.actions import GroupAction
+from launch.substitutions import (
+    LaunchConfiguration,
+    PathJoinSubstitution,
+    TextSubstitution,
+    Command,
+    FindExecutable,
+)
 
-from launch_ros.actions import PushRosNamespace
+from launch_ros.actions import Node, PushRosNamespace
 from launch_ros.substitutions import FindPackageShare
+from launch_ros.parameter_descriptions import ParameterValue
 
 
-def launch_setup(context, *args, **kwargs):
-    arm_id = LaunchConfiguration("arm_id")
-    controller = LaunchConfiguration("controller")
-    use_mock_hardware = LaunchConfiguration("use_mock_hardware")
-    rviz = LaunchConfiguration("rviz")
-
-    # fmt: off
+def generate_launch_description():
     robot_controllers = PathJoinSubstitution(
         [FindPackageShare("hydra_bringup"), "config", "robot_controllers.yaml"]
     )
 
-    launch_ns_robot = GroupAction(
-        actions=[
-            PushRosNamespace(arm_id),
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([
-                    PathJoinSubstitution([
-                        FindPackageShare("za_robot"), 
-                        "launch", "za_robot.launch.py",
-                    ]),
-                ]),
-                launch_arguments={
-                    "prefix": arm_id.perform(context) + "_",
-                    "controller": controller,
-                    "use_mock_hardware": use_mock_hardware,
-                    "controller_config": robot_controllers,
-                    "rviz": rviz
-                }.items()
-            ),
-        ]
-    )
-    # fmt: on
-
-    nodes_to_start = [launch_ns_robot]
-    return nodes_to_start
-
-
-def generate_launch_description():
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
             "arm_id",
             description="Name (prefix) of the robot to launch",
             choices=["rob1", "rob2"],
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "tool",
+            default_value="marker_tool",
+            description="Tool: 'typhoon_extruder', 'marker_tool', or 'tool0'",
         )
     )
     declared_arguments.append(
@@ -68,14 +48,67 @@ def generate_launch_description():
             description="Should mock (simulated) hardware be used?",
         )
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "rviz",
-            default_value="false",
-            description="Should RViz be launched",
-        )
+
+    arm_id = LaunchConfiguration("arm_id")
+    tool = LaunchConfiguration("tool")
+    controller = LaunchConfiguration("controller")
+    use_mock_hardware = LaunchConfiguration("use_mock_hardware")
+
+    robot_description = Command(
+        [
+            PathJoinSubstitution([FindExecutable(name="xacro")]),
+            " ",
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("hydra_description"),
+                    "urdf",
+                    "robots",
+                    "za_tool.xacro",
+                ]
+            ),
+            " use_mock_hardware:=",
+            use_mock_hardware,
+            " prefix:=",
+            arm_id,
+            TextSubstitution(text="_"),
+            " tool:=",
+            tool,
+        ]
     )
 
-    return LaunchDescription(
-        declared_arguments + [OpaqueFunction(function=launch_setup)]
+    control_node = Node(
+        package="controller_manager",
+        executable="ros2_control_node",
+        parameters=[
+            {"robot_description": ParameterValue(robot_description, value_type=str)},
+            robot_controllers,
+        ],
+        output="both",
     )
+
+    joint_state_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "joint_state_broadcaster",
+            "--controller-manager",
+            "controller_manager",
+        ],
+    )
+
+    robot_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=[controller, "--controller-manager", "controller_manager"],
+    )
+
+    namespaced_group = GroupAction(
+        actions=[
+            PushRosNamespace(arm_id),
+            control_node,
+            joint_state_broadcaster_spawner,
+            robot_controller_spawner,
+        ]
+    )
+
+    return LaunchDescription(declared_arguments + [namespaced_group])

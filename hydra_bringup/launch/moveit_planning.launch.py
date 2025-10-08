@@ -24,11 +24,11 @@ def generate_launch_description():
     # fmt: off
     move_group = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
-                PathJoinSubstitution([
-                        FindPackageShare("hydra_moveit_config"),
-                        "launch",
-                        "move_group.launch.py",
-                ]),
+            PathJoinSubstitution([
+                FindPackageShare("hydra_moveit_config"),
+                "launch",
+                "move_group.launch.py",
+            ]),
         ]),
     )
 
@@ -44,11 +44,11 @@ def generate_launch_description():
 
     visualization_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
-                PathJoinSubstitution([
-                        FindPackageShare("hydra_moveit_config"),
-                        "launch",
-                        "moveit_rviz.launch.py",
-                ]),
+            PathJoinSubstitution([
+                FindPackageShare("hydra_moveit_config"),
+                "launch",
+                "moveit_rviz.launch.py",
+            ]),
         ]),
         condition=IfCondition(rviz),
     )

@@ -25,17 +25,25 @@ def generate_launch_description():
             description="The configuration file to use for RViz",
         )
     )
-    rviz_config_file = LaunchConfiguration("rviz_config_file")
-
-    robot_description = Command(
-        [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [FindPackageShare("hydra_description"), "urdf", "hydra.xacro"]
-            ),
-        ]
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "tool",
+            default_value="marker_tool",
+            description="Tool: 'typhoon_extruder', 'marker_tool', or 'tool0'",
+        )
     )
+    rviz_config_file = LaunchConfiguration("rviz_config_file")
+    tool = LaunchConfiguration("tool")
+
+    robot_description = Command([
+        PathJoinSubstitution([FindExecutable(name="xacro")]),
+        " ",
+        PathJoinSubstitution(
+            [FindPackageShare("hydra_description"), "urdf", "hydra.xacro"]
+        ),
+        " tool:=",
+        tool
+    ])
 
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
