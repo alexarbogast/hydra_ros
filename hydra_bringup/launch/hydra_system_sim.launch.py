@@ -4,7 +4,6 @@ from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
-from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
@@ -17,14 +16,23 @@ def generate_launch_description():
             description="Should RViz be launched",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "tool",
+            default_value="typhoon_extruder",
+            description="Tool: 'typhoon_extruder'  or 'tool0'",
+        )
+    )
     rviz = LaunchConfiguration("rviz")
+    tool = LaunchConfiguration("tool")
 
     # fmt: off
     rob1_robot_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([
                 FindPackageShare("hydra_bringup"),
-                "launch", "hydra_robot.launch.py",
+                "launch",
+                "hydra_robot.launch.py",
             ])
         ]),
         launch_arguments={
@@ -36,7 +44,8 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([
                 FindPackageShare("hydra_bringup"),
-                "launch", "hydra_robot.launch.py",
+                "launch",
+                "hydra_robot.launch.py",
             ])
         ]),
         launch_arguments={
@@ -48,7 +57,8 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([
                 FindPackageShare("hydra_bringup"),
-                "launch", "hydra_robot.launch.py",
+                "launch",
+                "hydra_robot.launch.py",
             ])
         ]),
         launch_arguments={
@@ -72,6 +82,9 @@ def generate_launch_description():
                 "launch", "hydra_visualization.launch.py",
             ])
         ]),
+        launch_arguments={
+            "tool": tool
+        }.items(),
         condition=IfCondition(rviz)
     )
     # fmt: on

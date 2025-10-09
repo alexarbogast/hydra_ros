@@ -1,5 +1,5 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, GroupAction
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import (
     LaunchConfiguration,
     PathJoinSubstitution,
@@ -79,7 +79,7 @@ def generate_launch_description():
         package="controller_manager",
         executable="spawner",
         arguments=[
-            "joint_state_broadcaster", 
+            "joint_state_broadcaster",
             "--controller-manager", "controller_manager",
         ],
         namespace=namespace
