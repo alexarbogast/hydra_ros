@@ -9,7 +9,6 @@ from launch.substitutions import (
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
@@ -36,7 +35,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "controller_config",
             default_value=controller,
-            description="Path to the configuration file for ros2_control"
+            description="Path to the configuration file for ros2_control",
         )
     )
     declared_arguments.append(
@@ -55,13 +54,16 @@ def generate_launch_description():
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution([
-                FindPackageShare("hydra_description"),
-                "urdf",
-                "positioner",
-                "positioner.xacro",
-                ]),
-            " use_mock_hardware:=", use_mock_hardware,
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("hydra_description"),
+                    "urdf",
+                    "positioner",
+                    "positioner.xacro",
+                ]
+            ),
+            " use_mock_hardware:=",
+            use_mock_hardware,
         ]
     )
 
@@ -69,30 +71,42 @@ def generate_launch_description():
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[
-            {"robot_description": ParameterValue(robot_description, value_type=str)},
             controller_config,
         ],
         output="both",
-        namespace=namespace
+        remappings=[
+            ("~/robot_description", "robot_description"),
+        ],
+        namespace=namespace,
+    )
+    robot_description_publisher = Node(
+        package="hydra_bringup",
+        executable="robot_description_publisher.py",
+        parameters=[
+            {"robot_description": robot_description},
+        ],
+        namespace=namespace,
     )
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=[
             "joint_state_broadcaster",
-            "--controller-manager", "controller_manager",
+            "--controller-manager",
+            "controller_manager",
         ],
-        namespace=namespace
+        namespace=namespace,
     )
     controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=[controller, "--controller-manager", "controller_manager"],
-        namespace=namespace
+        namespace=namespace,
     )
 
     nodes_to_start = [
         control_node,
+        robot_description_publisher,
         joint_state_broadcaster_spawner,
         controller_spawner,
     ]

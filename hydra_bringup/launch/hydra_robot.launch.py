@@ -11,7 +11,6 @@ from launch.substitutions import (
 
 from launch_ros.actions import Node, PushRosNamespace
 from launch_ros.substitutions import FindPackageShare
-from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
@@ -80,10 +79,20 @@ def generate_launch_description():
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[
-            {"robot_description": ParameterValue(robot_description, value_type=str)},
             robot_controllers,
         ],
         output="both",
+        remappings=[
+            ("~/robot_description", "robot_description"),  # humble
+        ],
+    )
+
+    robot_description_publisher = Node(
+        package="hydra_bringup",
+        executable="robot_description_publisher.py",
+        parameters=[
+            {"robot_description": robot_description},
+        ],
     )
 
     joint_state_broadcaster_spawner = Node(
@@ -106,6 +115,7 @@ def generate_launch_description():
         actions=[
             PushRosNamespace(arm_id),
             control_node,
+            robot_description_publisher,
             joint_state_broadcaster_spawner,
             robot_controller_spawner,
         ]
