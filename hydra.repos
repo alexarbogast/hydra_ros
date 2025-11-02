@@ -1,0 +1,13 @@
+repositories:
+  hydra_description:
+    type: git
+    url: https://github.com/alexarbogast/hydra_description
+    version: ampf_ros2
+  za_description:
+    type: git
+    url: https://github.com/alexarbogast/za_description
+    version: ros2
+  za_ros:
+    type: git
+    url: https://github.com/alexarbogast/za_ros
+    version: ros2
