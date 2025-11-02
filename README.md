@@ -26,11 +26,6 @@ configuration.
 <a id='1'></a>
 
 ## Dependencies
-The `za_ros` metapackage is required for `hydra_ros`. Follow the instructions at
-[za_ros](https://github.com/alexarbogast/za_ros) to install the package and its
-dependencies. Make sure to install
-[ros_control_boilerplate](https://github.com/PickNikRobotics/ros_control_boilerplate)
-and [ros_controllers](https://github.com/ros-controls/ros_controllers). 
 
 When running the multi-robot system on the physical hardware, it is recommended
 to build the Docker image and use the scripts provided in
@@ -42,19 +37,21 @@ required.
 
 ## Installation
 
-Clone the repository to your local workspace. If you have not previously cloned
-the [hydra_description](https://github.com/alexarbogast/hydra_description)
-package, you will need to clone recursively. 
+Create a ROS 2 workspace and clone this package into a `src` directory.
 
-```sh
-mkdir -p colcon_ws/src && cd colcon_ws/src
-git clone -b ros2 --recurse-submodules git@github.com:alexarbogast/hydra_ros.git
+Import package dependencies:
+```
+sudo apt update
+rosdep update
+cd src
+vcs import < hydra_ros/hydra.repos
+rosdep install -r --from-paths . --ignore-src --rosdistro $ROS_DISTRO -y
 ```
 
-Build your workspace
-```sh
-cd ../
-colcon build --symlink-install
+Build the packages:
+```
+cd <COLCON_WORKSPACE>
+colcon build
 ```
 
 <a id='3'></a>
