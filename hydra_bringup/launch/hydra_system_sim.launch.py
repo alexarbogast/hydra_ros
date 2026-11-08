@@ -27,45 +27,23 @@ def generate_launch_description():
     tool = LaunchConfiguration("tool")
 
     # fmt: off
-    rob1_robot_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare("hydra_bringup"),
-                "launch",
-                "hydra_robot.launch.py",
-            ])
-        ]),
-        launch_arguments={
-            "arm_id": "rob1",
-            "rviz": "false",
-        }.items(),
-    )
-    rob2_robot_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare("hydra_bringup"),
-                "launch",
-                "hydra_robot.launch.py",
-            ])
-        ]),
-        launch_arguments={
-            "arm_id": "rob2",
-            "rviz": "false",
-        }.items(),
-    )
-    rob3_robot_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare("hydra_bringup"),
-                "launch",
-                "hydra_robot.launch.py",
-            ])
-        ]),
-        launch_arguments={
-            "arm_id": "rob3",
-            "rviz": "false",
-        }.items(),
-    )
+    robots_launch = [
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([
+                PathJoinSubstitution([
+                    FindPackageShare("hydra_bringup"),
+                    "launch",
+                    "hydra_robot.launch.py",
+                ])
+            ]),
+            launch_arguments={
+                "arm_id": arm_id,
+                "rviz": "false",
+            }.items(),
+        )
+        for arm_id in {"rob1", "rob2", "rob3"}
+    ]
+
     positioner_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([
@@ -91,9 +69,7 @@ def generate_launch_description():
 
     nodes_to_start = [
         visualization_launch,
-        rob1_robot_launch,
-        rob2_robot_launch,
-        rob3_robot_launch,
+        *robots_launch,
         positioner_launch,
     ]
     return LaunchDescription(declared_arguments + nodes_to_start)

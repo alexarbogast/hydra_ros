@@ -1,4 +1,0 @@
-[submodule "hydra_description"]
-	path = hydra_description
-	url = git@github.com:alexarbogast/hydra_description.git
-	branch = ros2

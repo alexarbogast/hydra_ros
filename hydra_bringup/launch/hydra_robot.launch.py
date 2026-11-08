@@ -11,11 +11,12 @@ from launch.substitutions import (
 
 from launch_ros.actions import Node, PushRosNamespace
 from launch_ros.substitutions import FindPackageShare
+from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
-    robot_controllers = PathJoinSubstitution(
-        [FindPackageShare("hydra_bringup"), "config", "robot_controllers.yaml"]
+    default_controller_config = PathJoinSubstitution(
+        [FindPackageShare("hydra_bringup"), "config", "controllers.yaml"]
     )
 
     declared_arguments = []
@@ -42,6 +43,13 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            "controller_config",
+            default_value=default_controller_config,
+            description="Path to the ros2_control controller config file",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             "use_mock_hardware",
             default_value="true",
             description="Should mock (simulated) hardware be used?",
@@ -51,6 +59,7 @@ def generate_launch_description():
     arm_id = LaunchConfiguration("arm_id")
     tool = LaunchConfiguration("tool")
     controller = LaunchConfiguration("controller")
+    controller_config = LaunchConfiguration("controller_config")
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
 
     robot_description = Command(
@@ -62,16 +71,17 @@ def generate_launch_description():
                     FindPackageShare("hydra_description"),
                     "urdf",
                     "robots",
-                    "za_tool.xacro",
+                    "za6_tool.xacro",
                 ]
             ),
-            " use_mock_hardware:=",
-            use_mock_hardware,
             " prefix:=",
             arm_id,
             TextSubstitution(text="_"),
             " tool:=",
             tool,
+            " include_ros2_control:=true",
+            " use_mock_hardware:=",
+            use_mock_hardware,
         ]
     )
 
@@ -79,7 +89,7 @@ def generate_launch_description():
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[
-            robot_controllers,
+            controller_config,
         ],
         output="both",
         remappings=[
@@ -91,7 +101,12 @@ def generate_launch_description():
         package="hydra_bringup",
         executable="robot_description_publisher.py",
         parameters=[
-            {"robot_description": robot_description},
+            {
+                "robot_description": ParameterValue(
+                    robot_description,
+                    value_type=str,
+                ),
+            },
         ],
     )
 

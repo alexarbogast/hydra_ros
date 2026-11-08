@@ -9,11 +9,12 @@ from launch.substitutions import (
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
-    controller = PathJoinSubstitution(
-        [FindPackageShare("hydra_bringup"), "config", "positioner_controllers.yaml"]
+    default_controller_config = PathJoinSubstitution(
+        [FindPackageShare("hydra_bringup"), "config", "controllers.yaml"]
     )
 
     declared_arguments = []
@@ -34,8 +35,8 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "controller_config",
-            default_value=controller,
-            description="Path to the configuration file for ros2_control",
+            default_value=default_controller_config,
+            description="Path to the ros2_control controller config file",
         )
     )
     declared_arguments.append(
@@ -47,8 +48,8 @@ def generate_launch_description():
     )
     namespace = LaunchConfiguration("namespace")
     controller = LaunchConfiguration("controller")
-    use_mock_hardware = LaunchConfiguration("use_mock_hardware")
     controller_config = LaunchConfiguration("controller_config")
+    use_mock_hardware = LaunchConfiguration("use_mock_hardware")
 
     robot_description = Command(
         [
@@ -83,7 +84,12 @@ def generate_launch_description():
         package="hydra_bringup",
         executable="robot_description_publisher.py",
         parameters=[
-            {"robot_description": robot_description},
+            {
+                "robot_description": ParameterValue(
+                    robot_description,
+                    value_type=str,
+                ),
+            },
         ],
         namespace=namespace,
     )

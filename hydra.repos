@@ -2,12 +2,8 @@ repositories:
   hydra_description:
     type: git
     url: https://github.com/alexarbogast/hydra_description
-    version: ros2
-  za_description:
+    version: feature/za-ros2-drivers-integration
+  tormach_za_ros2_drivers:
     type: git
-    url: https://github.com/alexarbogast/za_description
-    version: ros2
-  za_ros:
-    type: git
-    url: https://github.com/alexarbogast/za_ros
-    version: ros2
+    url: https://github.com/alexarbogast/tormach_za_ros2_drivers.git
+    version: fix/prefix-grasp-link
